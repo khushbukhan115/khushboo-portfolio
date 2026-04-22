@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Funnel Is the Product</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-soft: #11141a;
+    --surface: #151922;
+    --surface-2: #1b2030;
+    --line: #252b3a;
+    --text: #e8ebf1;
+    --text-dim: #a3acbe;
+    --text-mute: #6b7489;
+    --accent: #ff6a3d;
+    --accent-2: #ffd46b;
+    --good: #3ed598;
+    --bad: #ff6b6b;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --max: 920px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+	
+	
+
+  /* DOC CHROME */
+  .docbar {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .docbar-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-mute);
+  }
+  .docbar-inner a { color: var(--text-dim); transition: color 120ms ease; }
+  .docbar-inner a:hover { color: var(--accent); }
+  .docbar-inner .back::before { content: '\2190  '; color: var(--accent); }
+  .docbar-inner .ident { color: var(--text); }
+  .docbar-inner .ident .caret { color: var(--accent); margin: 0 6px; }
+
+  
+
+  /* HERO */
+  .hero {
+    padding: 140px 32px 100px;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,106,61,0.14), transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,212,107,0.08), transparent 55%),
+      var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-inner { max-width: var(--max); margin: 0 auto; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin-bottom: 28px;
+  }
+  .hero .thesis {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(22px, 2.6vw, 30px);
+    line-height: 1.4;
+    color: var(--text-dim);
+    max-width: 720px;
+    margin-bottom: 56px;
+  }
+  .hero .thesis em { color: var(--accent-2); font-style: normal; font-weight: 500; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .meta-item .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin-bottom: 8px;
+  }
+  .meta-item .value {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* CONTENT */
+  main { max-width: var(--max); margin: 0 auto; padding: 100px 32px 120px; }
+
+  .act-marker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  section.act { margin-bottom: 140px; scroll-margin-top: 40px; }
+  section.act > h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(36px, 4.6vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+    max-width: 780px;
+  }
+  section h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 0 0 14px;
+    color: var(--text);
+  }
+  p { margin-bottom: 20px; color: var(--text-dim); max-width: 720px; }
+  p strong, li strong { color: var(--text); font-weight: 600; }
+
+  /* PULL */
+  .pull {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.3;
+    color: var(--text);
+    padding: 40px 0 40px 36px;
+    border-left: 3px solid var(--accent);
+    margin: 56px 0;
+    letter-spacing: -0.01em;
+    max-width: 800px;
+  }
+  .pull em { color: var(--accent-2); font-style: normal; }
+
+  /* VISUAL frame */
+  .visual { margin: 48px 0 12px; }
+  .visual .v-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .visual .v-title .num { color: var(--accent); }
+  .visual .v-caption { font-size: 13px; color: var(--text-mute); margin-top: 16px; max-width: 680px; line-height: 1.55; font-style: italic; }
+
+  /* MEGA */
+  .mega {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: baseline;
+    margin: 40px 0 24px;
+  }
+  .mega .n {
+    font-family: var(--serif);
+    font-size: clamp(96px, 16vw, 200px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--accent);
+  }
+  .mega .l {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.4vw, 28px);
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    padding-bottom: 12px;
+  }
+  .mega .l small { display: block; font-family: var(--sans); font-size: 14px; color: var(--text-mute); font-weight: 400; margin-top: 10px; line-height: 1.5; }
+  @media (max-width: 720px) { .mega { grid-template-columns: 1fr; gap: 12px; } }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 48px 0;
+  }
+  .stat-cell { background: var(--surface); padding: 28px 24px; }
+  .stat-cell .n {
+    font-family: var(--serif);
+    font-size: clamp(32px, 3.6vw, 46px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .stat-cell .n.warn { color: var(--bad); }
+  .stat-cell .n.good { color: var(--good); }
+  .stat-cell .n.accent { color: var(--accent-2); }
+  .stat-cell .l { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  @media (max-width: 720px) { .stat-grid { grid-template-columns: 1fr; } }
+
+  /* INTENT chart */
+  .intent-chart {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    display: grid;
+    gap: 10px;
+  }
+  .i-row { display: grid; grid-template-columns: 170px 1fr 60px 70px; gap: 16px; align-items: center; font-size: 13.5px; }
+  .i-row .i-lbl { color: var(--text); font-weight: 500; }
+  .i-row .i-bar-wrap { height: 18px; background: var(--bg-soft); border-radius: 2px; overflow: hidden; }
+  .i-row .i-bar { height: 100%; background: var(--text-dim); }
+  .i-row.hot .i-bar { background: var(--accent); }
+  .i-row.gap .i-bar { background: var(--bad); }
+  .i-row.cold .i-bar { background: #3a4256; }
+  .i-row .i-n { text-align: right; font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 500; }
+  .i-row .i-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; color: var(--text-mute); }
+  .i-row.hot .i-tag { color: var(--accent); }
+  .i-row.gap .i-tag { color: var(--bad); }
+  @media (max-width: 720px) {
+    .i-row { grid-template-columns: 110px 1fr 50px; }
+    .i-row .i-tag { display: none; }
+  }
+
+  /* FUNNEL */
+  .funnel-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    display: grid;
+    gap: 12px;
+  }
+  .f-row { display: grid; grid-template-columns: 130px 1fr 110px; gap: 20px; align-items: center; }
+  .f-row .f-lbl { font-size: 13px; color: var(--text-dim); font-weight: 500; }
+  .f-row .f-bar { height: 32px; background: var(--text-dim); border-radius: 2px; }
+  .f-row .f-bar.mid { background: #6b7489; }
+  .f-row .f-bar.low { background: #4a5163; }
+  .f-row .f-bar.drop { background: var(--bad); }
+  .f-row .f-n { text-align: right; font-family: var(--mono); font-size: 12px; color: var(--text); font-weight: 500; }
+  .f-row .f-n span { display: block; color: var(--text-mute); font-size: 11px; margin-top: 2px; }
+  @media (max-width: 720px) {
+    .f-row { grid-template-columns: 90px 1fr 70px; gap: 10px; }
+  }
+
+  /* SYSTEM LOOP */
+  .loop {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 8px 32px;
+  }
+  .loop-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 1.1fr;
+    gap: 28px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .loop-row:last-child { border-bottom: none; }
+  .loop-row .stage { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 500; }
+  .loop-row .behavior { font-size: 14.5px; color: var(--text); font-weight: 500; }
+  .loop-row .response { font-size: 13.5px; color: var(--text-dim); line-height: 1.55; }
+  .loop-row .response strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 720px) {
+    .loop { padding: 8px 20px; }
+    .loop-row { grid-template-columns: 1fr; gap: 8px; padding: 18px 0; }
+  }
+
+  /* MOVES */
+  .moves { margin: 40px 0; }
+  .move {
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 40px;
+    align-items: baseline;
+  }
+  .moves .move:last-child { border-bottom: 1px solid var(--line); }
+  .move .m-idx {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .move h3 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.8vw, 32px);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .move p { color: var(--text-dim); font-size: 15.5px; max-width: 620px; margin: 0; }
+  .move .m-foot { font-family: var(--mono); font-size: 11px; color: var(--text-mute); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 18px; }
+  .move .m-foot strong { color: var(--accent-2); font-weight: 500; }
+  @media (max-width: 720px) { .move { grid-template-columns: 1fr; gap: 12px; padding: 32px 0; } }
+
+  /* ENDING */
+  .ending {
+    padding: 160px 32px;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(255,106,61,0.12), transparent 60%),
+      var(--bg);
+    border-top: 1px solid var(--line);
+    text-align: left;
+  }
+  .ending-inner { max-width: var(--max); margin: 0 auto; }
+  .ending .eyebrow { margin-bottom: 40px; }
+  .ending p {
+    font-family: var(--serif);
+    font-size: clamp(38px, 5.6vw, 72px);
+    line-height: 1.05;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin: 0;
+  }
+  .ending p em { color: var(--accent); font-style: normal; }
+  .ending .sig {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+  }
+
+  @media (max-width: 720px) {
+    .meta-grid { grid-template-columns: repeat(2, 1fr); }
+    main { padding: 72px 24px 80px; }
+    section.act { margin-bottom: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DOC CHROME -->
+<div class="docbar">
+  <div class="docbar-inner">
+    <a class="back" href="portfolio.html" style="text-decoration: none;">Khushboo Khan</a>
+    <span class="ident">Case Study<span class="caret">/</span>Merchant Onboarding<span class="caret">/</span>2026</span>
+  </div>
+</div>
+
+<!-- HERO · thesis -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Product Design &middot; 2026</div>
+    <h1>The Funnel<br>Is the Product.</h1>
+    <p class="thesis">
+Funnels don’t convert users. <em>Systems do.</em>
+</p>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="label">Role</div>
+        <div class="value">Lead Product Designer</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Scope</div>
+        <div class="value">End-to-end revenue system</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Timeline</div>
+        <div class="value">2025 &ndash; 2026, two releases</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Surfaces</div>
+        <div class="value">Pricing, Entry, Product, Lifecycle</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ACT I · THE FAILURE -->
+<section class="act">
+  <div class="act-marker">Act I &middot; The Failure</div>
+  <h2>Users arrived.<br>Nothing happened.</h2>
+
+  <div class="mega">
+    <div class="n">1.7%</div>
+    <div class="l">
+      of users ever entered the system.
+<small>The rest never got a chance to begin.</small>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-cell"><div class="n warn">50%</div><div class="l">Of paying users clustered at one tier. Not because it fit, but because nothing else did.</div></div>
+    <div class="stat-cell"><div class="n warn">22.5%</div><div class="l">Of users reached the one surface built to convert them.</div></div>
+    <div class="stat-cell"><div class="n warn">13 / 785</div><div class="l">Cohort month: arrivals to activations.</div></div>
+  </div>
+
+  <div class="visual">
+    <div class="v-title"><span class="num">Fig 01</span> Where the system lost people</div>
+    <div class="funnel-wrap">
+      <div class="f-row">
+        <div class="f-lbl">Arrived</div>
+        <div class="f-bar" style="width:100%"></div>
+        <div class="f-n">2,947<span>100%</span></div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">Engaged</div>
+        <div class="f-bar mid" style="width:60.8%"></div>
+        <div class="f-n">1,792<span>60.8%</span></div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">Entered</div>
+        <div class="f-bar low" style="width:26.9%"></div>
+        <div class="f-n">792<span>26.9%</span></div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">Activated</div>
+        <div class="f-bar drop" style="width:1.4%; min-width: 3px;"></div>
+        <div class="f-n">41<span>1.4%</span></div>
+      </div>
+    </div>
+    <div class="v-caption">The steepest drop sits at entry, before anyone sees what the product can do.</div>
+  </div>
+<p>This wasn’t a drop-off.</p>
+<p><strong>The system rejected users at entry.</strong></p>
+	
+  <div class="pull">
+A system existed.<br>
+It just didn’t <em>convert.</em>
+</div>
+</section>
+
+<!-- ACT II · THE REALIZATION -->
+<section class="act">
+  <div class="act-marker">Act II · The Realization</div>
+  <h2>Users were ready.<br>The product wasn’t.</h2>
+
+  <p>
+    Users weren’t confused. They weren’t hesitant. They weren’t price-sensitive.
+  </p>
+
+  <p>
+    They were already behaving like customers.
+  </p>
+
+  <p>
+    They compared vendors. They explored integrations. They evaluated outcomes.
+    The signals of intent were everywhere — across nine different surfaces.
+  </p>
+
+  <p>
+    But the product treated those behaviors as passive activity,
+    instead of what they actually were:
+    <strong>buying signals.</strong>
+  </p>
+
+  <div class="visual">
+    <div class="v-title"><span class="num">Fig 02</span> Intent existed. The system ignored it.</div>
+    <!-- keep your existing intent chart here -->
+    <div class="v-caption">
+      High-intent behavior was distributed across the product.
+      The upgrade path was centralized in a place users didn’t need to go.
+    </div>
+  </div>
+
+  <p>
+    We didn’t have a traffic problem.
+    We didn’t have a pricing problem.
+  </p>
+
+
+<p>
+We had a <strong>translation failure.</strong>
+</p>
+
+  <div class="pull">
+    The product could observe intent.<br>
+    It just couldn’t <em>convert it.</em>
+  </div>
+
+  <p>
+    The assumption was simple:
+    users would navigate to a dedicated pricing surface when they were ready to upgrade.
+  </p>
+
+  <p>
+    Reality was simpler:
+    <strong>they never needed to.</strong>
+  </p>
+
+  <p>
+    The moment of intent was already happening —
+    inside comparison, inside setup, inside usage.
+  </p>
+
+  <p>
+    The system wasn’t missing users.
+  </p>
+
+  <p>
+    It was missing the moment.
+  </p>
+</section>
+
+<!-- ACT III · THE SYSTEM -->
+<section class="act">
+  <div class="act-marker">Act III &middot; The System</div>
+  <h2>Each behavior advances the system forward.</h2>
+
+  <p>
+Funnels are not flows.
+They are state systems.
+</p>
+
+<p>
+Every action moves the product into a new state.
+Every state must move revenue forward.
+</p>
+	<p><strong>If it doesn’t, the state shouldn’t exist.</strong></p>
+
+  <div class="visual">
+    <div class="v-title"><span class="num">Fig 03</span> Behavior &rarr; system response</div>
+    <div class="loop">
+      <div class="loop-row">
+        <div class="stage">Enters</div>
+        <div class="behavior">User completes signup</div>
+        <div class="response">The product welcomes, <strong>sets state: contact</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Hesitates</div>
+        <div class="behavior">No use within 48 hours</div>
+        <div class="response">The product invites, <strong>lifts state: nurture</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Tries</div>
+        <div class="behavior">Runs first verification</div>
+        <div class="response">The product reveals next capability, <strong>state: activated</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Commits</div>
+        <div class="behavior">5+ verifications in 30 days</div>
+        <div class="response">The product surfaces growth path, <strong>state: engaged</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Outgrows</div>
+        <div class="behavior">Hits 80% of quota</div>
+        <div class="response">The product reveals progression in context, <strong>state: progression</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Scales</div>
+        <div class="behavior">10+ verifications / week</div>
+        <div class="response">The product opens expansion surfaces, <strong>state: expansion</strong></div>
+      </div>
+      <div class="loop-row">
+        <div class="stage">Fades</div>
+        <div class="behavior">No action in 14 days</div>
+        <div class="response">The product re-engages on last-used surface, <strong>state: dormant</strong></div>
+      </div>
+    </div>
+    <div class="v-caption">The system doesn&rsquo;t wait to be told what to do. Behavior is the trigger.</div>
+  </div>
+</section>
+
+<!-- ACT IV · THE MOVES -->
+<section class="act">
+  <div class="act-marker">Act IV · System Rewrites</div>
+<h2>The system wasn’t improved.<br>It was rewritten.</h2>
+
+  <div class="moves">
+
+    <div class="move">
+  <div class="m-idx">Rewrite 01</div>
+  <div>
+    <h3>Entry became a state, not a step.</h3>
+    <p>
+      The system stopped asking for commitment upfront.
+      Instead of “start a plan,” users could experience value immediately.
+    </p>
+    <p>
+      Context — company size, usage, configuration — was captured progressively,
+      only after the product had proven itself.
+    </p>
+    <p>
+      Entry was no longer a conversion event.
+      It became the first state in the system.
+    </p>
+    <div class="m-foot">Shift · <strong>signup → activation without commitment</strong></div>
+  </div>
+</div>
+
+    <div class="move">
+  <div class="m-idx">Rewrite 02</div>
+  <div>
+    <h3>Pricing aligned to behavior, not plans.</h3>
+    <p>
+      Static tiers were replaced with a usage-driven model.
+      The more the product was used, the more it revealed.
+    </p>
+    <p>
+      Services became additive. Upgrades became automatic.
+      There was no moment of renegotiation — only progression.
+    </p>
+    <p>
+      Pricing stopped being a decision users had to make.
+      It became a consequence of how they used the product.
+    </p>
+    <div class="m-foot">Shift · <strong>plan selection → usage-based progression</strong></div>
+  </div>
+</div>
+
+    <div class="move">
+  <div class="m-idx">Rewrite 03</div>
+  <div>
+    <h3>Monetization moved to where intent lives.</h3>
+    <p>
+      Upgrade opportunities were relocated from a single pricing page
+      to the surfaces where users were already making decisions.
+    </p>
+    <p>
+      Vendor Comparison. Integrations. Analytics.
+    </p>
+    <p>
+      Locked features became live previews.
+      Every high-intent interaction exposed the next level of capability.
+    </p>
+    <p>
+      The system no longer asked users to go upgrade.
+      It upgraded them in context.
+    </p>
+    <div class="m-foot">Shift · <strong>centralized pricing → contextual progression</strong></div>
+  </div>
+</div>
+
+    <div class="move">
+  <div class="m-idx">Rewrite 04</div>
+  <div>
+    <h3>The lifecycle became state-driven.</h3>
+    <p>
+      Every user action updated a system state:
+      new, activated, engaged, expanding, dormant.
+    </p>
+    <p>
+      Each state triggered the next best action —
+      not through campaigns, but through the product itself.
+    </p>
+    <p>
+      Re-engagement happened where the user left.
+      Expansion happened where usage peaked.
+    </p>
+    <p>
+      The system became self-aware.
+    </p>
+    <div class="m-foot">Shift · <strong>manual lifecycle → behavior-driven system</strong></div>
+  </div>
+</div>
+
+  </div>
+</section>
+
+<!-- ACT V · THE OUTCOME -->
+<section class="act">
+  <div class="act-marker">Act V &middot; The Outcome</div>
+  <h2>A system that carries revenue on its own.</h2>
+	
+	<p>Nothing about the market changed.</p>
+<p>The system did.</p>
+
+  <div class="mega">
+    <div class="n">12&ndash;17&times;</div>
+    <div class="l">
+      more users now move through the system.
+<small>The system no longer drops them at entry.</small>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-cell"><div class="n good">7 &rarr; 3</div><div class="l">Steps from entry to activation</div></div>
+    <div class="stat-cell"><div class="n good">8.7&times;</div><div class="l">Lift in progression through high-intent surfaces</div></div>
+    <div class="stat-cell"><div class="n good">$33K &rarr; $50K</div><div class="l">
+Revenue now moves without intervention.
+<small>The system converts without relying on sales.</small>
+</div></div>
+  </div>
+
+  <div class="pull">
+The system stopped asking users to decide.<br>
+It started moving them forward.
+</div>
+</section>
+
+</main>
+
+<!-- ENDING · realization -->
+<div class="ending">
+  <div class="ending-inner">
+    <div class="eyebrow">In hindsight</div>
+    <p>
+I didn’t redesign a flow.<br>
+I designed a system that <em>converts on its own.</em>
+</p>
+    <div class="sig">
+      <span>The Funnel Is the Product</span>
+      <span>Case Study &middot; 2026</span>
+    </div>
+  </div>
+</div>
+
+</body></html>
