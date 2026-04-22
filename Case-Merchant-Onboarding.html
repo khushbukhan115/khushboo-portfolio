@@ -53,8 +53,9 @@
     letter-spacing: 0.12em;
     color: var(--text-mute);
   }
-  .docbar-inner a { color: var(--text-dim); transition: color 120ms ease; }
-  .docbar-inner a:hover { color: var(--accent); }
+
+  .docbar-inner a, .sig a { color: var(--text-dim); transition: color 120ms ease; }
+  .docbar-inner a:hover, .sig a:hover { color: var(--accent); }
   .docbar-inner .back::before { content: '\2190  '; color: var(--accent); }
   .docbar-inner .ident { color: var(--text); }
   .docbar-inner .ident .caret { color: var(--accent); margin: 0 6px; }
@@ -391,7 +392,7 @@
 <!-- DOC CHROME -->
 <div class="docbar">
   <div class="docbar-inner">
-    <a class="back" href="portfolio.html" style="text-decoration: none;">Khushboo Khan</a>
+    <a class="back" href="index.html" style="text-decoration: none;">Khushboo Khan</a>
     <span class="ident">Case Study<span class="caret">/</span>Merchant Onboarding<span class="caret">/</span>2026</span>
   </div>
 </div>
@@ -749,10 +750,13 @@ It started moving them forward.
 I didn’t redesign a flow.<br>
 I designed a system that <em>converts on its own.</em>
 </p>
-    <div class="sig">
-      <span>The Funnel Is the Product</span>
-      <span>Case Study &middot; 2026</span>
+	  
+	  <div class="sig">
+      <a href="index.html">&larr; Back to portfolio</a>
+      
+      <a href="Case-Regulated-Onboarding.html">Case &middot; Regulated Onboarding &rarr;</a>
     </div>
+    
   </div>
 </div>
 
