@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beacon Developer Portal — Primary Personas</title>
+<style>
+  :root {
+    --primary:#34E29B;
+    --primary-deep:#48eaa6;
+    --primary-soft:rgba(52,226,155,.12);
+    --accent:#34E29B;
+    --maya:#5B8DEF;
+    --maya-soft:rgba(91,141,239,.16);
+    --diego:#3FD0C9;
+    --diego-soft:rgba(63,208,201,.16);
+    --sara:#E8A23D;
+    --sara-soft:rgba(232,162,61,.16);
+    --bg:#050706;
+    --card:#0d110f;
+    --text:#F4F7F5;
+    --text-secondary:#C9D1CC;
+    --text-muted:#A4AFA9;
+    --border:rgba(255,255,255,.10);
+    --border-soft:rgba(255,255,255,.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
+    color: white;
+    padding: 80px 0 96px;
+    margin-bottom: -48px;
+  }
+  .hero-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.85;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 720px;
+  }
+  .hero-subtitle {
+    font-size: 18px;
+    line-height: 1.55;
+    opacity: 0.92;
+    max-width: 680px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    margin-top: 36px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  .hero-meta strong { font-weight: 600; }
+
+  /* STICKY NAV */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(250, 250, 249, 0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 50;
+    padding: 16px 0;
+    margin-bottom: 56px;
+  }
+  .sticky-nav-inner {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .sticky-nav-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 16px;
+  }
+  .sticky-nav a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background:#0d110f;
+    transition: all 0.15s ease;
+  }
+  .sticky-nav a:hover {
+    color: var(--text);
+    border-color: var(--primary);
+  }
+
+  /* PERSONA OVERVIEW CARDS */
+  .persona-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+  .persona-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    display: block;
+    border-top-width: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  .persona-card.maya { border-top-color: var(--maya); }
+  .persona-card.diego { border-top-color: var(--diego); }
+  .persona-card.sara { border-top-color: var(--sara); }
+  .persona-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+  }
+  .persona-card.maya .persona-avatar { background: var(--maya); }
+  .persona-card.diego .persona-avatar { background: var(--diego); }
+  .persona-card.sara .persona-avatar { background: var(--sara); }
+  .persona-archetype {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+  }
+  .persona-card.maya .persona-archetype { color: var(--maya); }
+  .persona-card.diego .persona-archetype { color: var(--diego); }
+  .persona-card.sara .persona-archetype { color: var(--sara); }
+  .persona-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .persona-card-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  .persona-card-tag {
+    display: inline-block;
+    background: var(--border-soft);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .persona-card.maya .persona-card-tag { background: var(--maya-soft); color: var(--maya); }
+  .persona-card.diego .persona-card-tag { background: var(--diego-soft); color: var(--diego); }
+  .persona-card.sara .persona-card-tag { background: var(--sara-soft); color: var(--sara); }
+
+  /* STRATEGIC DECISIONS TABLE */
+  .decisions-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 80px;
+  }
+  .decisions-section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .decisions-section p.lead {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    max-width: 760px;
+  }
+  .decisions-table { width: 100%; border-collapse: collapse; }
+  .decisions-table th, .decisions-table td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14.5px;
+    vertical-align: top;
+  }
+  .decisions-table th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 600;
+    background: var(--bg);
+  }
+  .decisions-table tr:last-child td { border-bottom: none; }
+
+  /* PERSONA DETAILED SECTION */
+  .persona-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    z-index: 1;
+  }
+  .persona-section.maya::before { background: var(--maya); }
+  .persona-section.diego::before { background: var(--diego); }
+  .persona-section.sara::before { background: var(--sara); }
+
+  .persona-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 48px 48px 28px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .persona-section-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .persona-section.maya .persona-section-avatar { background: var(--maya); }
+  .persona-section.diego .persona-section-avatar { background: var(--diego); }
+  .persona-section.sara .persona-section-avatar { background: var(--sara); }
+  .persona-header-text { flex: 1; }
+  .persona-section-eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+  }
+  .persona-section.maya .persona-section-eyebrow { color: var(--maya); }
+  .persona-section.diego .persona-section-eyebrow { color: var(--diego); }
+  .persona-section.sara .persona-section-eyebrow { color: var(--sara); }
+  .persona-section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .persona-section-tagline {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    max-width: 720px;
+  }
+
+  /* NEW: STATS STRIP */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .stat-cell {
+    padding: 18px 20px;
+    text-align: center;
+    border-right: 1px solid var(--border-soft);
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  /* CONTENT BLOCKS */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 36px 48px;
+  }
+  .content-block { margin-bottom: 32px; }
+  .content-block:last-child { margin-bottom: 0; }
+  .content-block h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .content-block p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .content-block p:last-child { margin-bottom: 0; }
+
+  /* PSYCHOGRAPHICS GRID */
+  .psych-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .psych-item {
+    background: var(--bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .psych-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .persona-section.maya .psych-label { color: var(--maya); }
+  .persona-section.diego .psych-label { color: var(--diego); }
+  .persona-section.sara .psych-label { color: var(--sara); }
+  .psych-value {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+
+  /* NEW: SNAPSHOT ZONE — 8-Lens + Context Tags + Key Scenario */
+  .snapshot-zone {
+    background: var(--bg);
+    padding: 36px 48px;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .snapshot-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+  }
+  .snapshot-block h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .persona-section.maya .snapshot-block h4 { color: var(--maya); }
+  .persona-section.diego .snapshot-block h4 { color: var(--diego); }
+  .persona-section.sara .snapshot-block h4 { color: var(--sara); }
+
+  /* 8-Lens bars */
+  .lens-row { margin-bottom: 10px; }
+  .lens-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    gap: 8px;
+  }
+  .lens-name { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .lens-value { font-size: 11px; color: var(--text-muted); text-align: right; }
+  .lens-track { height: 5px; background: #121714; border-radius: 10px; overflow: hidden; }
+  .lens-fill { height: 100%; border-radius: 10px; }
+  .persona-section.maya .lens-fill { background: var(--maya); }
+  .persona-section.diego .lens-fill { background: var(--diego); }
+  .persona-section.sara .lens-fill { background: var(--sara); }
+
+  /* Context tags */
+  .ctx-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ctx-tag {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-soft);
+    white-space: nowrap;
+  }
+
+  /* Key Scenario callout */
+  .scenario {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+  .persona-section.maya .scenario { background: var(--maya-soft); border-color: rgba(37, 99, 235, 0.3); }
+  .persona-section.diego .scenario { background: var(--diego-soft); border-color: rgba(217, 119, 6, 0.3); }
+  .persona-section.sara .scenario { background: var(--sara-soft); border-color: rgba(220, 38, 38, 0.3); }
+  .scenario-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .persona-section.maya .scenario-label { color: var(--maya); }
+  .persona-section.diego .scenario-label { color: var(--diego); }
+  .persona-section.sara .scenario-label { color: var(--sara); }
+  .scenario p { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+  /* CALLOUT (UX Implications) */
+  .callout {
+    border-left: 4px solid var(--primary);
+    background: var(--primary-soft);
+    padding: 28px 32px;
+    margin: 36px 48px;
+    border-radius: 0 12px 12px 0;
+  }
+  .persona-section.maya .callout { border-left-color: var(--maya); background: var(--maya-soft); }
+  .persona-section.diego .callout { border-left-color: var(--diego); background: var(--diego-soft); }
+  .persona-section.sara .callout { border-left-color: var(--sara); background: var(--sara-soft); }
+  .callout h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .callout p { font-size: 14.5px; line-height: 1.7; color: var(--text); }
+
+  /* EVIDENCE BLOCK */
+  .evidence-block {
+    background: var(--bg);
+    border-top: 1px solid var(--border-soft);
+    padding: 28px 48px;
+  }
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    row-gap: 14px;
+    column-gap: 20px;
+    font-size: 13.5px;
+    margin-top: 16px;
+  }
+  .evidence-grid dt {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .evidence-grid dd { color: var(--text); line-height: 1.6; }
+  .confidence-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--maya-soft);
+    color: var(--maya);
+  }
+
+  /* OPEN QUESTIONS */
+  .questions-block {
+    padding: 28px 48px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .questions-block h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .questions-list { list-style: none; margin-top: 12px; }
+  .questions-list li {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text);
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .questions-list li::before {
+    content: '?';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    line-height: 18px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .persona-section.maya .questions-list li::before { background: var(--maya); }
+  .persona-section.diego .questions-list li::before { background: var(--diego); }
+  .persona-section.sara .questions-list li::before { background: var(--sara); }
+
+  /* CROSS-PERSONA SECTION */
+  .cross-section {
+    background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 56px 48px;
+    margin-bottom: 56px;
+  }
+  .cross-section h2 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .cross-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+  .cross-section p {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: 16px;
+    max-width: 880px;
+  }
+  .cross-section strong { color: white; font-weight: 600; }
+  .cross-section ul { list-style: none; max-width: 880px; }
+  .cross-section ul li {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+    color: rgba(255,255,255,0.92);
+  }
+  .cross-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 11px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+  }
+
+  /* VALIDATION SECTION */
+  .validation-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 56px;
+  }
+  .validation-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .validation-section .lead {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    max-width: 760px;
+  }
+  .validation-list { list-style: none; counter-reset: validation; }
+  .validation-list li {
+    counter-increment: validation;
+    padding: 18px 0 18px 56px;
+    border-bottom: 1px solid var(--border-soft);
+    position: relative;
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .validation-list li:last-child { border-bottom: none; }
+  .validation-list li::before {
+    content: counter(validation);
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .validation-list li strong { display: block; margin-bottom: 4px; color: var(--text); }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0 64px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  footer p { margin-bottom: 6px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { padding: 56px 0 72px; }
+    .hero h1 { font-size: 32px; }
+    .hero-subtitle { font-size: 16px; }
+    .persona-cards { grid-template-columns: 1fr; }
+    .persona-header { flex-direction: column; gap: 16px; padding: 32px 24px 22px; }
+    .persona-section h2 { font-size: 24px; }
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    .stat-cell { border-bottom: 1px solid var(--border-soft); }
+    .two-col { grid-template-columns: 1fr; gap: 24px; padding: 28px 24px; }
+    .psych-grid { grid-template-columns: 1fr; }
+    .snapshot-zone { padding: 28px 24px; }
+    .snapshot-grid { grid-template-columns: 1fr; gap: 28px; }
+    .callout { margin: 28px 24px; padding: 22px; }
+    .evidence-block, .questions-block { padding: 22px 24px; }
+    .evidence-grid { grid-template-columns: 1fr; }
+    .cross-section, .validation-section { padding: 36px 24px; }
+  }
+
+  @media print {
+    body { background:#0d110f; font-size: 11pt; }
+    .sticky-nav { display: none; }
+    .hero { background:#0d110f; color: var(--primary-deep); page-break-after: avoid; }
+    .persona-section, .cross-section, .validation-section, .decisions-section { page-break-inside: avoid; box-shadow: none; }
+    .cross-section { background: var(--primary-soft); color: var(--text); }
+    .cross-section h2, .cross-section h3, .cross-section p, .cross-section strong, .cross-section ul li { color: var(--text); }
+  }
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+
+/* persona brand refinement */
+.hero{background:radial-gradient(1100px 320px at 18% -20%, rgba(52,226,155,.12), transparent 70%), #050706 !important;color:#F4F7F5 !important;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-eyebrow{color:#34E29B !important;opacity:1 !important}
+.hero h1,.hero-title{color:#F4F7F5 !important}
+.hero-subtitle{color:#A4AFA9 !important;opacity:1 !important}
+.hero-meta,.hero-meta div{color:#A4AFA9 !important}
+.hero-meta strong{color:#F4F7F5 !important}
+.persona-avatar,.persona-section-avatar,.header-avatar{color:#06120d !important;font-weight:700}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Beacon Developer Portal Redesign — Persona Document v0.1</div>
+    <h1>The three modes a developer occupies on this portal</h1>
+    <p class="hero-subtitle">Rather than profile types of developers (junior versus senior, language background, role), this document profiles the three modes a developer passes through on the portal. Each mode produces different requirements, surfaces different design tensions, and stress-tests a different strategic decision in the redesign.</p>
+    <div class="hero-meta">
+      <div><strong>Prepared by</strong> &nbsp; Khushboo Khan</div>
+      <div><strong>Date</strong> &nbsp; 2026-05-14</div>
+      <div><strong>Status</strong> &nbsp; Working document, validation pending</div>
+    </div>
+  </div>
+</header>
+
+<nav class="sticky-nav">
+  <div class="container sticky-nav-inner">
+    <span class="sticky-nav-label">Jump to</span>
+    <a href="#maya">Maya · Evaluating Architect</a>
+    <a href="#diego">Diego · Shipping Integrator</a>
+    <a href="#sara">Sara · Recovering Maintainer</a>
+    <a href="#cross">Cross-persona insights</a>
+    <a href="#validation">Validation plan</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- PERSONA OVERVIEW CARDS -->
+  <section class="persona-cards">
+    <a href="#maya" class="persona-card maya">
+      <div class="persona-avatar">M</div>
+      <div class="persona-archetype">The Evaluating Architect</div>
+      <div class="persona-name">Maya</div>
+      <p class="persona-card-subtitle">A senior engineer comparing this API against alternatives before committing. Needs breadth, error behaviour, and vendor risk visible before she will write code.</p>
+      <span class="persona-card-tag">Read to decide</span>
+    </a>
+    <a href="#diego" class="persona-card diego">
+      <div class="persona-avatar">D</div>
+      <div class="persona-archetype">The Shipping Integrator</div>
+      <div class="persona-name">Diego</div>
+      <p class="persona-card-subtitle">A mid-level developer building the integration this week. Wants the SDK to work first try, the example to compile, and the error message to teach him what is wrong.</p>
+      <span class="persona-card-tag">Try and integrate</span>
+    </a>
+    <a href="#sara" class="persona-card sara">
+      <div class="persona-avatar">S</div>
+      <div class="persona-archetype">The Recovering Maintainer</div>
+      <div class="persona-name">Sara</div>
+      <p class="persona-card-subtitle">An on-call engineer landing on the portal because something broke at 3am. Needs the exact error, the recovery semantics, and the recent change, fast.</p>
+      <span class="persona-card-tag">Troubleshoot and recover</span>
+    </a>
+  </section>
+
+  <!-- STRATEGIC DECISIONS TABLE -->
+  <section class="decisions-section">
+    <h2>Why these three personas</h2>
+    <p class="lead">Each persona was chosen to stress-test one of the three strategic decisions the redesign has to take a clear position on. A single developer cycles through all three modes — sometimes within a week, sometimes within an hour. Designing for these three together guarantees the redesign serves the full lifecycle.</p>
+    <table class="decisions-table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Mode</th>
+          <th>Strategic decision it stress-tests</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Maya</strong> — The Evaluating Architect</td>
+          <td>Read to decide</td>
+          <td>What is the SDK's role on the portal — source of truth, or one rendering among many?</td>
+        </tr>
+        <tr>
+          <td><strong>Diego</strong> — The Shipping Integrator</td>
+          <td>Try and integrate</td>
+          <td>Where does the AI Copilot live — bolted-on panel, or in-flow assistant?</td>
+        </tr>
+        <tr>
+          <td><strong>Sara</strong> — The Recovering Maintainer</td>
+          <td>Troubleshoot and recover</td>
+          <td>How does failure become a first-class surface — error catalogue, changelog, retry semantics?</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- MAYA — FULL DETAILED PERSONA -->
+  <section id="maya" class="persona-section maya">
+    <div class="persona-header">
+      <div class="persona-section-avatar">M</div>
+      <div class="persona-header-text">
+        <div class="persona-section-eyebrow">Persona 1 · The Evaluating Architect</div>
+        <h2>Maya</h2>
+        <p class="persona-section-tagline">A senior engineer comparing this API against alternatives before committing — needs to see breadth, error behaviour, and vendor risk before she will write code.</p>
+      </div>
+    </div>
+
+    <!-- NEW: STATS STRIP -->
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">35</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Sr Tech Lead</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">12 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">B2B SaaS · 200</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">EMEA</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context &amp; Background</h3>
+          <p>Maya is 35, a Senior Backend Engineer / Tech Lead at a 200-person B2B SaaS company in EMEA. Her VP Eng has asked her to evaluate three candidate APIs for a critical integration and recommend one. She has twelve years of experience and has integrated 30+ APIs across her career. She is currently <em>not</em> writing code — three competitor portals are open in adjacent tabs, a Notion comparison matrix is taking shape, and her API spec viewer of choice is ready to load each vendor's OpenAPI file.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals</h3>
+          <p>She wants to decide whether to commit to this vendor, understand the API's full capability surface (not just the happy path), identify gaps between the marketing pitch and the technical reality, and anticipate the integration's hidden costs — rate limits, idiomatic SDK quality, edge-case behaviour, deprecation history.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Needs</h3>
+          <p>A HTTP-first reference that does not force her into an SDK she may never use. A capability map that lets her scan what the API can and cannot do, organised by job rather than by resource. Comprehensive error documentation (status codes, semantics, recovery patterns). Pricing, rate limits, SLA, and deprecation policy in the portal — not buried on the marketing site. Code samples she can read for quality, not just paste.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points &amp; Frustrations</h3>
+          <p>SDK-only portals that hide the HTTP layer — she cannot tell whether the API is sound or whether the SDK is wrapping smelly code. Walkthroughs that feel like marketing demos instead of reference material. Auto-generated docs that show parameter names but not semantics or constraints. Missing error response shapes — the success body is shown, failures get a status code and silence. AI assistants that hallucinate references or summarise away the precision she is looking for.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours &amp; Habits</h3>
+          <p>Opens five-plus tabs from the portal in the first thirty seconds. Searches for specific keywords — "rate limit", "OAuth", "webhook", "error", "idempotency". Reads the Concepts and changelog <em>before</em> the endpoint reference. Tests her hypotheses by reading the API spec directly when the docs are vague. Uses ctrl-F more than the portal's own search. Bookmarks specific pages to share with her team and to revisit during procurement.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <div class="psych-grid">
+            <div class="psych-item">
+              <div class="psych-label">Motivations</div>
+              <div class="psych-value">Deliver a sound integration; avoid 18 months of "we picked the wrong API"; defend the choice with evidence.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Fears</div>
+              <div class="psych-value">Hidden costs; vendor lock-in; support quality after the sales call; AI-summarised docs that hide caveats.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Attitudes</div>
+              <div class="psych-value">Skeptical by default. Treats vendor docs as marketing until proven otherwise.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Beliefs</div>
+              <div class="psych-value">"Good APIs have ugly truths in their docs." "The SDK is a convenience, not the contract."</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Risk Tolerance</div>
+              <div class="psych-value">Low–medium. Would rather skip a feature than be surprised by it.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Trust Orientation</div>
+              <div class="psych-value">Trusts precision and disclosure. Distrusts polish that hides detail.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Decision Style</div>
+              <div class="psych-value">Comparison-driven, evidence-led, defends the choice in writing.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Technical Confidence</div>
+              <div class="psych-value">Very high. Comfortable at the spec level.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Can she find the HTTP-level truth without fighting the docs? Does the API have a coherent error model? Are SDKs in her team's languages idiomatic or autogenerated noise? Is there a changelog and a deprecation policy she can audit? What is the failure-recovery story for the operations her product depends on?</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Journey Touchpoints on the Beacon Portal</h3>
+          <p>Lands on Overview, wants "what this API does," not "welcome to the docs." Scans the endpoint list — finds it organised by resource (Albums, Artists), not by capability (search, playback). Searches "error", gets few results. Switches to HTTP — finds it, but the page is still framed as "X SDK in HTTP," revealing the SDK-first IA. Looks for a Pricing / Limits / SLA page — not present in the portal. Tries the Copilot — useful but does not cite specific endpoints; loses confidence.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW: SNAPSHOT ZONE — 8-Lens + Context Tags + Key Scenario -->
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">Very High — spec level</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:90%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Very High — reads SDK source</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:90%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Expert</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:85%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Low — distrusts uncited</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:30%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Low — would skip a feature</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:25%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Medium — evaluation timeline</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:45%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">High — team-wide adoption</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:65%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">High — reads changelog first</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:80%"></div></div>
+          </div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">🔍 Spec-first evaluator</span>
+            <span class="ctx-tag">📊 Compares 3+ vendors</span>
+            <span class="ctx-tag">🌍 EMEA tech lead</span>
+            <span class="ctx-tag">⚖️ Procurement signoff</span>
+            <span class="ctx-tag">📝 Decision-memo writer</span>
+            <span class="ctx-tag">🚫 AI-summary skeptic</span>
+            <span class="ctx-tag">🔐 OAuth expert</span>
+            <span class="ctx-tag">📋 Reads changelog first</span>
+          </div>
+
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Maya has three tabs open — Beacon's portal, Stainless's portal, a competitor's docs. She is making a recommendation by end of week. She searches "rate limit" in each. The portal that returns a clear, structured, cited answer wins the engineering eval.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <p>The portal must elevate HTTP-first as a co-equal lens, not as one of seven languages buried in a switcher. A capability-first navigation cut, in parallel with the resource-first cut, would let her scan the API by job. Errors, rate limits, and operational constraints need their own first-class surfaces — an error catalogue, recovery patterns, retry semantics on every endpoint. The Copilot must cite specific docs and link to them; answers without citation cost trust. Concepts must surface as part of the reference, not buried under Quick Start as if they were onboarding artefacts.</p>
+    </div>
+
+    <div class="evidence-block">
+      <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">Evidence &amp; Confidence &nbsp; <span class="confidence-pill">Medium · Designer-synthesised</span></h3>
+      <dl class="evidence-grid">
+        <dt>Sources</dt>
+        <dd>Live Beacon portal walkthrough (2026-05-14); Beacon product positioning analysis; competitive analysis of Stainless, Speakeasy, Fern; enterprise-evaluator behaviour patterns in dev-tools UX research.</dd>
+        <dt>Method</dt>
+        <dd>Desk research and inference from product behaviour.</dd>
+        <dt>Assumptions</dt>
+        <dd>(a) The portal is used by senior engineers in evaluation mode, not just by builders. (b) Enterprise procurement still involves a senior technical lead. (c) HTTP-level fluency remains common in this segment.</dd>
+        <dt>Unknowns</dt>
+        <dd>Share of portal visitors who are evaluators versus committed builders. Typical evaluation timeline. Share of evaluations that fail because of docs gaps.</dd>
+        <dt>Validation Needs</dt>
+        <dd>5–8 interviews with senior engineers who have recently chosen an API integration. Analytics on time-on-page for HTTP vs SDK views. Heatmap analysis of Overview-page clicks.</dd>
+      </dl>
+    </div>
+
+    <div class="questions-block">
+      <h3>Open Questions</h3>
+      <ul class="questions-list">
+        <li>Do Beacon-customer providers typically expose pricing inside the portal, or only on their marketing site?</li>
+        <li>How visible is the API changelog inside the current portal product?</li>
+        <li>Does the API Copilot have an "evaluator mode" — capability summary, gap analysis, schema comparison — or is it tuned for builder questions only?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- DIEGO — FULL DETAILED PERSONA -->
+  <section id="diego" class="persona-section diego">
+    <div class="persona-header">
+      <div class="persona-section-avatar">D</div>
+      <div class="persona-header-text">
+        <div class="persona-section-eyebrow">Persona 2 · The Shipping Integrator</div>
+        <h2>Diego</h2>
+        <p class="persona-section-tagline">A mid-level developer building the integration this week — wants the SDK to work first try, the example to compile, and the error message to teach him what is wrong.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">28</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Full-Stack Dev</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">5 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">Series A · 40</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">Remote</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context &amp; Background</h3>
+          <p>Diego is 28, a full-stack developer at a Series A startup of forty people. Five years of experience. This API is one feature inside a larger product release. He is the only engineer assigned to it and the PM wants it live in four working days. He works in VS Code, with a terminal, Postman, and a browser tab on the portal. His team uses TypeScript on the front and Python on the back; he picks the language based on which side of the stack the API call lives on.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals</h3>
+          <p>Ship a working integration by Friday. Avoid spending more time on auth than on the actual logic. Use the official SDK because his team does not trust raw HTTP in production. Get something working locally, then harden it.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Needs</h3>
+          <p>A working code sample in his language that he can paste and run. A fast path through OAuth setup, or guidance on what credentials to get and where to get them. A playground that returns a real response so he knows the shape before writing code. Recipes and walkthroughs for the most common two or three integration patterns. An AI assistant he can ask for "give me this in TypeScript with retry logic."</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points &amp; Frustrations</h3>
+          <p>"It works in the docs but not in my code" — sample omits an import or a config step. Auth pages that explain OAuth conceptually but do not tell him where to click in the provider's dashboard. Walkthroughs that show the happy path but not how to wire it into a real app. Docs that explain the function signature but not when to call it. Copilot answers that do not include the imports.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours &amp; Habits</h3>
+          <p>Skims, does not read — looks for code blocks first and prose second. Copies the first example that looks close and tweaks it. Opens the playground, clicks "Try It!", uses the response to plan his types. Asks the AI assistant before reading the reference. Mostly working in his language of choice; rarely switches to other languages.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <div class="psych-grid">
+            <div class="psych-item">
+              <div class="psych-label">Motivations</div>
+              <div class="psych-value">Ship on time; look reliable to his PM; learn enough to defend his choice in code review.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Fears</div>
+              <div class="psych-value">Hitting a wall with auth on Day 2 and burning his timeline. AI suggesting code that does not work with no debug path.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Attitudes</div>
+              <div class="psych-value">Pragmatic. "I will read the spec only if the example fails."</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Beliefs</div>
+              <div class="psych-value">"The SDK is doing the right thing." "The error message is enough if it is specific."</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Risk Tolerance</div>
+              <div class="psych-value">Medium. Uses AI-generated code if it has working tests. Copies-tweaks confidently.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Trust Orientation</div>
+              <div class="psych-value">Trusts working examples; trusts SDKs more than raw HTTP; trusts AI with citations.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Decision Style</div>
+              <div class="psych-value">Fast, experimentation-driven, "try it and see."</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Technical Confidence</div>
+              <div class="psych-value">High in his stack. Medium-low in OAuth and infrastructure.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Did the example just work? Did the Copilot give him code that compiled on the first try? Is the auth setup under thirty minutes? Are error messages precise enough to fix on his own?</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Journey Touchpoints</h3>
+          <p>Lands on Quick Start, skips to the code blocks. Goes straight to the endpoint via left nav, not search. Clicks Try It! before reading the spec. Hits OAuth, gets stuck, opens Copilot or navigates to Concepts → Apps. If Copilot unblocks him, he becomes a power user of it for the rest of the integration. Returns later for a different endpoint — uses search if he remembers the name, navigates to the resource if he does not.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">High in his stack</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:70%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">High — code-blocks-first</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:85%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Medium-low — hits walls</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:45%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Medium — power user with caveats</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:55%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Medium — pragmatic iterator</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:60%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Very High — 4-day sprint</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:85%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Single feature owner</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:35%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">Low — skims, code-first</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:25%"></div></div>
+          </div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">⚡ Mid-level full-stack</span>
+            <span class="ctx-tag">🚀 Series A startup pace</span>
+            <span class="ctx-tag">⏱ 4-day sprint to ship</span>
+            <span class="ctx-tag">🤖 AI Copilot power-user</span>
+            <span class="ctx-tag">🔧 TypeScript + Python</span>
+            <span class="ctx-tag">📋 Postman + IDE workflow</span>
+            <span class="ctx-tag">🎯 TTFC-obsessed</span>
+            <span class="ctx-tag">🆕 First-time on this API</span>
+          </div>
+
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Friday morning. Diego has 4 hours before the PR review. He clicks "Try It!" on the Get-an-Album endpoint, hits the OAuth wall, asks the Copilot for help. The Copilot's next answer decides whether he ships today or rolls into next sprint.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <p>The "Try It!" playground must work <em>out of the box with safe demo credentials</em>, OR the auth setup must be the smoothest path in the product — linked inline from every endpoint page that requires auth, with step-by-step guidance for getting credentials from the provider's dashboard. The Copilot must produce <em>complete, runnable</em> code with imports, instantiation, and the call — not just the call. Walkthroughs are valuable for him because they tie multiple endpoints into a real use case, but only if they map to actual product patterns, not toy demos. Errors in his SDK call should map to specific docs sections in one click.</p>
+    </div>
+
+    <div class="evidence-block">
+      <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">Evidence &amp; Confidence &nbsp; <span class="confidence-pill" style="background: var(--diego-soft); color: var(--diego);">Medium-High · Designer-synthesised</span></h3>
+      <dl class="evidence-grid">
+        <dt>Sources</dt>
+        <dd>Live portal walkthrough (OAuth friction cliff observation); Beacon positioning around SDK-first; widely-observed builder-developer behaviour in dev-tools UX research; API Copilot output structure as observed.</dd>
+        <dt>Method</dt>
+        <dd>Desk research synthesis.</dd>
+        <dt>Assumptions</dt>
+        <dd>(a) Beacon's strongest commercial conversion is on this persona. (b) Most portal traffic by volume is integrator-mode. (c) Deadline pressure shapes most decisions on the page.</dd>
+        <dt>Unknowns</dt>
+        <dd>Actual time-to-first-successful-call on Beacon-built portals. How often Copilot's code outputs are pasted and run versus reviewed and rewritten. Abandonment point in the OAuth flow.</dd>
+        <dt>Validation Needs</dt>
+        <dd>Time-to-first-call analytics segmented by language. User-test recordings of OAuth setup. Copilot output adoption rate (paste / edit / run).</dd>
+      </dl>
+    </div>
+
+    <div class="questions-block">
+      <h3>Open Questions</h3>
+      <ul class="questions-list">
+        <li>Is there a test mode or sandbox credentials in the playground, or does every developer need to register their own OAuth app first?</li>
+        <li>Does the Copilot output include imports today, or only the call?</li>
+        <li>Is there analytics on how often developers leave the portal to ask Stack Overflow during their first integration?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SARA — FULL DETAILED PERSONA -->
+  <section id="sara" class="persona-section sara">
+    <div class="persona-header">
+      <div class="persona-section-avatar">S</div>
+      <div class="persona-header-text">
+        <div class="persona-section-eyebrow">Persona 3 · The Recovering Maintainer</div>
+        <h2>Sara</h2>
+        <p class="persona-section-tagline">An on-call engineer landing on the portal because something broke at 3am — needs to find the exact error, the recovery semantics, and the recent change, fast.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">32</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Backend Eng</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">7 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">Product · 50</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">Hybrid</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context &amp; Background</h3>
+          <p>Sara is 32, a mid-level backend engineer at a fifty-person product team. She maintains six active API integrations including this one. She did not write the original integration — she inherited it from a teammate who left. Right now she is dealing with a 502 error in production; PagerDuty fired twenty minutes ago. She has Datadog dashboards open in another window, the codebase in her editor, and the API portal in a third tab.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals</h3>
+          <p>Stop the bleeding — production is degraded and customers are noticing. Identify whether the error is on her side, the API's side, or a transient infrastructure issue. Find the right retry / backoff / circuit-breaker semantics. Know whether the API has had a recent change that could explain the regression.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Needs</h3>
+          <p>Search that returns specific error codes and their meanings. A clear status / changelog / breaking-changes page. Idempotency, retry, and rate-limit documentation that is <em>prominent</em>, not buried. Response examples for every status code — not just 200. A way to filter docs by "things that can break" rather than wading through capability docs.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points &amp; Frustrations</h3>
+          <p>Search that returns marketing pages when she searches "500" or "429". Error pages that say "Internal Server Error" with no playbook. Changelogs that are press-release-style instead of API-developer-facing. Walkthroughs that explain the happy path but never the recovery. Discovering that yes-the-API-changed-last-week buried in a blog post, not the portal.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours &amp; Habits</h3>
+          <p>Uses portal search first, ctrl-F second, navigation third. Reads only the error tabs (401, 403, 429, 500); skips the success body. Always checks the changelog page before assuming her code is wrong. Opens the Copilot only as a last resort because "AI cannot tell me what just broke." Bookmarks the error-code reference if one exists.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <div class="psych-grid">
+            <div class="psych-item">
+              <div class="psych-label">Motivations</div>
+              <div class="psych-value">Restore service; document the postmortem; never see this error again.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Fears</div>
+              <div class="psych-value">Being blamed for an outage that is the API's fault. Missing a breaking-change announcement. Introducing a fix that masks the real problem.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Attitudes</div>
+              <div class="psych-value">Distrust until proved otherwise. Treats the portal as evidence in an investigation, not as a teacher.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Beliefs</div>
+              <div class="psych-value">"The portal lies about edge cases." "The status page is more honest than the docs."</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Risk Tolerance</div>
+              <div class="psych-value">Very low. If she cannot verify a behaviour, she will not depend on it.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Trust Orientation</div>
+              <div class="psych-value">Trusts precision, timestamps, explicit "this changed on X date" notes. Distrusts blanket statements.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Decision Style</div>
+              <div class="psych-value">Investigative, evidence-led, conservative.</div>
+            </div>
+            <div class="psych-item">
+              <div class="psych-label">Technical Confidence</div>
+              <div class="psych-value">Very high in production debugging. Agnostic about SDK ergonomics.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Did the portal tell her what 502 means in <em>this API's</em> vocabulary? Is there a changelog with the actual change? Are retry semantics specified, or does she have to infer them? Can she tell from the error response alone whether this is a transient or a permanent failure?</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Journey Touchpoints</h3>
+          <p>Lands via Google or a bookmark, not the home page. Searches "502", "rate limit", "retry-after", or the failing endpoint. Goes to the endpoint page, clicks the 5xx response tab — finds nothing useful. Looks for changelog or status — does not find it in the portal. Falls back to Copilot, asks "what does a 502 from this endpoint mean?" — gets a probabilistic answer that does not help her root-cause. Navigates away to Stack Overflow or X to find the truth.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">High — production debugger</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:75%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Very High — reads code daily</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:80%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Medium — inherited code</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:60%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Very Low — "can't tell me what broke"</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:25%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Very Low — won't mask root cause</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:15%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Extreme — production is on fire</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:95%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Owns the integration</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:35%"></div></div>
+          </div>
+          <div class="lens-row">
+            <div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">Medium — deep when stakes are high</span></div>
+            <div class="lens-track"><div class="lens-fill" style="width:60%"></div></div>
+          </div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">🔧 Production debugger</span>
+            <span class="ctx-tag">🚨 On-call rotation</span>
+            <span class="ctx-tag">📊 Datadog watcher</span>
+            <span class="ctx-tag">🗂 Inherited integration</span>
+            <span class="ctx-tag">🔁 Changelog-first reader</span>
+            <span class="ctx-tag">🚫 No-AI-for-incidents</span>
+            <span class="ctx-tag">🔍 Error-tab scanner</span>
+            <span class="ctx-tag">⏱ MTTR pressure</span>
+          </div>
+
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>3:47 AM. PagerDuty fires. Sara opens the portal, searches "502 retry", finds marketing pages. Opens the Copilot — asks "did anything change in the Albums endpoint last week?" If the Copilot can't answer with citation, she's calling the API provider's on-call at 4 AM.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <p>An <strong>Error Catalogue</strong> must be a first-class IA branch — parallel to Endpoints and Models. Every error code documented: when it fires, what the response body looks like, how to recover, idempotency guidance. A <strong>Changelog</strong> must be prominent in the portal nav with API-developer framing, not marketing release notes. Search must weight error codes, status codes, and concept terms heavily, not bury them. The Copilot must know <em>when</em> changes were made and <em>which endpoints</em> they affected — it must be wired into the changelog as a knowledge source. Per-endpoint "what can break" surface, summarising rate limits, retry behaviour, idempotency, and recent changes.</p>
+    </div>
+
+    <div class="evidence-block">
+      <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">Evidence &amp; Confidence &nbsp; <span class="confidence-pill" style="background: var(--sara-soft); color: var(--sara);">Medium · Designer-synthesised</span></h3>
+      <dl class="evidence-grid">
+        <dt>Sources</dt>
+        <dd>Portal walkthrough (response tabs without examples; no changelog in portal); general production-debug developer-tools UX patterns; Beacon positioning as an end-to-end docs-portal product.</dd>
+        <dt>Method</dt>
+        <dd>Desk research and inference.</dd>
+        <dt>Assumptions</dt>
+        <dd>(a) A meaningful share of portal traffic is debug-mode, not learn-mode. (b) Most APIs deployed via Beacon have a changelog somewhere, but not necessarily in the portal. (c) Maintainers are an underserved persona in dev-tools UX overall.</dd>
+        <dt>Unknowns</dt>
+        <dd>How Beacon customers surface changelogs today. Whether the Copilot has access to release notes. Search query distribution on a live Beacon portal — are error terms common?</dd>
+        <dt>Validation Needs</dt>
+        <dd>Log analysis of search queries on a representative portal. Interviews with on-call developers who landed during an incident. Heatmap analysis of 4xx / 5xx response tabs.</dd>
+      </dl>
+    </div>
+
+    <div class="questions-block">
+      <h3>Open Questions</h3>
+      <ul class="questions-list">
+        <li>Does the Beacon product offer a built-in changelog feature today?</li>
+        <li>Is there a status-page integration available to Beacon customers?</li>
+        <li>Does the Copilot know about API changes over time, or only the current state of the API?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CROSS PERSONA INSIGHTS -->
+  <section id="cross" class="cross-section">
+    <h2>Cross-persona insights</h2>
+
+    <h3>What all three personas have in common</h3>
+    <p>All three trust <strong>precision over polish</strong>. All three are made nervous by AI assistants that summarise away detail. All three reach for <strong>search before navigation</strong> when the question is specific. All three care about errors more than the marketing site implies.</p>
+
+    <h3>Where they diverge</h3>
+    <p>Maya wants <strong>breadth and HTTP-first truth</strong>. Diego wants <strong>a working SDK example in his language</strong>. Sara wants <strong>error semantics and changelogs</strong>. A portal that serves only one will fail the other two. The redesign needs to layer the surfaces so each persona can find their preferred entry point without the others' content getting in the way.</p>
+
+    <h3>What this means for the IA</h3>
+    <p>The current portal organises around content <em>type</em> (Quick Start, Walkthroughs, Endpoints, Models). The persona analysis suggests a parallel organising principle is needed: <strong>mode of use</strong>. A developer in Maya-mode wants to scan capability and risk. Diego-mode wants to do. Sara-mode wants to fix. The redesign should support all three without requiring the user to declare which mode they are in — the surfaces should be self-evidently useful to each.</p>
+
+    <h3>What this means for the AI Copilot</h3>
+    <p>The Copilot's contract changes per persona:</p>
+    <ul>
+      <li><strong>For Maya:</strong> cite sources, link to the spec, surface limits and edge cases proactively.</li>
+      <li><strong>For Diego:</strong> produce complete, runnable code with imports, instantiation, and the call. Be the friction-relief on OAuth setup.</li>
+      <li><strong>For Sara:</strong> know the changelog. Cite which version of the API the answer applies to. Refuse to guess when the question is about state ("what just changed?").</li>
+    </ul>
+    <p>A Copilot that does only one of these well is a Copilot that disappoints two of the three personas.</p>
+  </section>
+
+  <!-- VALIDATION PLAN -->
+  <section id="validation" class="validation-section">
+    <h2>Validation plan</h2>
+    <p class="lead">The personas above are designer-led syntheses, not research-validated artefacts. To harden them, the following research is recommended <em>before</em> finalising the redesign direction.</p>
+    <ul class="validation-list">
+      <li><strong>Five to eight semi-structured interviews</strong> with developers who have recently used an Beacon-built portal. Mixed-mode — some in evaluation, some in integration, some in maintenance.</li>
+      <li><strong>Search log analysis</strong> from a representative Beacon-customer portal. Validates Sara's behaviour (do error terms appear?) and Maya's behaviour (do capability terms appear?).</li>
+      <li><strong>Time-to-first-successful-call analytics</strong> segmented by language and by entry page. Validates Diego's OAuth-friction-cliff hypothesis.</li>
+      <li><strong>Heatmap analysis</strong> of the Responses section on endpoint pages. Quantifies how often non-200 tabs are clicked.</li>
+      <li><strong>AI Copilot transcript review</strong> (anonymised, with consent). Classifies question types — evaluator, integrator, maintainer — and assesses answer quality against each.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>Beacon Developer Portal — Primary Personas · v0.1</p>
+    <p>Prepared by Khushboo Khan · 2026-05-14 · Working document, validation pending.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deliverable 3 · IA Audit Pass · Beacon Developer Portal</title>
+<style>
+:root{
+  --ink:#F4F7F5;--txt:#F4F7F5;--muted:#A4AFA9;--faint:#8E978F;
+  --bg:#050706;--surface:#0d110f;--soft:#080b0a;--softer:#080b0a;
+  --border:rgba(255,255,255,.10);--rule:rgba(255,255,255,.17);--hairline:rgba(255,255,255,.06);
+  --accent:#34E29B;--accent-soft:rgba(52,226,155,.12);
+  --red:#E0625F;--orange:#E8A23D;--amber:#E8A23D;--green:#34E29B;
+  --L1:#5B8DEF;--L2:#3FD0C9;--L3:#34E29B;--L4:#B57EDC;--L5:#E8A23D;
+  --audit:#F4F7F5;
+  --sev-h:#F3A379;--sev-h-bg:#080b0a;
+  --sev-m:#F59E0B;--sev-m-bg:#080b0a;
+  --sev-l:#ADB1B9;--sev-l-bg:#080b0a;
+  --gate:#F4F7F5;--gate-bg:#080b0a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
+
+.topstrip{position:fixed;top:0;left:0;right:0;height:56px;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--hairline);display:flex;align-items:center;padding:0 24px}
+.topstrip .brand{font-weight:700;color:var(--ink);font-size:14px;letter-spacing:.04em}
+.topstrip .brand .num{color:var(--muted);margin-right:8px;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+.topstrip .sep{color:var(--rule);margin:0 14px}
+.topstrip .meta{color:var(--muted);font-size:13px}
+.topstrip .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.topstrip .opt-pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5;background:var(--audit)}
+.topstrip a.alt{font-size:13px;color:var(--accent);text-decoration:none;font-weight:600}
+.topstrip a.alt:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-columns:260px 1fr;max-width:1440px;margin:0 auto;padding-top:56px}
+.sidebar{position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;padding:32px 20px 64px;border-right:1px solid var(--hairline)}
+.sidebar .group{margin-bottom:24px}
+.sidebar .group h4{font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px;padding:0 12px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:6px;color:var(--txt);text-decoration:none;font-size:13px;font-weight:500;transition:background .12s}
+.sidebar a:hover{background:var(--soft);color:var(--ink)}
+.sidebar a.active{background:var(--soft);color:var(--ink);font-weight:600}
+.sidebar a .n{font-size:11px;color:var(--faint);font-weight:600;width:18px}
+.sidebar a .badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--soft);color:var(--muted)}
+
+main{padding:48px 56px 120px;min-width:0}
+
+.cover{padding:48px 0 56px;border-bottom:1px solid var(--hairline);margin-bottom:56px}
+.cover .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.cover h1{font-size:46px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);font-weight:700;margin-bottom:16px;max-width:780px}
+.cover h1 .opt{color:var(--audit)}
+.cover .sub{font-size:18px;color:var(--muted);font-weight:400;max-width:680px;margin-bottom:32px;line-height:1.5}
+.cover .meta{display:flex;gap:32px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.cover .meta .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted);display:block;margin-bottom:2px}
+.cover .meta .value{color:var(--ink);font-weight:600;font-size:15px}
+
+/* === STAT BAR === */
+.statbar{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px}
+.stat{padding:16px 18px;border:1px solid var(--border);border-radius:10px;background:#0d110f}
+.stat .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:6px}
+.stat .num{font-size:32px;color:var(--ink);font-weight:700;line-height:1}
+.stat .sub{font-size:12px;color:var(--muted);margin-top:2px}
+.stat.h .num{color:var(--sev-h)}
+.stat.m .num{color:var(--sev-m)}
+.stat.l .num{color:var(--sev-l)}
+.stat.g .num{color:var(--gate)}
+
+.section{margin-bottom:72px;scroll-margin-top:72px}
+.section-head{margin-bottom:24px}
+.section-head .meta{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5}
+.chip-audit{background:var(--audit)}
+.section-num{font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.06em}
+.section-title{font-size:28px;line-height:1.2;letter-spacing:-.015em;color:var(--ink);font-weight:700;margin-bottom:10px;max-width:760px}
+.section-frame{font-size:15px;color:var(--muted);max-width:680px;line-height:1.55}
+
+/* === LENS BLOCKS === */
+.lens{border:1px solid var(--border);border-radius:14px;background:#0d110f;margin-bottom:18px;overflow:hidden}
+.lens-head{padding:18px 22px;background:var(--surface);border-bottom:1px solid var(--hairline);display:flex;align-items:center;gap:14px}
+.lens-num{font-size:32px;font-weight:700;color:var(--audit);line-height:1;min-width:46px}
+.lens-info{flex:1}
+.lens-info h3{font-size:18px;color:var(--ink);font-weight:700;margin-bottom:3px}
+.lens-info .q{font-size:13px;color:var(--muted);line-height:1.5}
+.lens-counts{display:flex;gap:6px;flex-shrink:0}
+.lens-counts .c{font-size:11px;font-weight:700;padding:4px 8px;border-radius:99px;letter-spacing:.04em;color:#F4F7F5}
+.lens-counts .c.h{background:var(--sev-h)}
+.lens-counts .c.m{background:var(--sev-m)}
+.lens-counts .c.l{background:var(--sev-l)}
+.lens-body{padding:18px 22px}
+
+.finding{padding:14px 16px;border:1px solid var(--hairline);border-radius:10px;background:var(--softer);margin-bottom:10px}
+.finding:last-child{margin-bottom:0}
+.finding.h{border-left:3px solid var(--sev-h)}
+.finding.m{border-left:3px solid var(--sev-m)}
+.finding.l{border-left:3px solid var(--sev-l)}
+.finding.gate{border:1px solid var(--gate);background:var(--gate-bg)}
+.finding-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.finding-code{font-size:13px;font-weight:700;color:var(--ink);font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace}
+.finding-sev{font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+.finding-sev.h{background:var(--sev-h-bg);color:var(--sev-h)}
+.finding-sev.m{background:var(--sev-m-bg);color:var(--sev-m)}
+.finding-sev.l{background:var(--sev-l-bg);color:var(--sev-l)}
+.finding-gate{font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase;background:var(--gate);color:#F4F7F5}
+.finding-title{font-size:14px;color:var(--ink);font-weight:600;flex:1}
+.finding-body{font-size:13px;color:var(--txt);line-height:1.55;margin-bottom:10px}
+.finding-body code{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;background:#0d110f;padding:1px 5px;border-radius:3px;border:1px solid var(--hairline)}
+.finding-rec{padding:10px 12px;background:#0d110f;border:1px solid var(--hairline);border-radius:8px;font-size:12px;color:var(--txt);line-height:1.55}
+.finding-rec .label{font-size:9px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;display:block}
+.finding-rec.gate{background:var(--gate-bg);border-color:var(--gate)}
+.finding-rec.gate .label{color:var(--gate)}
+
+/* === VERDICT === */
+.verdict{padding:28px 32px;border:1px solid #BBF7D0;background:linear-gradient(135deg,#0d110f,#0d110f);border-radius:14px;margin-bottom:48px}
+.verdict h3{font-size:22px;color:var(--ink);font-weight:700;margin-bottom:10px}
+.verdict h3 .check{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--green);color:#F4F7F5;font-weight:700;margin-right:8px;vertical-align:-4px}
+.verdict p{font-size:15px;color:var(--txt);line-height:1.6;max-width:780px;margin-bottom:8px}
+
+/* === GATES === */
+.gates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gate-card{padding:20px;border:1px solid var(--gate);border-radius:12px;background:var(--gate-bg)}
+.gate-card .gtag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--gate);color:#F4F7F5;letter-spacing:.06em;display:inline-block;margin-bottom:10px}
+.gate-card h4{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.gate-card .desc{font-size:13px;color:var(--txt);line-height:1.55;margin-bottom:12px}
+.gate-card .opts{font-size:12px;color:var(--txt);line-height:1.7}
+.gate-card .opts .o{display:block;padding:4px 0}
+.gate-card .opts .o strong{color:var(--ink)}
+.gate-card .rec{margin-top:10px;padding:8px 10px;background:#0d110f;border:1px solid var(--gate);border-radius:6px;font-size:12px;color:var(--gate);font-weight:600}
+
+/* === AUTO-APPLY LIST === */
+.auto-list{padding:24px;border:1px solid var(--border);border-radius:12px;background:#0d110f}
+.auto-list h4{font-size:13px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.auto-list ol{list-style:none;counter-reset:auto-c;font-size:13px;color:var(--txt);line-height:1.7}
+.auto-list ol li{counter-increment:auto-c;padding:6px 0 6px 36px;position:relative;border-bottom:1px solid var(--hairline)}
+.auto-list ol li:last-child{border-bottom:0}
+.auto-list ol li::before{content:counter(auto-c,decimal-leading-zero);position:absolute;left:0;top:6px;font-size:11px;color:var(--accent);font-weight:700;font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace}
+.auto-list ol li code{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;color:var(--audit);font-weight:600;margin-right:8px}
+
+/* === CLOSING === */
+.closing{padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center}
+.closing h3{font-size:20px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.closing p{font-size:14px;color:var(--muted);line-height:1.55;max-width:600px;margin:0 auto 18px}
+.closing .links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.closing .links a{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:#0d110f;border:1px solid var(--border);border-radius:8px;color:var(--ink);text-decoration:none;font-weight:600;font-size:13px}
+.closing .links a:hover{border-color:var(--accent);color:var(--accent)}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  main{padding:32px 20px 80px}
+  .statbar{grid-template-columns:repeat(2,1fr)}
+  .gates-grid{grid-template-columns:1fr}
+  .lens-head{flex-direction:column;align-items:flex-start}
+  .lens-counts{margin-top:8px}
+}
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="topstrip">
+  <span class="brand"><span class="num">Deliverable 3</span> IA Audit Pass</span>
+  <span class="sep">·</span>
+  <span class="opt-pill">9-LENS AUDIT</span>
+  <div class="right">
+    <a class="alt" href="Deliverable-3-IA-Current-Portal-Improvement.html">← Back to D3 IA</a>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="group">
+      <h4>Cover</h4>
+      <a href="#cover"><span class="n">·</span> Overview</a>
+      <a href="#summary"><span class="n">·</span> Summary</a>
+      <a href="#verdict"><span class="n">·</span> Verdict</a>
+    </div>
+    <div class="group">
+      <h4>Structure lenses</h4>
+      <a href="#lens-1"><span class="n">01</span> Group composition <span class="badge">2</span></a>
+      <a href="#lens-2"><span class="n">02</span> Cross-links <span class="badge">2</span></a>
+      <a href="#lens-3"><span class="n">03</span> F-code coverage <span class="badge">1</span></a>
+    </div>
+    <div class="group">
+      <h4>Coverage lenses</h4>
+      <a href="#lens-4"><span class="n">04</span> Persona paths <span class="badge">4</span></a>
+      <a href="#lens-5"><span class="n">05</span> SDK-axis <span class="badge">3</span></a>
+      <a href="#lens-6"><span class="n">06</span> Missing surfaces <span class="badge">3</span></a>
+    </div>
+    <div class="group">
+      <h4>Precision lenses</h4>
+      <a href="#lens-7"><span class="n">07</span> Naming <span class="badge">2</span></a>
+      <a href="#lens-8"><span class="n">08</span> Realism <span class="badge">1</span></a>
+      <a href="#lens-9"><span class="n">09</span> Mobile + a11y <span class="badge">3</span></a>
+    </div>
+    <div class="group">
+      <h4>Resolution</h4>
+      <a href="#gates"><span class="n">·</span> Decision gates</a>
+      <a href="#auto"><span class="n">·</span> Auto-apply list</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- COVER -->
+    <section class="cover" id="cover">
+      <div class="kicker">Deliverable 3 · IA Audit · Beacon Developer Portal</div>
+      <h1>Nine lenses on the IA <span class="opt">before we commit it.</span></h1>
+      <p class="sub">A second-pass audit on the proposed four-group IA. Each lens runs against the proposal and produces findings. Three findings are decision gates that need your approval. Eighteen are auto-applyable polish.</p>
+      <div class="meta">
+        <div><span class="label">Audited file</span><span class="value">Deliverable 3 · Current Portal Improvement</span></div>
+        <div><span class="label">Lenses run</span><span class="value">9 / 9</span></div>
+        <div><span class="label">Findings</span><span class="value">21 total</span></div>
+        <div><span class="label">Critical</span><span class="value">0</span></div>
+        <div><span class="label">By</span><span class="value">Khushboo Khan</span></div>
+      </div>
+    </section>
+
+    <!-- SUMMARY STATS -->
+    <section class="section" id="summary">
+      <div class="statbar">
+        <div class="stat"><div class="lbl">Total findings</div><div class="num">21</div><div class="sub">across 9 lenses</div></div>
+        <div class="stat h"><div class="lbl">High</div><div class="num">4</div><div class="sub">strategic gaps</div></div>
+        <div class="stat m"><div class="lbl">Medium</div><div class="num">13</div><div class="sub">polish needed</div></div>
+        <div class="stat l"><div class="lbl">Low</div><div class="num">4</div><div class="sub">minor clarifications</div></div>
+        <div class="stat g"><div class="lbl">Decision gates</div><div class="num">3</div><div class="sub">need your call</div></div>
+      </div>
+    </section>
+
+    <!-- VERDICT -->
+    <section id="verdict">
+      <div class="verdict">
+        <h3><span class="check">✓</span>The IA holds.</h3>
+        <p>Zero critical findings. The four-group structure (Quick Start · Build · Reference · Operate) is the right shape. No finding invalidates the core proposal.</p>
+        <p>What this audit catches is the gap between "the IA is right" and "the IA is fully documented". Twenty-one places where the proposal makes a choice but does not state it. Three places where it makes an implicit choice that needs a decision from you.</p>
+      </div>
+    </section>
+
+    <!-- LENS 1 -->
+    <section class="section" id="lens-1">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">01</div>
+          <div class="lens-info">
+            <h3>Group composition</h3>
+            <div class="q">Are the right items in the right groups? Is anything orphaned, double-homed, or miscategorized?</div>
+          </div>
+          <div class="lens-counts"><span class="c m">1 MED</span><span class="c l">1 LOW</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A1.1</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Changelog placement is inconsistent</span>
+            </div>
+            <div class="finding-body">Secondary nav lists Changelog under Reference. The implementation table splits <code>/resources</code> into "SDKs &amp; OpenAPI" and "Error codes" but does not place Changelog. Result: Changelog is implied but never explicitly assigned a node.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Add Changelog as an explicit row in the implementation table. Home it under <code>Reference › Changelog</code>.</div>
+          </div>
+          <div class="finding l">
+            <div class="finding-head">
+              <span class="finding-code">A1.2</span>
+              <span class="finding-sev l">Low</span>
+              <span class="finding-title">Try It Out has two homes without rule of primacy</span>
+            </div>
+            <div class="finding-body">Try It Out appears as a standalone node in Reference and as an inline component on every endpoint page. The IA does not specify which is primary.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Inline-on-endpoint is primary. Standalone <code>Reference › Try It Out</code> is a playground fallback for users without a specific endpoint in mind. State this explicitly.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 2 -->
+    <section class="section" id="lens-2">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">02</div>
+          <div class="lens-info">
+            <h3>Cross-link integrity</h3>
+            <div class="q">Every routing rule promised in D3 and re-stated in D4. Does each have a clear source surface and destination surface?</div>
+          </div>
+          <div class="lens-counts"><span class="c m">1 MED</span><span class="c l">1 LOW</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A2.1</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Routes out of Quick Start are not explicit</span>
+            </div>
+            <div class="finding-body">D3 details routes between Build, Reference, and Operate, but routes from Quick Start to the other three groups are implied rather than stated. When a developer finishes <code>Quick Start › First call</code>, where does the IA send them?</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Add "Next step" CTAs on <code>Quick Start › First call</code>: "Build a real integration → Build › First integration" and "Browse the API → Reference › Endpoints".</div>
+          </div>
+          <div class="finding l">
+            <div class="finding-head">
+              <span class="finding-code">A2.2</span>
+              <span class="finding-sev l">Low</span>
+              <span class="finding-title">Conditional cross-link behavior is undefined</span>
+            </div>
+            <div class="finding-body">The IA promises every endpoint page links to "Used in walkthrough". If no walkthrough exists for an endpoint, what happens?</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Hide the link by default. If the endpoint has no walkthrough, show "Ask Copilot to draft a walkthrough" instead.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 3 -->
+    <section class="section" id="lens-3">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">03</div>
+          <div class="lens-info">
+            <h3>F-code coverage</h3>
+            <div class="q">The 40 findings in Deliverable 1. Did the IA actually resolve each one, or explicitly note it as out-of-scope?</div>
+          </div>
+          <div class="lens-counts"><span class="c h">1 HIGH</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding h">
+            <div class="finding-head">
+              <span class="finding-code">A3.1</span>
+              <span class="finding-sev h">High</span>
+              <span class="finding-title">F-code coverage matrix does not exist in D3</span>
+            </div>
+            <div class="finding-body">D3 names a handful of F-codes inside its "Resolves" tags on individual cards, but it never produces a complete matrix mapping all 40 F-codes to resolution path. Reviewers cannot verify coverage at a glance. Risk: silent gaps. <strong>This is the highest-leverage finding in the audit because it lets a hiring manager verify the IA covers what the audit identified.</strong></div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Add a coverage matrix appendix to D3. Two columns: F-code + resolution path. Group rows by resolution type: "Resolved by IA", "Resolved by content", "Resolved by UI", "Resolved by accessibility pass", "Out of IA scope".</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 4 -->
+    <section class="section" id="lens-4">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">04</div>
+          <div class="lens-info">
+            <h3>Persona path completeness</h3>
+            <div class="q">All 8 personas walked end to end through D3. Stress-test off-path cases, not just happy paths.</div>
+          </div>
+          <div class="lens-counts"><span class="c h">1 HIGH</span><span class="c m">2 MED</span><span class="c l">1 LOW</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding gate">
+            <div class="finding-head">
+              <span class="finding-code">A4.1</span>
+              <span class="finding-sev h">High</span>
+              <span class="finding-gate">Decision gate</span>
+              <span class="finding-title">Compliance content placement is ambiguous</span>
+            </div>
+            <div class="finding-body">D3 says Compliance is "planned as <code>Operate › Runbook</code> sibling" but never explicitly places it. Reza cannot evaluate without it, and his path is the strongest persona-level argument for the IA.</div>
+            <div class="finding-rec gate"><span class="label">Decision needed</span><strong>Option A:</strong> Quick Start › Compliance (my recommendation). Reza sees it before any auth. Con: dilutes Quick Start. <br><strong>Option B:</strong> Operate › Compliance. Signals operational maturity. Con: Reza has to navigate Operate during evaluation.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A4.2</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">SDK landing page is not specified</span>
+            </div>
+            <div class="finding-body">What does <code>/net-standard-library/</code> (root inside an SDK with no further path) show? D3 does not define this.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>SDK landing shows: working curl in the SDK's language, capability hint strip ("What can the .NET SDK do"), and direct links to each of the four groups for that SDK.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A4.3</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">SDK-switching context preservation is undefined</span>
+            </div>
+            <div class="finding-body">If Diego is on <code>/net/walkthroughs/first-integration/step-3</code> and switches the SDK picker to Python, where does he land?</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Preserve topic context. If the equivalent page exists in the target SDK, route there. If not, fall back to that SDK's Quick Start with a banner: "This walkthrough is not yet available in Python. Start here."</div>
+          </div>
+          <div class="finding l">
+            <div class="finding-head">
+              <span class="finding-code">A4.4</span>
+              <span class="finding-sev l">Low</span>
+              <span class="finding-title">Auth-gated vs public Operate surfaces are not specified</span>
+            </div>
+            <div class="finding-body">Status and Deprecations should be public for Diego-Ops's evaluation. Logs and Webhook events are per-account, so they require auth.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Document the access model. Status / Deprecations / Rate limits (general) / Runbook are public. Logs / Webhook events / Rate limits (your usage) are auth-gated.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 5 -->
+    <section class="section" id="lens-5">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">05</div>
+          <div class="lens-info">
+            <h3>SDK-axis consistency</h3>
+            <div class="q">Does the four-group structure replicate cleanly inside every SDK, or is some content cross-SDK?</div>
+          </div>
+          <div class="lens-counts"><span class="c h">1 HIGH</span><span class="c m">2 MED</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding gate">
+            <div class="finding-head">
+              <span class="finding-code">A5.1</span>
+              <span class="finding-sev h">High</span>
+              <span class="finding-gate">Decision gate</span>
+              <span class="finding-title">Operate group URL structure is undefined</span>
+            </div>
+            <div class="finding-body">Operate content (Status, Deprecations, Rate limits, Runbook) is cross-SDK. It applies to the API, not to any specific SDK. D3 does not say whether Operate lives at <code>/operate/...</code> (portal root) or <code>/[sdk]/operate/...</code> (duplicated per SDK).</div>
+            <div class="finding-rec gate"><span class="label">Decision needed</span>My recommendation: <code>/operate/...</code> at portal root. Each SDK's left rail links into the same root surfaces. Duplication per SDK would be wasteful. Logs and Webhook events stay under the user's account scope, not under an SDK.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A5.2</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Walkthroughs may be partially SDK-agnostic</span>
+            </div>
+            <div class="finding-body">A walkthrough's narrative is usually the same across SDKs; only the code samples differ.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Author walkthroughs once at <code>/build/walkthroughs/...</code> with code samples per language. The SDK picker filters which walkthroughs have code in that SDK's language.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A5.3</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Empty-group behavior is not defined</span>
+            </div>
+            <div class="finding-body">If Python SDK has no Recipes yet, does the Recipes node show empty? Hide?</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Group header shows. Empty sub-state reads: "No Recipes for Python yet. Ask Copilot for a custom one, or browse Recipes in other SDKs."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 6 -->
+    <section class="section" id="lens-6">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">06</div>
+          <div class="lens-info">
+            <h3>Missing surfaces</h3>
+            <div class="q">What does the portal have or need that D3 did not address?</div>
+          </div>
+          <div class="lens-counts"><span class="c h">1 HIGH</span><span class="c m">2 MED</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding gate">
+            <div class="finding-head">
+              <span class="finding-code">A6.1</span>
+              <span class="finding-sev h">High</span>
+              <span class="finding-gate">Decision gate</span>
+              <span class="finding-title">API versioning is not addressed</span>
+            </div>
+            <div class="finding-body">APIs ship v1 and v2 alongside each other. A developer reading <code>/reference/albums/get</code> needs to know which version. D3 does not say.</div>
+            <div class="finding-rec gate"><span class="label">Decision needed</span>My recommendation: SDK picker becomes a two-part SDK × Version selector. Default: latest stable. Deprecation calendar in Operate links into the picker. Alternative: treat each API version as a distinct SDK (simpler but loses semantic grouping). Third option: defer to Wave 2 (acceptable but flags the gap).</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A6.2</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Out-of-IA pages are not acknowledged</span>
+            </div>
+            <div class="finding-body">A developer portal has surfaces outside the four cognitive groups: pricing, account/profile, support, login, terms.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Acknowledge them explicitly. Recommend a top-right utility cluster (Sign in / Pricing / Support) separate from the four-group rail. Footer for terms / privacy / cookies.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A6.3</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Search results page format is not specified</span>
+            </div>
+            <div class="finding-body">D3 mentions Cmd-K opens search grouped by intent. The actual results page layout is not specced.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Results page groups by Quick Start / Build / Reference / Operate. Max 3 results per group above the fold. "More in [group]" link expands per group. Empty state suggests Copilot.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 7 -->
+    <section class="section" id="lens-7">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">07</div>
+          <div class="lens-info">
+            <h3>Naming precision</h3>
+            <div class="q">Are the labels strongest possible? Any academic, ambiguous, or borrowed-from-IA-vocabulary names?</div>
+          </div>
+          <div class="lens-counts"><span class="c m">2 MED</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A7.1</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">"SDKs &amp; OpenAPI" is a compound node</span>
+            </div>
+            <div class="finding-body">The current node combines two distinct concepts. SDKs are libraries to install. OpenAPI is a machine-readable spec to download.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Split into two siblings under Reference: <code>Reference › SDKs</code> and <code>Reference › OpenAPI spec</code>.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A7.2</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">"Logs &amp; Runbook" is a compound node</span>
+            </div>
+            <div class="finding-body">Logs are a usage log. Runbook is an incident response guide. Different surfaces, different intents.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Split into two siblings under Operate: <code>Operate › Logs</code> and <code>Operate › Runbook</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 8 -->
+    <section class="section" id="lens-8">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">08</div>
+          <div class="lens-info">
+            <h3>Implementation realism</h3>
+            <div class="q">Are all the new Operate and Build surfaces buildable in a Part 2 Figma scope, or are some aspirational?</div>
+          </div>
+          <div class="lens-counts"><span class="c m">1 MED</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A8.1</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Implementation phasing is not called out</span>
+            </div>
+            <div class="finding-body">The six Operate surfaces vary widely in build cost. Runbook is content-only. Logs require per-key telemetry storage. The Figma can show all six but the engineering ship is staged.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Add an "Implementation phasing" section to D3. <strong>Wave 1:</strong> content-only (Recipes, Migrations, Runbook). <strong>Wave 2:</strong> status pipeline + deprecation policy (Status, Deprecations). <strong>Wave 3:</strong> per-key telemetry (Logs, Rate limits, Webhook events). Reviewers see realistic delivery cadence, not a flat "build everything" list.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LENS 9 -->
+    <section class="section" id="lens-9">
+      <div class="lens">
+        <div class="lens-head">
+          <div class="lens-num">09</div>
+          <div class="lens-info">
+            <h3>Mobile and accessibility carry-over</h3>
+            <div class="q">Did D3 explicitly carry forward the audit's accessibility findings and address mobile / responsive behavior for the four-group rail?</div>
+          </div>
+          <div class="lens-counts"><span class="c m">2 MED</span><span class="c l">1 LOW</span></div>
+        </div>
+        <div class="lens-body">
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A9.1</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">Mobile rail behavior is not specified</span>
+            </div>
+            <div class="finding-body">The four-group rail is a desktop pattern. D3 does not say what happens on narrow viewports.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Below 980px the rail collapses to a hamburger. Four groups become a sheet menu. Group headers anchor at the sheet top, secondary nodes scroll. Breadcrumb stays in the header but truncates middle.</div>
+          </div>
+          <div class="finding m">
+            <div class="finding-head">
+              <span class="finding-code">A9.2</span>
+              <span class="finding-sev m">Medium</span>
+              <span class="finding-title">A11y findings from Deliverable 1 are not explicitly acknowledged</span>
+            </div>
+            <div class="finding-body">F8.1 through F8.6 from the audit are content / UI / component-level. They are not directly resolved by IA. But D3 should state this explicitly so reviewers do not assume coverage.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>Add a brief "Accessibility scope" note to D3: "Component-level a11y (focus traps, keyboard navigation, contrast) is addressed in the wireframe spec at Deliverable 2 and in the design system handoff, not at the IA level. The IA contributes by giving every navigable surface a clear semantic hierarchy."</div>
+          </div>
+          <div class="finding l">
+            <div class="finding-head">
+              <span class="finding-code">A9.3</span>
+              <span class="finding-sev l">Low</span>
+              <span class="finding-title">Breadcrumb mobile truncation behavior is undefined</span>
+            </div>
+            <div class="finding-body">A breadcrumb like <code>NET Standard Library › Reference › Endpoints › Albums › Get an album</code> does not fit on a 360px viewport.</div>
+            <div class="finding-rec"><span class="label">Recommendation</span>On mobile, truncate the middle: show first crumb plus current crumb (e.g., <code>NET ... › Get an album</code>). Long-press / tap reveals the full chain.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DECISION GATES -->
+    <section class="section" id="gates">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-audit">Resolution</span>
+          <span class="section-num">Decision gates</span>
+        </div>
+        <h2 class="section-title">Three findings need your call.</h2>
+        <p class="section-frame">These cannot be applied without your approval because they change a placement choice or a structural convention. The other eighteen findings auto-apply as polish.</p>
+      </header>
+
+      <div class="gates-grid">
+        <div class="gate-card">
+          <span class="gtag">Gate 1 · A4.1</span>
+          <h4>Compliance placement</h4>
+          <p class="desc">Where does compliance content live for Reza's evaluation?</p>
+          <div class="opts">
+            <span class="o"><strong>Option A:</strong> Quick Start › Compliance</span>
+            <span class="o"><strong>Option B:</strong> Operate › Compliance</span>
+          </div>
+          <div class="rec">My recommendation: Option A. Reza sees it before any auth.</div>
+        </div>
+        <div class="gate-card">
+          <span class="gtag">Gate 2 · A5.1</span>
+          <h4>Operate URL structure</h4>
+          <p class="desc">Does Operate live at portal root or duplicated per SDK?</p>
+          <div class="opts">
+            <span class="o"><strong>Option A:</strong> /operate/... at root</span>
+            <span class="o"><strong>Option B:</strong> /[sdk]/operate/... per SDK</span>
+          </div>
+          <div class="rec">My recommendation: Option A. Avoids duplication.</div>
+        </div>
+        <div class="gate-card">
+          <span class="gtag">Gate 3 · A6.1</span>
+          <h4>API versioning surface</h4>
+          <p class="desc">How does the IA handle v1 vs v2 of the API?</p>
+          <div class="opts">
+            <span class="o"><strong>Option A:</strong> SDK × Version picker</span>
+            <span class="o"><strong>Option B:</strong> Versions as distinct SDKs</span>
+            <span class="o"><strong>Option C:</strong> Defer to Wave 2</span>
+          </div>
+          <div class="rec">My recommendation: Option A. Two-part picker.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTO-APPLY -->
+    <section class="section" id="auto">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-audit">Resolution</span>
+          <span class="section-num">Auto-apply list</span>
+        </div>
+        <h2 class="section-title">Eighteen polish fixes.</h2>
+        <p class="section-frame">These can be applied to D3 without your approval. Each is a documentation gap, an explicit-statement gap, or a placement clarification. Listed in priority order.</p>
+      </header>
+
+      <div class="auto-list">
+        <h4>Apply to D3 in this order</h4>
+        <ol>
+          <li><code>A3.1</code>Add F-code coverage matrix appendix (high leverage)</li>
+          <li><code>A1.1</code>Add Changelog to implementation table</li>
+          <li><code>A1.2</code>State Try It Out primacy rule</li>
+          <li><code>A2.1</code>Add Next-step CTAs out of Quick Start</li>
+          <li><code>A2.2</code>Define conditional cross-link behavior</li>
+          <li><code>A4.2</code>Specify SDK landing page contents</li>
+          <li><code>A4.3</code>Specify SDK-switching context preservation</li>
+          <li><code>A4.4</code>Document Operate access model (public vs auth-gated)</li>
+          <li><code>A5.2</code>State walkthroughs are cross-SDK by default</li>
+          <li><code>A5.3</code>Define empty-group behavior</li>
+          <li><code>A6.2</code>Acknowledge out-of-IA utility pages</li>
+          <li><code>A6.3</code>Spec search results page format</li>
+          <li><code>A7.1</code>Split "SDKs &amp; OpenAPI" into two siblings</li>
+          <li><code>A7.2</code>Split "Logs &amp; Runbook" into two siblings</li>
+          <li><code>A8.1</code>Add implementation phasing section</li>
+          <li><code>A9.1</code>Spec mobile rail behavior</li>
+          <li><code>A9.2</code>Add accessibility scope note</li>
+          <li><code>A9.3</code>Spec breadcrumb mobile truncation</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section">
+      <div class="closing">
+        <h3>What this audit confirms.</h3>
+        <p>The IA is structurally sound. Four groups is the right shape. Quick Start was correctly kept. Build, Reference, Operate are clean and unambiguous. The cross-link logic is internally consistent. The persona pass holds. Apply the eighteen auto-fixes, make the three decisions, and D3 is ready to ship as the canonical assignment IA.</p>
+        <div class="links">
+          <a href="Deliverable-3-IA-Current-Portal-Improvement.html">← Audited file (D3)</a>
+          <a href="Deliverable-3-IA-Audit-Pass.md">View markdown version</a>
+          <a href="Deliverable-4-Persona-Competitor-Validation.html">D4 · IA Defense</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sidebar a');
+function updateActive(){
+  let current = '';
+  sections.forEach(s => {
+    const r = s.getBoundingClientRect();
+    if(r.top <= 120 && r.bottom > 120) current = s.id;
+  });
+  navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+}
+document.addEventListener('scroll', updateActive, {passive:true});
+window.addEventListener('load', updateActive);
+</script>
+</body>
+</html>

@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beacon Developer Portal — Extreme Personas Analysis</title>
+<style>
+  :root {
+    --primary:#34E29B;
+    --primary-mid:#34E29B;
+    --primary-soft:rgba(52,226,155,.12);
+    --accent:#34E29B;
+    --aria:#B57EDC;
+    --aria-soft:rgba(181,126,220,.16);
+    --liam:#34E29B;
+    --liam-soft:rgba(52,226,155,.16);
+    --diego:#3FD0C9;
+    --diego-soft:rgba(63,208,201,.16);
+    --maya:#5B8DEF;
+    --maya-soft:rgba(91,141,239,.16);
+    --reza:#E0625F;
+    --reza-soft:rgba(224,98,95,.16);
+    --bg:#050706;
+    --card:#0d110f;
+    --text:#F4F7F5;
+    --text-secondary:#C9D1CC;
+    --text-muted:#A4AFA9;
+    --border:rgba(255,255,255,.10);
+    --border-soft:rgba(255,255,255,.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1E293B 0%, #312E81 35%, var(--primary) 65%, var(--primary-mid) 100%);
+    color: white;
+    padding: 72px 0 88px;
+    margin-bottom: -56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.12) 0%, transparent 30%),
+                      radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.18) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.85;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 800px;
+  }
+  .hero-subtitle {
+    font-size: 17px;
+    line-height: 1.6;
+    opacity: 0.92;
+    max-width: 760px;
+    font-weight: 400;
+  }
+  .hero-meta {
+    margin-top: 32px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    opacity: 0.82;
+  }
+  .hero-meta strong { font-weight: 600; }
+
+  /* SPECTRUM CARD */
+  .spectrum-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 44px 48px 56px;
+    margin-bottom: 64px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 2;
+  }
+  .spectrum-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .spectrum-card .spectrum-sub {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .spectrum-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 0 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .spectrum-bar {
+    position: relative;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--aria) 0%, var(--aria) 12%, var(--liam) 25%, var(--liam) 37%, var(--diego) 50%, var(--diego) 62%, var(--maya) 75%, var(--maya) 87%, var(--reza) 100%);
+    margin: 0 20px 16px;
+  }
+  .spectrum-nodes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: -52px -20px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .spectrum-node {
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+  }
+  .spectrum-node:hover { transform: translateY(-4px); }
+  .node-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 4px solid var(--card);
+  }
+  .spectrum-node[data-persona="aria"] .node-circle { background: var(--aria); }
+  .spectrum-node[data-persona="liam"] .node-circle { background: var(--liam); }
+  .spectrum-node[data-persona="diego"] .node-circle { background: var(--diego); }
+  .spectrum-node[data-persona="maya"] .node-circle { background: var(--maya); }
+  .spectrum-node[data-persona="reza"] .node-circle { background: var(--reza); }
+  .node-name {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .node-archetype {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 0 4px;
+  }
+
+  /* STICKY NAV */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(250, 250, 249, 0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 50;
+    padding: 14px 0;
+    margin-bottom: 48px;
+  }
+  .sticky-nav-inner {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .sticky-nav-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 14px;
+  }
+  .sticky-nav a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background:#0d110f;
+    transition: all 0.15s ease;
+  }
+  .sticky-nav a:hover { color: var(--text); border-color: var(--primary-mid); }
+
+  /* METHODOLOGY CALLOUT */
+  .methodology {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 56px;
+  }
+  .methodology h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .methodology p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .methodology p:last-child { margin-bottom: 0; }
+  .methodology blockquote {
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--primary-mid);
+    padding: 16px 0 16px 20px;
+    border-left: 4px solid var(--primary-mid);
+    margin: 18px 0;
+    background: var(--primary-soft);
+    border-radius: 0 8px 8px 0;
+    padding-right: 24px;
+  }
+  .methodology strong { color: var(--text); font-weight: 600; }
+  .methodology ol { padding-left: 24px; margin: 14px 0; }
+  .methodology ol li { font-size: 14.5px; line-height: 1.7; margin-bottom: 8px; color: var(--text); }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    margin: 88px 0 32px;
+    text-align: center;
+  }
+  .section-divider .eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary-mid);
+    background: var(--primary-soft);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .section-divider h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* PERSONA SECTION */
+  .persona-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .persona-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    z-index: 1;
+  }
+  .persona-section.aria::before { background: var(--aria); }
+  .persona-section.liam::before { background: var(--liam); }
+  .persona-section.diego::before { background: var(--diego); }
+  .persona-section.maya::before { background: var(--maya); }
+  .persona-section.reza::before { background: var(--reza); }
+
+  .persona-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    padding: 44px 48px 24px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .persona-section-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .persona-section.aria .persona-section-avatar { background: var(--aria); }
+  .persona-section.liam .persona-section-avatar { background: var(--liam); }
+  .persona-section.diego .persona-section-avatar { background: var(--diego); }
+  .persona-section.maya .persona-section-avatar { background: var(--maya); }
+  .persona-section.reza .persona-section-avatar { background: var(--reza); }
+  .persona-header-text { flex: 1; }
+  .persona-pos {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .persona-section.aria .persona-pos { background: var(--aria-soft); color: var(--aria); }
+  .persona-section.liam .persona-pos { background: var(--liam-soft); color: var(--liam); }
+  .persona-section.diego .persona-pos { background: var(--diego-soft); color: var(--diego); }
+  .persona-section.maya .persona-pos { background: var(--maya-soft); color: var(--maya); }
+  .persona-section.reza .persona-pos { background: var(--reza-soft); color: var(--reza); }
+  .persona-section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .archetype-line {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .archetype-line strong { color: var(--text); font-weight: 600; }
+  .one-liner {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 760px;
+  }
+
+  /* STATS STRIP */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .stat-cell {
+    padding: 16px 18px;
+    text-align: center;
+    border-right: 1px solid var(--border-soft);
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  /* TWO-COL BODY */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    padding: 32px 48px;
+  }
+  .content-block { margin-bottom: 24px; }
+  .content-block:last-child { margin-bottom: 0; }
+  .content-block h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .content-block p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .content-block p:last-child { margin-bottom: 0; }
+  .content-block ul { list-style: none; }
+  .content-block ul li {
+    font-size: 14.5px;
+    line-height: 1.65;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .content-block ul li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  /* COMPACT PSYCHOGRAPHICS (6 items) */
+  .psych-compact-list { list-style: none; }
+  .psych-compact-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .psych-compact-list li:last-child { border-bottom: none; }
+  .psych-compact-list .psych-key {
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+  }
+  .persona-section.aria .psych-key { color: var(--aria); }
+  .persona-section.liam .psych-key { color: var(--liam); }
+  .persona-section.diego .psych-key { color: var(--diego); }
+  .persona-section.maya .psych-key { color: var(--maya); }
+  .persona-section.reza .psych-key { color: var(--reza); }
+
+  /* ANCHOR NOTE — for Diego/Maya compact cards */
+  .anchor-note {
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin: 28px 48px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .anchor-note strong { color: var(--text); font-weight: 600; }
+
+  /* SNAPSHOT ZONE */
+  .snapshot-zone {
+    background: var(--bg);
+    padding: 32px 48px;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .snapshot-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 36px;
+  }
+  .snapshot-block h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .persona-section.aria .snapshot-block h4 { color: var(--aria); }
+  .persona-section.liam .snapshot-block h4 { color: var(--liam); }
+  .persona-section.diego .snapshot-block h4 { color: var(--diego); }
+  .persona-section.maya .snapshot-block h4 { color: var(--maya); }
+  .persona-section.reza .snapshot-block h4 { color: var(--reza); }
+
+  /* 8-Lens bars */
+  .lens-row { margin-bottom: 9px; }
+  .lens-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    gap: 8px;
+  }
+  .lens-name { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .lens-value { font-size: 10.5px; color: var(--text-muted); text-align: right; }
+  .lens-track { height: 5px; background: #121714; border-radius: 10px; overflow: hidden; }
+  .lens-fill { height: 100%; border-radius: 10px; }
+  .persona-section.aria .lens-fill { background: var(--aria); }
+  .persona-section.liam .lens-fill { background: var(--liam); }
+  .persona-section.diego .lens-fill { background: var(--diego); }
+  .persona-section.maya .lens-fill { background: var(--maya); }
+  .persona-section.reza .lens-fill { background: var(--reza); }
+
+  /* Context tags */
+  .ctx-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ctx-tag {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-soft);
+    white-space: nowrap;
+  }
+
+  /* Key Scenario callout */
+  .scenario {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+  .persona-section.aria .scenario { background: var(--aria-soft); border-color: rgba(14, 165, 233, 0.3); }
+  .persona-section.liam .scenario { background: var(--liam-soft); border-color: rgba(16, 185, 129, 0.3); }
+  .persona-section.diego .scenario { background: var(--diego-soft); border-color: rgba(217, 119, 6, 0.3); }
+  .persona-section.maya .scenario { background: var(--maya-soft); border-color: rgba(37, 99, 235, 0.3); }
+  .persona-section.reza .scenario { background: var(--reza-soft); border-color: rgba(124, 58, 237, 0.3); }
+  .scenario-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .persona-section.aria .scenario-label { color: var(--aria); }
+  .persona-section.liam .scenario-label { color: var(--liam); }
+  .persona-section.diego .scenario-label { color: var(--diego); }
+  .persona-section.maya .scenario-label { color: var(--maya); }
+  .persona-section.reza .scenario-label { color: var(--reza); }
+  .scenario p { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+  /* STRESS POINT CALLOUT — extreme analysis specific */
+  .stress-point {
+    background: #1B2A4A;
+    padding: 22px 28px;
+    margin: 0;
+    border-left: 5px solid;
+    color: white;
+  }
+  .persona-section.aria .stress-point { border-left-color: var(--aria); }
+  .persona-section.liam .stress-point { border-left-color: var(--liam); }
+  .persona-section.diego .stress-point { border-left-color: var(--diego); }
+  .persona-section.maya .stress-point { border-left-color: var(--maya); }
+  .persona-section.reza .stress-point { border-left-color: var(--reza); }
+  .stress-point-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .persona-section.aria .stress-point-label { color: var(--aria); }
+  .persona-section.liam .stress-point-label { color: var(--liam); }
+  .persona-section.diego .stress-point-label { color: var(--diego); }
+  .persona-section.maya .stress-point-label { color: var(--maya); }
+  .persona-section.reza .stress-point-label { color: var(--reza); }
+  .stress-point p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.92);
+  }
+  .stress-point p strong { color: white; font-weight: 600; }
+
+  /* CALLOUT (UX Implications) */
+  .callout {
+    border-left: 4px solid var(--primary-mid);
+    background: var(--primary-soft);
+    padding: 24px 28px;
+    margin: 32px 48px;
+    border-radius: 0 12px 12px 0;
+  }
+  .persona-section.aria .callout { border-left-color: var(--aria); background: var(--aria-soft); }
+  .persona-section.liam .callout { border-left-color: var(--liam); background: var(--liam-soft); }
+  .persona-section.diego .callout { border-left-color: var(--diego); background: var(--diego-soft); }
+  .persona-section.maya .callout { border-left-color: var(--maya); background: var(--maya-soft); }
+  .persona-section.reza .callout { border-left-color: var(--reza); background: var(--reza-soft); }
+  .callout h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .callout ul { list-style: none; }
+  .callout ul li {
+    font-size: 14px;
+    line-height: 1.65;
+    padding: 5px 0 5px 18px;
+    position: relative;
+    color: var(--text);
+  }
+  .callout ul li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+  .callout strong { font-weight: 600; }
+
+  /* EVIDENCE BLOCK */
+  .evidence-block {
+    background: var(--bg);
+    border-top: 1px solid var(--border-soft);
+    padding: 24px 48px;
+  }
+  .evidence-block .evidence-heading {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .conf-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .conf-pill.strong { background: #0d110f; color: #059F74; }
+  .conf-pill.medium { background: #0d110f; color: #DB650B; }
+  .evidence-block ul.evidence-sources { list-style: none; margin-bottom: 12px; }
+  .evidence-block ul.evidence-sources li {
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 3px 0 3px 14px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .evidence-block ul.evidence-sources li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+  .evidence-block p.confidence-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+  .evidence-block p.confidence-text strong { color: var(--text); font-weight: 600; }
+
+  /* CROSS-SPECTRUM SECTION */
+  .cross-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 56px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cross-section h2 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .cross-section .lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 36px;
+    max-width: 860px;
+  }
+  .cross-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .cross-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 24px 28px;
+    backdrop-filter: blur(8px);
+  }
+  .cross-card-num {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .cross-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+    letter-spacing: -0.01em;
+  }
+  .cross-card p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.88);
+  }
+  .cross-card strong { color: white; font-weight: 600; }
+  .cross-card em { color: rgba(255,255,255,0.95); font-style: italic; }
+
+  /* MODE VS SPECTRUM */
+  .mode-vs-spectrum {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 64px;
+  }
+  .mode-vs-spectrum h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .mode-vs-spectrum p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .lens-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+  }
+  .lens-table th, .lens-table td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14px;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .lens-table th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 700;
+    background: var(--bg);
+  }
+  .lens-table tr:last-child td { border-bottom: none; }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0 56px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+  footer p { margin-bottom: 6px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { padding: 48px 0 64px; }
+    .hero h1 { font-size: 28px; }
+    .spectrum-card { padding: 28px 24px 36px; }
+    .spectrum-nodes { grid-template-columns: repeat(5, 1fr); gap: 4px; margin: -40px -4px 0; }
+    .node-circle { width: 48px; height: 48px; font-size: 18px; border-width: 3px; }
+    .node-name { font-size: 12px; }
+    .node-archetype { font-size: 10px; }
+    .persona-header { flex-direction: column; gap: 16px; padding: 28px 24px 22px; }
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+    .stat-cell { border-bottom: 1px solid var(--border-soft); }
+    .two-col { grid-template-columns: 1fr; gap: 22px; padding: 24px; }
+    .snapshot-zone { padding: 24px; }
+    .snapshot-grid { grid-template-columns: 1fr; gap: 24px; }
+    .callout, .anchor-note { margin: 24px; padding: 22px; }
+    .stress-point { padding: 22px 24px; }
+    .evidence-block { padding: 22px 24px; }
+    .cross-section { padding: 36px 24px; }
+    .cross-grid { grid-template-columns: 1fr; }
+    .mode-vs-spectrum { padding: 28px 24px; }
+    .section-divider h2 { font-size: 24px; }
+  }
+
+  @media print {
+    body { background:#0d110f; font-size: 10.5pt; }
+    .sticky-nav { display: none; }
+    .hero { background:#0d110f; color: var(--primary); page-break-after: avoid; }
+    .persona-section, .cross-section, .mode-vs-spectrum, .methodology, .spectrum-card { page-break-inside: avoid; box-shadow: none; }
+    .cross-section { background: var(--primary-soft); color: var(--text); }
+    .cross-section h2, .cross-section .lead, .cross-card h3, .cross-card p, .cross-card strong { color: var(--text); }
+    .stress-point { background: var(--bg); color: var(--text); border-left-width: 4px; }
+    .stress-point p, .stress-point p strong { color: var(--text); }
+  }
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+
+/* persona brand refinement */
+.hero{background:radial-gradient(1100px 320px at 18% -20%, rgba(52,226,155,.12), transparent 70%), #050706 !important;color:#F4F7F5 !important;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-eyebrow{color:#34E29B !important;opacity:1 !important}
+.hero h1,.hero-title{color:#F4F7F5 !important}
+.hero-subtitle{color:#A4AFA9 !important;opacity:1 !important}
+.hero-meta,.hero-meta div{color:#A4AFA9 !important}
+.hero-meta strong{color:#F4F7F5 !important}
+.persona-avatar,.persona-section-avatar,.header-avatar{color:#06120d !important;font-weight:700}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container hero-content">
+    <div class="hero-eyebrow">Beacon Personas v0.2 — Extreme Analysis</div>
+    <h1>Five personas across the developer expertise spectrum — designed to stress-test the portal at its boundaries</h1>
+    <p class="hero-subtitle">The three mode personas in v0.1 (Maya, Diego, Sara) describe how a developer behaves on the portal. They do not describe how that behaviour changes at the edges of expertise. This document adds five personas placed along a single dimension — developer expertise and API sophistication — and forces the redesign to defend itself at both extremes.</p>
+    <div class="hero-meta">
+      <div><strong>Companion to</strong> &nbsp; 03-personas (mode lens)</div>
+      <div><strong>Companion to</strong> &nbsp; 04-persona-validation-evidence</div>
+      <div><strong>Date</strong> &nbsp; 2026-05-14</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- SPECTRUM CARD -->
+  <section class="spectrum-card">
+    <h2>The expertise spectrum</h2>
+    <div class="spectrum-sub">Low expertise &nbsp; → &nbsp; High expertise</div>
+    <div class="spectrum-axis">
+      <span>Non-developer</span>
+      <span>High-confidence architect</span>
+    </div>
+    <div class="spectrum-bar"></div>
+    <div class="spectrum-nodes">
+      <a href="#aria" class="spectrum-node" data-persona="aria">
+        <div class="node-circle">A</div>
+        <div class="node-name">Aria</div>
+        <div class="node-archetype">Citizen Integrator</div>
+      </a>
+      <a href="#liam" class="spectrum-node" data-persona="liam">
+        <div class="node-circle">L</div>
+        <div class="node-name">Liam</div>
+        <div class="node-archetype">Junior Developer</div>
+      </a>
+      <a href="#diego" class="spectrum-node" data-persona="diego">
+        <div class="node-circle">D</div>
+        <div class="node-name">Diego</div>
+        <div class="node-archetype">Shipping Integrator</div>
+      </a>
+      <a href="#maya" class="spectrum-node" data-persona="maya">
+        <div class="node-circle">M</div>
+        <div class="node-name">Maya</div>
+        <div class="node-archetype">Evaluating Architect</div>
+      </a>
+      <a href="#reza" class="spectrum-node" data-persona="reza">
+        <div class="node-circle">R</div>
+        <div class="node-name">Reza</div>
+        <div class="node-archetype">Platform Engineer</div>
+      </a>
+    </div>
+  </section>
+
+  <nav class="sticky-nav">
+    <div class="sticky-nav-inner">
+      <span class="sticky-nav-label">Jump to</span>
+      <a href="#aria">Aria</a>
+      <a href="#liam">Liam</a>
+      <a href="#diego">Diego</a>
+      <a href="#maya">Maya</a>
+      <a href="#reza">Reza</a>
+      <a href="#cross">Cross-spectrum</a>
+      <a href="#mode-vs-spectrum">Mode vs Spectrum</a>
+    </div>
+  </nav>
+
+  <!-- METHODOLOGY -->
+  <section class="methodology">
+    <h2>Why design for extremes</h2>
+    <p>The technique comes from inclusive design (Patricia Moore's foundational work; Microsoft's Inclusive Design Toolkit; the BBC Gel system). The core argument is simple:</p>
+    <blockquote>If you design for the average user, you fail the extremes. If you design for the extremes, you often pull the average up too.</blockquote>
+    <p>For Beacon specifically, this matters for three reasons:</p>
+    <ol>
+      <li><strong>2026 reality.</strong> AI agents and no-code/low-code platforms (Zapier, Make, n8n, Retool, plus the new wave of agentic builders) mean non-engineers and adjacent roles are increasingly landing on developer portals. Designing only for "developers" is too narrow. Postman's 2025 State of the API Report found 89% of developers using generative AI daily and 51% of organisations deploying AI agents; both populations spill onto API portals.</li>
+      <li><strong>Strategic moat.</strong> Beacon's competitive position rests on being <em>the integrated portal experience</em> — better than Stainless or Speakeasy as a whole DX surface, not just as an SDK generator. That moat shows up at the edges: a portal that an architect respects AND a portal a no-code builder can navigate is one nobody else delivers.</li>
+      <li><strong>Internal consistency.</strong> A portal that serves only the middle implicitly punishes the edges — junior developers get lost, architects get patronised. The design is invisibly hostile to both.</li>
+    </ol>
+  </section>
+
+  <!-- ARIA -->
+  <section class="section-divider">
+    <span class="eyebrow">Lowest extreme</span>
+    <h2>Aria, the citizen integrator</h2>
+  </section>
+
+  <section id="aria" class="persona-section aria">
+    <div class="persona-header">
+      <div class="persona-section-avatar">A</div>
+      <div class="persona-header-text">
+        <span class="persona-pos">Position 1 of 5 · Pre-code</span>
+        <h2>Aria</h2>
+        <div class="archetype-line"><strong>The No-Code Builder Forced into Code</strong> · Lowest — non-engineer who builds with abstractions and only touches API documentation when those abstractions break</div>
+        <p class="one-liner">A marketing-ops manager whose Zapier flow returned a 401 and dropped her at the API docs — she needs plain-English answers and decision trees, not curl.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">31</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Marketing Ops Mgr</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">3 yrs Zapier</div><div class="stat-label">Tool Tenure</div></div>
+      <div class="stat-cell"><div class="stat-value">B2B SaaS · 60</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">Remote</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context</h3>
+          <p>Aria is 31, a Marketing Operations Manager at a 60-person B2B SaaS company. She has spent three years building automations in Zapier and Make to connect HubSpot, Slack, Notion, Asana, and the company's product database. She has never written code professionally — she considers herself "not technical" even though she configures complex multi-step automations daily.</p>
+          <p>Today her Resonance-to-Slack integration broke. Zapier's connector reports "Resonance returned 401" and points her to "check the API documentation." She has the docs open, Zapier open, and the company's developer Slack channel open in case she needs to escalate.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals &amp; Needs</h3>
+          <p>She wants to get the workflow running again, ideally before standup. She needs to know whether this is a "click somewhere in settings" problem or a "needs a developer" problem. She needs plain-English explanations, step-by-step recovery instructions that do not assume CLI access, and a way to tell the difference between "my problem" and "the API's problem."</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points</h3>
+          <p>SDK-only documentation that assumes she will write code. Error messages like "OAuth token expired" without explaining how to refresh one. Jargon (rate limit, idempotency, retry-after, scope) treated as common knowledge. Code blocks she cannot read or modify. "Try It!" buttons that demand credentials she does not have access to obtain.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours</h3>
+          <p>Reads the prose, skips the code blocks entirely. Uses ctrl-F for plain-English error text more than for status codes. Asks the AI assistant in conversational language ("why isn't this working?"). Falls back to the no-code platform's community forums first, then internal Slack.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <ul class="psych-compact-list">
+            <li><span class="psych-key">Motivations</span> Keep the workflow running. Look competent. Avoid escalating to engineering.</li>
+            <li><span class="psych-key">Fears</span> Breaking something further. Admitting she is out of her depth. Being told "this is a developer question."</li>
+            <li><span class="psych-key">Attitudes</span> APIs are mysterious infrastructure. Documentation is intimidating. AI is a friend who explains things kindly.</li>
+            <li><span class="psych-key">Risk Tolerance</span> Very low. Will not click anything labelled "regenerate" or "revoke."</li>
+            <li><span class="psych-key">Trust Orientation</span> Trusts plain language and visual guidance. Distrusts terminal commands.</li>
+            <li><span class="psych-key">Technical Confidence</span> Low. Three years of Zapier; she considers it "not real" technical.</li>
+          </ul>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Can she identify and fix the problem without escalating? Are the recovery steps clickable, not codeable? Did the AI explain the error in language she understands? Is there a way to tell whether the issue is hers, the no-code platform's, or the API's?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">Very Low — "not technical"</span></div><div class="lens-track"><div class="lens-fill" style="width:15%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Very Low — skips code blocks</span></div><div class="lens-track"><div class="lens-fill" style="width:10%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Very Low — never set it up</span></div><div class="lens-track"><div class="lens-fill" style="width:5%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">High — AI is friendly explainer</span></div><div class="lens-track"><div class="lens-fill" style="width:75%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Very Low — won't click "revoke"</span></div><div class="lens-track"><div class="lens-fill" style="width:10%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Medium-High — workflow down</span></div><div class="lens-track"><div class="lens-fill" style="width:65%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Low — her own workflow only</span></div><div class="lens-track"><div class="lens-fill" style="width:15%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">Medium — reads prose</span></div><div class="lens-track"><div class="lens-fill" style="width:40%"></div></div></div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">📱 No-code platform user</span>
+            <span class="ctx-tag">🏢 Marketing Ops Manager</span>
+            <span class="ctx-tag">🔌 Zapier / Make builder</span>
+            <span class="ctx-tag">🚫 Never wrote production code</span>
+            <span class="ctx-tag">🆘 Escalates to engineering</span>
+            <span class="ctx-tag">🤖 AI as friendly explainer</span>
+            <span class="ctx-tag">🎯 Outcome &gt; implementation</span>
+            <span class="ctx-tag">🌐 Cross-tool integrator</span>
+          </div>
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Tuesday standup is in 40 minutes. Aria's Zapier flow has been broken for 12 hours. She opens the API docs, sees a wall of code, asks the Copilot "why am I getting 401?" If the answer leads with <code>curl -H Authorization:</code>, she escalates. If it explains the token expired in plain English, she fixes it herself.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stress-point">
+      <div class="stress-point-label">⚡ Why this extreme matters</div>
+      <p>By 2027 most organisations will have <strong>Aria-equivalents</strong> running automations on the same APIs developers consume (Gartner: 65% low-code; Postman 2025: 51% of orgs have deployed AI agents). A portal that fails Aria fails the next 5–10 years of API consumption. Beacon's integrated portal-plus-SDK-plus-AI is the rare position that can serve both audiences from one surface — pretending otherwise is a strategic blind spot.</p>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <ul>
+        <li>A <strong>"By-task" access path</strong> alongside "by-SDK" and "by-endpoint" — entry points framed around outcomes like "Why is my integration suddenly returning 401?", "How do I refresh my access token?", "Where do I find my Client ID?"</li>
+        <li><strong>Plain-English error explanations</strong> prepended to every status-code page; technical detail below the fold.</li>
+        <li>An <strong>AI Copilot mode that detects non-developer context</strong> and adjusts vocabulary accordingly — when the user asks "why isn't this working?", the response should not lead with a code sample.</li>
+        <li><strong>Decision-tree guides</strong> for common recovery flows: "401 received → is this you or the API? Try this. Still failing? Here's how to escalate."</li>
+        <li><strong>Screenshots and visual references</strong> for the provider's dashboard, not just the API itself.</li>
+      </ul>
+    </div>
+
+    <div class="evidence-block">
+      <div class="evidence-heading">Evidence &amp; Confidence <span class="conf-pill medium">Medium · Designer-synthesised</span></div>
+      <ul class="evidence-sources">
+        <li>Postman 2025 State of the API: 89% of developers use generative AI daily; growth of API consumption by non-traditional users</li>
+        <li>Gartner forecast: 65% of application development will use low-code by 2027</li>
+        <li>Stack Overflow 2024: learners trust AI more than professionals (49% vs 42%) — the same pattern likely extends to citizen integrators</li>
+        <li>Postman 2025: 51% of organisations have deployed AI agents — Aria interacts with portals indirectly via these agents</li>
+      </ul>
+      <p class="confidence-text">The citizen-integrator persona is well-documented in no-code platform UX research and in the broader RevOps / MarOps literature. Their <strong>specific interaction with raw API portals</strong> — as opposed to abstracted no-code connectors — is less directly studied. Worth treating as a hypothesis worth honouring: the trend lines (AI agents + low-code growth) suggest this population will only grow.</p>
+    </div>
+  </section>
+
+  <!-- LIAM -->
+  <section class="section-divider">
+    <span class="eyebrow">Low</span>
+    <h2>Liam, the junior developer</h2>
+  </section>
+
+  <section id="liam" class="persona-section liam">
+    <div class="persona-header">
+      <div class="persona-section-avatar">L</div>
+      <div class="persona-header-text">
+        <span class="persona-pos">Position 2 of 5 · Learning</span>
+        <h2>Liam</h2>
+        <div class="archetype-line"><strong>The Tutorial-Mode Builder</strong> · Low — writes code, but learning the craft; treats every integration as a study session as much as a task</div>
+        <p class="one-liner">A bootcamp grad on his first real API integration — copies and tweaks examples confidently but doesn't yet understand what OAuth <em>actually does</em> or why the error message points to "scopes."</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">24</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Junior Full-Stack</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">6 months</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">Startup · 30</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">Hybrid</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context</h3>
+          <p>Liam is 24, a Junior Full-Stack Developer at a thirty-person startup. He is six months into his first developer job, having come from a twelve-week bootcamp. He is strong on JavaScript/React and learning Node and APIs. His first real integration: connecting the product to a music API for a feature. His tech lead said "use their docs and the SDK." Stack Overflow, ChatGPT, and the docs are all open simultaneously.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals &amp; Needs</h3>
+          <p>He wants to complete the integration without asking too many questions in Slack. He needs to learn enough about OAuth to defend his choices in code review. He needs walkthroughs that explain <em>why</em>, not just <em>what</em>. He needs code samples that include imports, environment variable setup, and deployment notes. He needs concept pages that connect "what is a scope?" to "how does that show up in the code?"</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points</h3>
+          <p>Code samples that omit the import statement. OAuth tutorials that explain the flow conceptually but not how to register the app in the provider's dashboard. Errors like <code>invalid_scope</code> with no link to the scopes documentation. AI suggestions that include three different libraries when he only knows one. "Setting up SDKs" pages that assume he already knows how to manage env vars and secrets.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours</h3>
+          <p>Copies examples wholesale, then deletes lines until something breaks to learn what each does. Asks ChatGPT before reading the docs. Reads tutorials linearly. Does not search the portal — navigates by clicking. Bookmarks pages he did not fully understand to revisit.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <ul class="psych-compact-list">
+            <li><span class="psych-key">Motivations</span> Ship the thing. Learn the craft. Look competent at standup.</li>
+            <li><span class="psych-key">Fears</span> Asking a "stupid question" in Slack. Pushing code that gets shredded in review. OAuth becoming a multi-day yak shave.</li>
+            <li><span class="psych-key">Attitudes</span> Documentation is a teacher first, reference second. AI is a study buddy.</li>
+            <li><span class="psych-key">Risk Tolerance</span> Medium. Will paste AI-generated code if it compiles.</li>
+            <li><span class="psych-key">Trust Orientation</span> Trusts step-by-step tutorials, AI that explains its reasoning, and senior teammates.</li>
+            <li><span class="psych-key">Technical Confidence</span> Low-medium. Strong in his bootcamp languages, fragile elsewhere.</li>
+          </ul>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Did the tutorial explain <em>why</em>, not just <em>what</em>? Did the example include everything needed to run it? Did the AI explain the error in beginner-friendly language without dumbing it down? Did the concept pages link back to the endpoints that use them?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">Low — fragile beyond bootcamp</span></div><div class="lens-track"><div class="lens-fill" style="width:35%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Medium — JS strong, others fuzzy</span></div><div class="lens-track"><div class="lens-fill" style="width:55%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Low — conceptually fuzzy</span></div><div class="lens-track"><div class="lens-fill" style="width:20%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">High — AI as study buddy</span></div><div class="lens-track"><div class="lens-fill" style="width:70%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Medium — pastes if it compiles</span></div><div class="lens-track"><div class="lens-fill" style="width:50%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Medium-High — standup pressure</span></div><div class="lens-track"><div class="lens-fill" style="width:55%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Low — tech lead reviews</span></div><div class="lens-track"><div class="lens-fill" style="width:20%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">High — reads tutorials linearly</span></div><div class="lens-track"><div class="lens-fill" style="width:70%"></div></div></div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">🎓 Bootcamp graduate</span>
+            <span class="ctx-tag">💻 JavaScript / React strong</span>
+            <span class="ctx-tag">📚 First real API integration</span>
+            <span class="ctx-tag">🤖 AI as study buddy</span>
+            <span class="ctx-tag">👥 Pings senior on Slack</span>
+            <span class="ctx-tag">📖 Tutorial-mode reader</span>
+            <span class="ctx-tag">❓ Asks "why" not "what"</span>
+            <span class="ctx-tag">🔄 Copy-paste-modify learner</span>
+          </div>
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>First day implementing the integration. Liam reads Quick Start, copies the OAuth flow code, doesn't fully understand it but pastes anyway. The endpoint returns 401. He asks the Copilot "why?" The Copilot either teaches him about scopes — or hands him a working snippet he ships without understanding. The design choice teaches him a habit he keeps for years.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stress-point">
+      <div class="stress-point-label">⚡ Why this extreme matters</div>
+      <p>If the portal fails Liam, it fails the next generation of integrators. <strong>Liam grows up into Diego in three to five years</strong>; if his first integration with this API was a frustrating slog, his future team will choose competitors. Junior developers are also the population most exposed to AI dependency — they will absorb whatever interaction patterns the Copilot teaches them. The Copilot's design choices propagate up.</p>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <ul>
+        <li>A <strong>"First integration?" onboarding mode</strong> that surfaces conceptual context inline — "before you call this endpoint, you'll need an access token; here's why and how."</li>
+        <li><strong>Walkthroughs that explain, not demo</strong> — the goal is teaching, with rationale embedded.</li>
+        <li><strong>AI Copilot in "explain mode"</strong> — when the user asks "why?" it explains; it does not just answer.</li>
+        <li><strong>Bidirectional concept-to-endpoint links</strong> — from "Scopes" to "the endpoints that require this scope," and from each endpoint back to the concept.</li>
+        <li><strong>Error messages with novice-aware hints</strong> — "you might be missing X" framed as guidance, not just diagnosis.</li>
+      </ul>
+    </div>
+
+    <div class="evidence-block">
+      <div class="evidence-heading">Evidence &amp; Confidence <span class="conf-pill strong">Strong · Designer-synthesised</span></div>
+      <ul class="evidence-sources">
+        <li>Stack Overflow 2024: developers learning to code trust AI more (49%) than professionals (42%) — supports the "AI as study buddy" pattern</li>
+        <li>SmartBear State of API Documentation: 70% want examples, 51% want errors documented — junior developers over-index on both</li>
+        <li>Sohan et al. (2017) study on usage examples in REST API documentation: inexperienced developers benefit most from worked examples</li>
+        <li>Postman 2024: 44% admit to digging through source code to understand APIs — a documentation gap juniors feel acutely</li>
+        <li>The general literature on bootcamp graduates and onboarding cost in developer-tools UX</li>
+      </ul>
+      <p class="confidence-text">The junior developer profile is <strong>well-studied across dev-tools UX research, AI-assistant adoption studies, and developer-education literature</strong>. Both the tutorial-led behaviour and the AI-as-teacher pattern are documented.</p>
+    </div>
+  </section>
+
+  <!-- DIEGO (MID anchor) -->
+  <section class="section-divider">
+    <span class="eyebrow">Mid · Anchor from 03</span>
+    <h2>Diego, the shipping integrator</h2>
+  </section>
+
+  <section id="diego" class="persona-section diego">
+    <div class="persona-header">
+      <div class="persona-section-avatar">D</div>
+      <div class="persona-header-text">
+        <span class="persona-pos">Position 3 of 5 · Mid · Validated v0.1 anchor</span>
+        <h2>Diego</h2>
+        <div class="archetype-line"><strong>The Time-Boxed Builder</strong> · Mid-level, 5 years, ships in 4-day sprints</div>
+        <p class="one-liner">Mid-level full-stack developer, 5 years' experience, shipping the integration this week. Full profile in <code>03-personas</code>, evidence-validated in <code>04-persona-validation-evidence</code>.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">28</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Full-Stack Dev</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">5 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">Series A · 40</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">Remote</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="anchor-note">
+      <strong>Spectrum role:</strong> Diego is the default. He represents the dominant developer pattern at volume — the developer the portal serves "by default" today. A redesign that solves for Diego solves the common case; a redesign that solves <em>only</em> for Diego fails the four others. His needs (working examples, fast OAuth, complete runnable code from the Copilot, fast time-to-first-call) must be preserved — but the design must extend to serve both lower and higher. <em>See <code>03-personas</code> for full content.</em>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">High in his stack</span></div><div class="lens-track"><div class="lens-fill" style="width:70%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">High — code-blocks-first</span></div><div class="lens-track"><div class="lens-fill" style="width:85%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Medium-low — hits walls</span></div><div class="lens-track"><div class="lens-fill" style="width:45%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Medium — power user with caveats</span></div><div class="lens-track"><div class="lens-fill" style="width:55%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Medium — pragmatic iterator</span></div><div class="lens-track"><div class="lens-fill" style="width:60%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Very High — 4-day sprint</span></div><div class="lens-track"><div class="lens-fill" style="width:85%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Single feature owner</span></div><div class="lens-track"><div class="lens-fill" style="width:35%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">Low — skims, code-first</span></div><div class="lens-track"><div class="lens-fill" style="width:25%"></div></div></div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">⚡ Mid-level full-stack</span>
+            <span class="ctx-tag">🚀 Series A startup pace</span>
+            <span class="ctx-tag">⏱ 4-day sprint to ship</span>
+            <span class="ctx-tag">🤖 AI Copilot power-user</span>
+            <span class="ctx-tag">🔧 TypeScript + Python</span>
+            <span class="ctx-tag">📋 Postman + IDE workflow</span>
+            <span class="ctx-tag">🎯 TTFC-obsessed</span>
+            <span class="ctx-tag">🆕 First-time on this API</span>
+          </div>
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Friday morning. Diego has 4 hours before the PR review. He clicks "Try It!" on the Get-an-Album endpoint, hits the OAuth wall, asks the Copilot for help. The Copilot's next answer decides whether he ships today or rolls into next sprint.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stress-point">
+      <div class="stress-point-label">⚡ Why this extreme matters</div>
+      <p>Diego is <strong>the volume case</strong>. Most portal traffic looks like him. If the design fails Diego, the design fails the redesign — there is no other persona large enough to compensate. He is also the only persona whose needs are unambiguously well-evidenced at scale (Postman, SmartBear, Stack Overflow data all converge here).</p>
+    </div>
+  </section>
+
+  <!-- MAYA (HIGH anchor) -->
+  <section class="section-divider">
+    <span class="eyebrow">High · Anchor from 03</span>
+    <h2>Maya, the evaluating architect</h2>
+  </section>
+
+  <section id="maya" class="persona-section maya">
+    <div class="persona-header">
+      <div class="persona-section-avatar">M</div>
+      <div class="persona-header-text">
+        <span class="persona-pos">Position 4 of 5 · High · Validated v0.1 anchor</span>
+        <h2>Maya</h2>
+        <div class="archetype-line"><strong>The Capability Assessor</strong> · Senior, 12 years, scrutiny mode</div>
+        <p class="one-liner">Senior backend engineer / tech lead, 12 years' experience, comparing the API against alternatives before committing. Full profile in <code>03-personas</code>, evidence-validated in <code>04-persona-validation-evidence</code>.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">35</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Sr Tech Lead</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">12 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">B2B SaaS · 200</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">EMEA</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="anchor-note">
+      <strong>Spectrum role:</strong> Maya represents the technically-sophisticated end of the typical professional developer population. She reads the OpenAPI spec, distrusts SDK-only views, demands citation in AI answers, and wants the error model legible. Where Diego is in flow mode, Maya is in scrutiny mode. The redesign must respect her <em>without being intimidating to Liam</em>. <em>See <code>03-personas</code> for full content.</em>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">Very High — spec level</span></div><div class="lens-track"><div class="lens-fill" style="width:90%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Very High — reads SDK source</span></div><div class="lens-track"><div class="lens-fill" style="width:90%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Expert</span></div><div class="lens-track"><div class="lens-fill" style="width:85%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Low — distrusts uncited</span></div><div class="lens-track"><div class="lens-fill" style="width:30%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Low — would skip a feature</span></div><div class="lens-track"><div class="lens-fill" style="width:25%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Medium — evaluation timeline</span></div><div class="lens-track"><div class="lens-fill" style="width:45%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">High — team-wide adoption</span></div><div class="lens-track"><div class="lens-fill" style="width:65%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">High — reads changelog first</span></div><div class="lens-track"><div class="lens-fill" style="width:80%"></div></div></div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">🔍 Spec-first evaluator</span>
+            <span class="ctx-tag">📊 Compares 3+ vendors</span>
+            <span class="ctx-tag">🌍 EMEA tech lead</span>
+            <span class="ctx-tag">⚖️ Procurement signoff</span>
+            <span class="ctx-tag">📝 Decision-memo writer</span>
+            <span class="ctx-tag">🚫 AI-summary skeptic</span>
+            <span class="ctx-tag">🔐 OAuth expert</span>
+            <span class="ctx-tag">📋 Reads changelog first</span>
+          </div>
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Maya has three tabs open — Beacon's portal, Stainless's portal, a competitor's docs. She is making a recommendation by end of week. She searches "rate limit" in each. The portal that returns a clear, structured, cited answer wins the engineering eval.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stress-point">
+      <div class="stress-point-label">⚡ Why this extreme matters</div>
+      <p>Maya is <strong>the gate for considered B2B adoption</strong>. She decides whether the API is "production-grade" for her team and writes the recommendation upward. Win Maya and you win 200 downstream engineers as a cohort. Lose her and the team picks a competitor before integration even starts.</p>
+    </div>
+  </section>
+
+  <!-- REZA -->
+  <section class="section-divider">
+    <span class="eyebrow">Highest extreme</span>
+    <h2>Reza, the platform engineer</h2>
+  </section>
+
+  <section id="reza" class="persona-section reza">
+    <div class="persona-header">
+      <div class="persona-section-avatar">R</div>
+      <div class="persona-header-text">
+        <span class="persona-pos">Position 5 of 5 · Architect</span>
+        <h2>Reza</h2>
+        <div class="archetype-line"><strong>The Builder of Builders</strong> · Highest — designs APIs and platforms others build on; judges this API on whether he could build something like it himself</div>
+        <p class="one-liner">A principal platform engineer at a 2,000-person company who will consume this API across multiple internal teams — and whose evaluation will determine the contract value.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell"><div class="stat-value">41</div><div class="stat-label">Age</div></div>
+      <div class="stat-cell"><div class="stat-value">Principal Platform Eng</div><div class="stat-label">Role</div></div>
+      <div class="stat-cell"><div class="stat-value">18 years</div><div class="stat-label">Experience</div></div>
+      <div class="stat-cell"><div class="stat-value">Enterprise · 2,000</div><div class="stat-label">Company</div></div>
+      <div class="stat-cell"><div class="stat-value">On-site HQ</div><div class="stat-label">Region</div></div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="content-block">
+          <h3>Context</h3>
+          <p>Reza is 41, a Principal Platform Engineer at a large enterprise (financial services, healthcare, or similar regulated industry). Eighteen years of experience. He wrote his first internal SDK in 2012 and has shipped five production APIs at scale. He maintains the internal developer platform that 200+ engineers at his company depend on. Today he is evaluating this API for adoption across multiple business units — his recommendation will determine procurement. He has the OpenAPI spec open in Stoplight, the portal open in another tab, and his team's internal "API evaluation checklist" open in a third.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Goals &amp; Needs</h3>
+          <p>He needs to determine whether the API meets the company's standards for production use. He needs to anticipate integration cost across 5+ downstream teams. He needs to identify gaps that would require him to wrap or extend the SDK with internal logic. He needs the full OpenAPI spec (not just the rendered docs), a coherent error model with HTTP-status semantics, pagination, rate-limit, and bulk semantics that work at scale, webhook reliability documentation (delivery guarantees, signing, replay), data privacy and audit guarantees, SDK source on GitHub, a versioning and deprecation policy he can plan against, and at least published latency p99.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Pain Points</h3>
+          <p>Portals that hide the OpenAPI spec behind nice rendering — he wants the YAML, downloadable, current. SDKs that wrap responses in idiomatic conveniences and lose access to the raw HTTP payload. Marketing pages disguised as technical documentation. AI assistants that summarise away the engineering detail. "Just trust us" answers on rate limits, retry semantics, or webhook delivery.</p>
+        </div>
+
+        <div class="content-block">
+          <h3>Behaviours</h3>
+          <p>Downloads the OpenAPI spec immediately. Inspects the SDK source on GitHub before evaluating the docs. Reads the changelog backwards six-plus months to assess freshness and deprecation discipline. Tests rate limits and edge cases in a sandbox before recommending. Compares the API's design choices against his team's standards. Writes a one-page internal review with explicit go/no-go criteria.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h3>Psychographics</h3>
+          <ul class="psych-compact-list">
+            <li><span class="psych-key">Motivations</span> Protect the company's engineering quality bar. Avoid the next "we built on this and now we're stuck" disaster. Mentor his platform team.</li>
+            <li><span class="psych-key">Fears</span> Vendor lock-in costing 7 figures to unwind. Integration problems that surface 18 months later. Roadmap divergence between vendor and his needs.</li>
+            <li><span class="psych-key">Attitudes</span> Every API is on probation. Documentation tells you 60% of what you need; the rest is in the SDK source and support response time.</li>
+            <li><span class="psych-key">Risk Tolerance</span> Very low. He absorbs risk on behalf of 200 engineers.</li>
+            <li><span class="psych-key">Trust Orientation</span> Trusts the spec, the SDK source, the changelog. Distrusts marketing, AI summaries, breathless feature announcements.</li>
+            <li><span class="psych-key">Technical Confidence</span> Very high. Designs and ships APIs himself.</li>
+          </ul>
+        </div>
+
+        <div class="content-block">
+          <h3>Decision Criteria</h3>
+          <p>Is the OpenAPI spec clean, current, and complete? Is the error model coherent across endpoints? Does the SDK source pass a code-quality smell test? Is the changelog detailed enough to plan against? Are rate limits, retries, and idempotency explicit, not implied? Does the Copilot answer architect-grade questions or only generate boilerplate?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="snapshot-zone">
+      <div class="snapshot-title">Profile Snapshot</div>
+      <div class="snapshot-grid">
+        <div class="snapshot-block">
+          <h4>8-Lens Developer Profile</h4>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Technical Confidence</span><span class="lens-value">Very High — designs APIs</span></div><div class="lens-track"><div class="lens-fill" style="width:98%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Code Reading Fluency</span><span class="lens-value">Very High — reads SDK source</span></div><div class="lens-track"><div class="lens-fill" style="width:98%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">OAuth / Auth Fluency</span><span class="lens-value">Expert — designs OAuth flows</span></div><div class="lens-track"><div class="lens-fill" style="width:95%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">AI Assistant Trust</span><span class="lens-value">Very Low — trusts spec, not AI</span></div><div class="lens-track"><div class="lens-fill" style="width:15%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Risk Tolerance</span><span class="lens-value">Very Low — absorbs risk for 200</span></div><div class="lens-track"><div class="lens-fill" style="width:10%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Time Pressure</span><span class="lens-value">Low — methodical eval</span></div><div class="lens-track"><div class="lens-fill" style="width:30%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Decision Authority</span><span class="lens-value">Very High — enterprise-wide</span></div><div class="lens-track"><div class="lens-fill" style="width:95%"></div></div></div>
+          <div class="lens-row"><div class="lens-label-row"><span class="lens-name">Documentation Patience</span><span class="lens-value">Very High — backward 6+ months</span></div><div class="lens-track"><div class="lens-fill" style="width:95%"></div></div></div>
+        </div>
+        <div class="snapshot-block">
+          <h4>Context Tags</h4>
+          <div class="ctx-tags">
+            <span class="ctx-tag">🏛 Principal Platform Engineer</span>
+            <span class="ctx-tag">🏢 2,000-person enterprise</span>
+            <span class="ctx-tag">🛠 Designs internal APIs</span>
+            <span class="ctx-tag">👥 Mentors 200+ engineers</span>
+            <span class="ctx-tag">📋 GitHub source reader</span>
+            <span class="ctx-tag">🔒 Regulated industry</span>
+            <span class="ctx-tag">⚖️ 7-figure decision authority</span>
+            <span class="ctx-tag">📊 API checklist maker</span>
+          </div>
+          <div class="scenario">
+            <div class="scenario-label">Key Scenario</div>
+            <p>Quarterly tech review. Reza downloads the OpenAPI spec, reads the SDK source on GitHub, opens the changelog. Three signals determine his memo: deprecation discipline, error-model coherence, rate-limit specification. The portal must answer all three before he writes the recommendation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stress-point">
+      <div class="stress-point-label">⚡ Why this extreme matters</div>
+      <p>Reza is the <strong>conversion gate for enterprise contracts</strong>. If Beacon-deployed portals fail him, the API provider's enterprise revenue is capped. Reza is also the persona who can articulate, on the company's behalf, <em>what trust looks like</em> for the AI Copilot — and trust signals that pass Reza's test will pass everyone else's. He is the design's stress-test for "is this Copilot actually trustworthy?"</p>
+    </div>
+
+    <div class="callout">
+      <h3>Product / UX Implications</h3>
+      <ul>
+        <li>A <strong>"For Architects" access path</strong> — direct OpenAPI spec download, changelog with deprecation history, links to SDK source on GitHub, documented production-readiness checklists per endpoint.</li>
+        <li><strong>Model documentation that handles advanced types</strong> clearly — oneOf, anyOf, discriminators, nullable, recursive refs.</li>
+        <li>An <strong>API Copilot that demonstrates reasoning about the API</strong>, not just code generation — "what is your idempotency story?" should return a coherent, cited answer, not a code sample.</li>
+        <li>A <strong>production-readiness panel</strong> per endpoint summarising rate limits, retry guidance, idempotency keys, bulk semantics, webhook delivery guarantees.</li>
+        <li><strong>Versioning and deprecation policy</strong> visible at the portal level (not just buried in release notes) with a public roadmap.</li>
+      </ul>
+    </div>
+
+    <div class="evidence-block">
+      <div class="evidence-heading">Evidence &amp; Confidence <span class="conf-pill strong">Strong · Designer-synthesised</span></div>
+      <ul class="evidence-sources">
+        <li>DiVA-portal evaluation framework: 9 main + 30 sub-criteria for API selection — describes exactly this evaluation pattern</li>
+        <li>WSO2 Technical Evaluation Framework: 14 dimensions; technical fit weighted 30–35% in enterprise procurement</li>
+        <li>Smartsheet 5-dimension framework for enterprise-grade APIs</li>
+        <li>SmartBear State of API: 51% rank "Status and Errors" #2; 49% rank "Error messages" #4 — Reza over-indexes on these</li>
+        <li>Stack Overflow 2024/2025: senior developers are the <em>least</em> trustful of AI — favourability dropped further at higher experience levels</li>
+        <li>Postman 2025: 51% of organisations have deployed AI agents — Reza is the architect deciding governance for these</li>
+      </ul>
+      <p class="confidence-text">The senior architect / platform engineer persona is <strong>among the most-studied in enterprise procurement and DX research</strong>. The behaviours (spec download first, SDK source inspection, changelog audit, sandbox testing) are widely documented patterns in technical due diligence.</p>
+    </div>
+  </section>
+
+  <!-- CROSS SPECTRUM -->
+  <section id="cross" class="cross-section">
+    <h2>Cross-spectrum design implications</h2>
+    <p class="lead">When the design must serve all five personas, six structural moves emerge as universally beneficial. These are the redesign decisions the spectrum analysis surfaces with the most clarity.</p>
+    <div class="cross-grid">
+      <div class="cross-card">
+        <div class="cross-card-num">1</div>
+        <h3>Layered information density</h3>
+        <p>Every page must work at multiple registers of expertise — plain-English summary at the top (Aria, Liam), working example in language (Diego), technical detail and edge cases (Maya), spec download and source links (Reza). One page with <strong>progressively-revealed depth</strong>, not one page per audience.</p>
+      </div>
+      <div class="cross-card">
+        <div class="cross-card-num">2</div>
+        <h3>Vocabulary layering in error pages</h3>
+        <p>Error pages answer at three vocabulary levels: "what happened in human terms" (Aria); "what triggered this and how to recover" (Liam, Diego); "response body, retry semantics, idempotency story" (Maya, Reza). The same page serves all three.</p>
+      </div>
+      <div class="cross-card">
+        <div class="cross-card-num">3</div>
+        <h3>AI Copilot context awareness</h3>
+        <p>The Copilot's contract must <strong>change with context</strong>. Plain English for Aria. Explain-mode for Liam. Complete runnable code with OAuth guidance for Diego. Cite-or-refuse for Maya. Spec-grounded architect-grade answers for Reza. A single-mode Copilot satisfies none of them.</p>
+      </div>
+      <div class="cross-card">
+        <div class="cross-card-num">4</div>
+        <h3>Multiple entry paths</h3>
+        <p>Aria enters from a Google search of an error. Liam from Quick Start. Diego from the endpoint he needs. Maya from Overview with the spec in mind. Reza from API Spec download. The portal must support <strong>every entry point</strong> — the homepage is not the start of the journey for four of five personas.</p>
+      </div>
+      <div class="cross-card">
+        <div class="cross-card-num">5</div>
+        <h3>Trust signals at every expertise level</h3>
+        <p>Aria trusts plain language and clear escalation. Liam trusts step-by-step + AI-with-reasoning. Diego trusts working examples. Maya trusts citation and error docs. Reza trusts the spec, the source, the changelog. Trust comes from a <strong>layered set of signals</strong>, each calibrated to its audience.</p>
+      </div>
+      <div class="cross-card">
+        <div class="cross-card-num">6</div>
+        <h3>The portal is a multi-audience product</h3>
+        <p>The biggest structural implication is the framing itself. The redesign must explicitly treat the portal as a <strong>product serving multiple audiences from one surface</strong>, not a "developer document" some non-developers happen to land on. That is a different design brief than most documentation portals operate under.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODE VS SPECTRUM -->
+  <section id="mode-vs-spectrum" class="mode-vs-spectrum">
+    <h2>How extreme personas relate to mode personas</h2>
+    <p>The five extreme personas (Aria → Liam → Diego → Maya → Reza) sit on <strong>a single dimension: developer expertise and API sophistication</strong>. They stress-test the design at the boundaries.</p>
+    <p>The three mode personas (Maya, Diego, Sara) sit at <strong>comparable expertise levels but in different states of use</strong> — evaluating, integrating, troubleshooting. They stress-test the design across the lifecycle.</p>
+
+    <table class="lens-table">
+      <thead>
+        <tr><th>Lens</th><th>Anchor</th><th>What it surfaces</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mode</strong> (v0.1)</td>
+          <td>A working professional developer</td>
+          <td>Lifecycle gaps — where the design fails in evaluation, integration, or troubleshooting</td>
+        </tr>
+        <tr>
+          <td><strong>Spectrum</strong> (v0.2 / this document)</td>
+          <td>The expertise axis</td>
+          <td>Boundary gaps — where the design fails at the edges of expertise</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The two are <strong>complementary, not competing</strong>. A developer in real life occupies a position on both axes simultaneously — for example, "a junior developer in troubleshooting mode" (intersection of Liam + Sara) is a real moment that neither lens alone captures. Treating the two frameworks as overlays produces a richer test surface for the redesign than either alone.</p>
+
+    <p>Sara from v0.1 is not placed on this spectrum because her defining characteristic — debugging-mode behaviour — is orthogonal to expertise. Sara could be Liam-with-an-incident, Diego-with-an-incident, or Maya-with-an-incident. She is best read as a <strong>mode any expertise level can enter</strong>, not as a position on the expertise spectrum.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>Beacon Developer Portal — Extreme Personas Analysis · v0.2</p>
+    <p>Prepared by Khushboo Khan · 2026-05-14 · Companion to 03-personas and 04-persona-validation-evidence.</p>
+  </div>
+</footer>
+
+</body>
+</html>

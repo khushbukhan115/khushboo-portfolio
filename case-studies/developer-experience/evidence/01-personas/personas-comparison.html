@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beacon Personas — Side-by-Side Comparison</title>
+<style>
+  :root {
+    --primary:#34E29B;
+    --primary-mid:#34E29B;
+    --primary-soft:rgba(52,226,155,.12);
+    --aria:#B57EDC;
+    --aria-soft:rgba(181,126,220,.16);
+    --liam:#34E29B;
+    --liam-soft:rgba(52,226,155,.16);
+    --diego:#3FD0C9;
+    --diego-soft:rgba(63,208,201,.16);
+    --maya:#5B8DEF;
+    --maya-soft:rgba(91,141,239,.16);
+    --reza:#E0625F;
+    --reza-soft:rgba(224,98,95,.16);
+    --bg:#050706;
+    --card:#0d110f;
+    --text:#F4F7F5;
+    --text-secondary:#C9D1CC;
+    --text-muted:#A4AFA9;
+    --border:rgba(255,255,255,.10);
+    --border-soft:rgba(255,255,255,.06);
+    --strong:#F4F7F5;
+    --strong-soft:#080b0a;
+    --moderate:#F4F7F5;
+    --moderate-soft:#080b0a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1E293B 0%, #312E81 50%, var(--primary-mid) 100%);
+    color: white;
+    padding: 56px 0 72px;
+  }
+
+  .hero-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11.5px;
+    font-weight: 600;
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    max-width: 880px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.92;
+    max-width: 800px;
+  }
+
+  .hero-meta {
+    margin-top: 24px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    opacity: 0.8;
+  }
+
+  /* HOW TO READ */
+  .how-to-read {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-top: 32px;
+    margin-bottom: 28px;
+  }
+
+  .how-to-read h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .how-to-read p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text);
+  }
+
+  .how-to-read strong { color: var(--text); font-weight: 600; }
+
+  /* COMPARISON GRID */
+  .grid-wrapper {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: auto;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+    margin-bottom: 48px;
+    max-width: 100%;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 180px repeat(5, minmax(220px, 1fr));
+    min-width: 1280px;
+    position: relative;
+  }
+
+  /* HEADER ROW */
+  .header-cell {
+    background: var(--card);
+    border-bottom: 2px solid var(--border);
+    padding: 22px 18px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    text-align: center;
+  }
+
+  .header-cell.corner {
+    background: var(--bg);
+    z-index: 15;
+    left: 0;
+    text-align: left;
+    padding-left: 22px;
+    border-right: 1px solid var(--border-soft);
+  }
+
+  .header-cell.corner .corner-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .header-cell.corner .corner-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .header-cell.aria { border-top: 4px solid var(--aria); }
+  .header-cell.liam { border-top: 4px solid var(--liam); }
+  .header-cell.diego { border-top: 4px solid var(--diego); }
+  .header-cell.maya { border-top: 4px solid var(--maya); }
+  .header-cell.reza { border-top: 4px solid var(--reza); }
+
+  .header-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  .header-cell.aria .header-avatar { background: var(--aria); }
+  .header-cell.liam .header-avatar { background: var(--liam); }
+  .header-cell.diego .header-avatar { background: var(--diego); }
+  .header-cell.maya .header-avatar { background: var(--maya); }
+  .header-cell.reza .header-avatar { background: var(--reza); }
+
+  .header-name {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .header-archetype {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 0 6px;
+    margin-bottom: 8px;
+  }
+
+  .header-pos {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-cell.aria .header-pos { background: var(--aria-soft); color: var(--aria); }
+  .header-cell.liam .header-pos { background: var(--liam-soft); color: var(--liam); }
+  .header-cell.diego .header-pos { background: var(--diego-soft); color: var(--diego); }
+  .header-cell.maya .header-pos { background: var(--maya-soft); color: var(--maya); }
+  .header-cell.reza .header-pos { background: var(--reza-soft); color: var(--reza); }
+
+  /* SECTION DIVIDER ROW */
+  .section-divider-row {
+    grid-column: 1 / -1;
+    background: var(--bg);
+    padding: 14px 22px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    position: sticky;
+    left: 0;
+  }
+
+  /* DATA ROW CELLS */
+  .label-cell {
+    background: var(--bg);
+    padding: 18px 22px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-right: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .data-cell {
+    padding: 18px 18px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text);
+    border-right: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--card);
+  }
+
+  .data-cell:last-child { border-right: none; }
+
+  /* Subtle accent line on each persona's column */
+  .data-cell.aria { box-shadow: inset 3px 0 0 -1px rgba(14, 165, 233, 0.18); }
+  .data-cell.liam { box-shadow: inset 3px 0 0 -1px rgba(16, 185, 129, 0.18); }
+  .data-cell.diego { box-shadow: inset 3px 0 0 -1px rgba(217, 119, 6, 0.18); }
+  .data-cell.maya { box-shadow: inset 3px 0 0 -1px rgba(37, 99, 235, 0.18); }
+  .data-cell.reza { box-shadow: inset 3px 0 0 -1px rgba(124, 58, 237, 0.18); }
+
+  .data-cell em { color: var(--text-secondary); font-style: italic; }
+  .data-cell strong { font-weight: 600; }
+
+  /* Confidence pill cells */
+  .conf-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .conf-pill.strong { background: var(--strong-soft); color: var(--strong); }
+  .conf-pill.medium { background: var(--moderate-soft); color: var(--moderate); }
+
+  /* Quote-style cells */
+  .quote {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  /* Bullet list in cell */
+  .cell-list {
+    list-style: none;
+    margin: 0;
+  }
+  .cell-list li {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .cell-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    opacity: 0.6;
+  }
+  .data-cell.aria .cell-list li::before { background: var(--aria); }
+  .data-cell.liam .cell-list li::before { background: var(--liam); }
+  .data-cell.diego .cell-list li::before { background: var(--diego); }
+  .data-cell.maya .cell-list li::before { background: var(--maya); }
+  .data-cell.reza .cell-list li::before { background: var(--reza); }
+
+  /* SCROLL HINT */
+  .scroll-hint {
+    display: none;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  @media (max-width: 1280px) {
+    .scroll-hint { display: block; }
+  }
+
+  /* SPECTRUM BAR (mini, on top) */
+  .spectrum-mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+
+  .spectrum-mini-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .spectrum-mini-bar {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,
+      var(--aria) 0%, var(--aria) 12%,
+      var(--liam) 25%, var(--liam) 37%,
+      var(--diego) 50%, var(--diego) 62%,
+      var(--maya) 75%, var(--maya) 87%,
+      var(--reza) 100%);
+    margin: 0 14px 14px;
+  }
+
+  .spectrum-mini-axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 14px 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .spectrum-mini-names {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin: 0 -2px;
+    text-align: center;
+  }
+
+  .spectrum-mini-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .spectrum-mini-name.aria { color: var(--aria); }
+  .spectrum-mini-name.liam { color: var(--liam); }
+  .spectrum-mini-name.diego { color: var(--diego); }
+  .spectrum-mini-name.maya { color: var(--maya); }
+  .spectrum-mini-name.reza { color: var(--reza); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0 56px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+
+  footer p { margin-bottom: 4px; }
+  footer a { color: var(--primary-mid); text-decoration: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { padding: 40px 0 56px; }
+    .hero h1 { font-size: 24px; }
+    .hero-subtitle { font-size: 14px; }
+    .container { padding: 0 16px; }
+    .spectrum-mini { padding: 18px 20px; }
+  }
+
+  @media print {
+    body { background:#0d110f; font-size: 9pt; }
+    .hero { background:#0d110f; color: var(--primary); page-break-after: avoid; }
+    .comparison-grid { min-width: 100%; grid-template-columns: 140px repeat(5, 1fr); }
+    .data-cell, .label-cell, .header-cell { padding: 8px 10px; font-size: 9pt; }
+    .grid-wrapper { box-shadow: none; page-break-inside: avoid; }
+  }
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+
+/* persona brand refinement */
+.hero{background:radial-gradient(1100px 320px at 18% -20%, rgba(52,226,155,.12), transparent 70%), #050706 !important;color:#F4F7F5 !important;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-eyebrow{color:#34E29B !important;opacity:1 !important}
+.hero h1,.hero-title{color:#F4F7F5 !important}
+.hero-subtitle{color:#A4AFA9 !important;opacity:1 !important}
+.hero-meta,.hero-meta div{color:#A4AFA9 !important}
+.hero-meta strong{color:#F4F7F5 !important}
+.persona-avatar,.persona-section-avatar,.header-avatar{color:#06120d !important;font-weight:700}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Beacon Personas v0.2 — Comparison View</div>
+    <h1>Five personas, side-by-side — for scanning the spectrum at a glance</h1>
+    <p class="hero-subtitle">A swim-lane comparison of the same five personas detailed in 05-extreme-personas-analysis.html. This view is optimised for horizontal scanning — comparing how each persona answers the same questions, rather than going deep on any single one. Use it when you want to see what differs between Aria and Reza on the same dimension.</p>
+    <div class="hero-meta">
+      <div><strong>Companion to</strong> &nbsp; 05-extreme-personas-analysis</div>
+      <div><strong>Date</strong> &nbsp; 2026-05-14</div>
+      <div><strong>View</strong> &nbsp; Side-by-side comparison</div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="how-to-read">
+    <h2>How to read this view</h2>
+    <p>Each column is a persona; each row is a dimension. <strong>Read down a column</strong> to see one persona in compact summary. <strong>Read across a row</strong> to see how the dimension shifts from Aria (lowest expertise) to Reza (highest). Section dividers group related dimensions. The previous artifact (05-extreme-personas-analysis) goes deeper on each persona — this view is its scannable counterpart.</p>
+  </div>
+
+  <div class="spectrum-mini">
+    <div class="spectrum-mini-label">Developer expertise &amp; API sophistication — Low → High</div>
+    <div class="spectrum-mini-axis">
+      <span>Non-developer</span>
+      <span>High-confidence architect</span>
+    </div>
+    <div class="spectrum-mini-bar"></div>
+    <div class="spectrum-mini-names">
+      <div class="spectrum-mini-name aria">Aria</div>
+      <div class="spectrum-mini-name liam">Liam</div>
+      <div class="spectrum-mini-name diego">Diego</div>
+      <div class="spectrum-mini-name maya">Maya</div>
+      <div class="spectrum-mini-name reza">Reza</div>
+    </div>
+  </div>
+
+  <p class="scroll-hint">← scroll horizontally to compare all five personas →</p>
+
+  <div class="grid-wrapper">
+    <div class="comparison-grid">
+
+      <!-- HEADER ROW -->
+      <div class="header-cell corner">
+        <div class="corner-eyebrow">Compare</div>
+        <div class="corner-title">5 personas across<br>the expertise spectrum</div>
+      </div>
+      <div class="header-cell aria">
+        <div class="header-avatar">A</div>
+        <div class="header-name">Aria</div>
+        <div class="header-archetype">The Citizen Integrator</div>
+        <span class="header-pos">1 of 5</span>
+      </div>
+      <div class="header-cell liam">
+        <div class="header-avatar">L</div>
+        <div class="header-name">Liam</div>
+        <div class="header-archetype">The Junior Developer</div>
+        <span class="header-pos">2 of 5</span>
+      </div>
+      <div class="header-cell diego">
+        <div class="header-avatar">D</div>
+        <div class="header-name">Diego</div>
+        <div class="header-archetype">The Shipping Integrator</div>
+        <span class="header-pos">3 of 5</span>
+      </div>
+      <div class="header-cell maya">
+        <div class="header-avatar">M</div>
+        <div class="header-name">Maya</div>
+        <div class="header-archetype">The Evaluating Architect</div>
+        <span class="header-pos">4 of 5</span>
+      </div>
+      <div class="header-cell reza">
+        <div class="header-avatar">R</div>
+        <div class="header-name">Reza</div>
+        <div class="header-archetype">The Platform Engineer</div>
+        <span class="header-pos">5 of 5</span>
+      </div>
+
+      <!-- SECTION: IDENTITY -->
+      <div class="section-divider-row">Identity</div>
+
+      <div class="label-cell">One-liner</div>
+      <div class="data-cell aria">A marketing-ops manager whose Zapier flow returned a 401 and dropped her at the API docs — needs plain-English answers, not curl.</div>
+      <div class="data-cell liam">A bootcamp grad on his first real API integration — copies and tweaks examples confidently but doesn't yet understand what OAuth actually does.</div>
+      <div class="data-cell diego">A mid-level developer building the integration this week — wants the SDK to work first try and the example to compile.</div>
+      <div class="data-cell maya">A senior engineer comparing this API against alternatives — needs to see breadth, error behaviour, and vendor risk before she writes code.</div>
+      <div class="data-cell reza">A principal platform engineer evaluating this API for adoption across 5+ internal teams — judges it on whether he could build it himself.</div>
+
+      <!-- SECTION: CONTEXT -->
+      <div class="section-divider-row">Who they are</div>
+
+      <div class="label-cell">Context</div>
+      <div class="data-cell aria">31, Marketing Operations Manager at a 60-person B2B SaaS company. Three years of Zapier and Make. Never wrote code professionally.</div>
+      <div class="data-cell liam">24, Junior Full-Stack Developer at a 30-person startup. 6 months into his first job; came from a 12-week bootcamp. Strong on JS/React.</div>
+      <div class="data-cell diego">28, Full-Stack at a Series A startup of 40 people. 5 years' experience. TypeScript front, Python back. 4-day sprint to ship the integration.</div>
+      <div class="data-cell maya">35, Senior Backend / Tech Lead at a 200-person B2B SaaS in EMEA. 12 years; 30+ APIs integrated. Comparing 3 vendors.</div>
+      <div class="data-cell reza">41, Principal Platform Engineer at a 2,000-person enterprise. 18 years; shipped 5 production APIs. Maintains the internal developer platform.</div>
+
+      <div class="label-cell">Technical confidence</div>
+      <div class="data-cell aria"><strong>Low.</strong> Three years of Zapier; considers herself "not technical."</div>
+      <div class="data-cell liam"><strong>Low-medium.</strong> Strong in bootcamp languages, fragile elsewhere. Junior in OAuth, env vars, infra.</div>
+      <div class="data-cell diego"><strong>High in his stack.</strong> Medium-low in OAuth, auth flows, and infrastructure.</div>
+      <div class="data-cell maya"><strong>Very high.</strong> Comfortable at the spec level. Will read raw YAML before rendered docs.</div>
+      <div class="data-cell reza"><strong>Very high.</strong> Designs and ships APIs himself. Reads SDK source code as part of evaluation.</div>
+
+      <!-- SECTION: GOALS & NEEDS -->
+      <div class="section-divider-row">What they want</div>
+
+      <div class="label-cell">Primary goal</div>
+      <div class="data-cell aria">Get the workflow running again — ideally without escalating to engineering.</div>
+      <div class="data-cell liam">Complete the integration without too many Slack questions. Learn enough to defend his choices in code review.</div>
+      <div class="data-cell diego">Ship by Friday. Avoid spending more time on auth than on the actual logic.</div>
+      <div class="data-cell maya">Decide whether to commit to this vendor. Anticipate the integration's hidden costs.</div>
+      <div class="data-cell reza">Determine if the API meets the company's standards. Anticipate integration cost across 5+ downstream teams.</div>
+
+      <div class="label-cell">Key needs</div>
+      <div class="data-cell aria">
+        <ul class="cell-list">
+          <li>Plain-English error explanations</li>
+          <li>Step-by-step recovery, no CLI</li>
+          <li>Screenshots of provider dashboards</li>
+          <li>"Is this me or the API?" decision trees</li>
+        </ul>
+      </div>
+      <div class="data-cell liam">
+        <ul class="cell-list">
+          <li>Walkthroughs that explain <em>why</em></li>
+          <li>Code samples with imports + env vars</li>
+          <li>Concept-to-endpoint cross-links</li>
+          <li>AI that teaches as it answers</li>
+        </ul>
+      </div>
+      <div class="data-cell diego">
+        <ul class="cell-list">
+          <li>Working code sample in his language</li>
+          <li>Fast path through OAuth</li>
+          <li>Playground that returns real responses</li>
+          <li>Recipes for the top 2–3 patterns</li>
+        </ul>
+      </div>
+      <div class="data-cell maya">
+        <ul class="cell-list">
+          <li>HTTP-first reference, not SDK-only</li>
+          <li>Capability map by job, not resource</li>
+          <li>Error model + recovery semantics</li>
+          <li>Rate limits, SLA, deprecation policy</li>
+        </ul>
+      </div>
+      <div class="data-cell reza">
+        <ul class="cell-list">
+          <li>OpenAPI spec download (the YAML)</li>
+          <li>Coherent error model across endpoints</li>
+          <li>Webhook delivery guarantees, signing</li>
+          <li>SDK source on GitHub; latency p99</li>
+        </ul>
+      </div>
+
+      <!-- SECTION: PAIN POINTS -->
+      <div class="section-divider-row">What frustrates them</div>
+
+      <div class="label-cell">Top pain points</div>
+      <div class="data-cell aria">SDK-only docs that assume she'll code. Jargon treated as common knowledge. Error pages with no plain-English summary.</div>
+      <div class="data-cell liam">Code samples that skip the import. OAuth explained conceptually but not operationally. AI suggestions referencing three libraries he doesn't know.</div>
+      <div class="data-cell diego">"It works in the docs but not in my code." Auth that explains OAuth but not where to click in the provider dashboard.</div>
+      <div class="data-cell maya">SDK-only portals hiding the HTTP layer. Missing error response shapes. AI that summarises away the precision she's looking for.</div>
+      <div class="data-cell reza">Portals hiding the OpenAPI spec behind nice rendering. SDKs that lose access to raw HTTP. "Just trust us" answers on rate limits.</div>
+
+      <!-- SECTION: BEHAVIOR -->
+      <div class="section-divider-row">How they behave</div>
+
+      <div class="label-cell">Key behaviours</div>
+      <div class="data-cell aria">Reads prose, skips code blocks. Uses ctrl-F for plain-English error text. Asks AI conversationally ("why isn't this working?").</div>
+      <div class="data-cell liam">Copies examples wholesale, then deletes lines to learn. Asks ChatGPT before reading docs. Navigates by clicking, not searching.</div>
+      <div class="data-cell diego">Skims, code-blocks-first. Clicks Try It! before reading the spec. Asks AI before reference. One language, mostly.</div>
+      <div class="data-cell maya">Opens 5+ tabs in 30 seconds. Reads Concepts + changelog before the endpoint reference. Uses ctrl-F more than portal search.</div>
+      <div class="data-cell reza">Downloads spec immediately. Reads SDK source on GitHub. Reads changelog backwards 6+ months. Tests rate limits in sandbox.</div>
+
+      <div class="label-cell">Decision style</div>
+      <div class="data-cell aria">Cautious, escalation-aware. Will not click "regenerate" or "revoke."</div>
+      <div class="data-cell liam">Tutorial-led, pattern-matching, hesitant. Confirms with senior teammates.</div>
+      <div class="data-cell diego">Fast, experimentation-driven. "Try it and see."</div>
+      <div class="data-cell maya">Comparison-driven, evidence-led, defends in writing.</div>
+      <div class="data-cell reza">Methodical, criteria-driven, documented in a one-page review.</div>
+
+      <!-- SECTION: PSYCHOGRAPHICS -->
+      <div class="section-divider-row">What drives them</div>
+
+      <div class="label-cell">Motivations</div>
+      <div class="data-cell aria">Keep the workflow running. Look competent. Avoid escalating to engineering.</div>
+      <div class="data-cell liam">Ship the thing. Learn the craft. Look competent at standup.</div>
+      <div class="data-cell diego">Ship on time. Look reliable to his PM. Defend his choices in review.</div>
+      <div class="data-cell maya">Deliver a sound integration. Avoid 18 months of "wrong API" pain. Defend the choice with evidence.</div>
+      <div class="data-cell reza">Protect the company's engineering quality bar. Avoid 7-figure-cost vendor lock-in. Mentor the platform team.</div>
+
+      <div class="label-cell">Fears</div>
+      <div class="data-cell aria">Breaking something further. Admitting she's out of her depth. Being told "this is a developer question."</div>
+      <div class="data-cell liam">Asking a stupid question in Slack. Code shredded in PR. OAuth as a multi-day yak shave.</div>
+      <div class="data-cell diego">Hitting the OAuth wall on Day 2 and burning the timeline. AI suggesting code that doesn't work.</div>
+      <div class="data-cell maya">Hidden costs. Vendor lock-in. AI-summarised docs that hide caveats.</div>
+      <div class="data-cell reza">Roadmap divergence. Integration problems surfacing 18 months later. Building on a product whose support is thin.</div>
+
+      <div class="label-cell">Trust orientation</div>
+      <div class="data-cell aria">Trusts plain language and visual guidance. Distrusts terminal commands.</div>
+      <div class="data-cell liam">Trusts step-by-step tutorials, AI that explains its reasoning, senior teammates.</div>
+      <div class="data-cell diego">Trusts working examples. Trusts SDKs more than raw HTTP. Trusts AI with clear citations.</div>
+      <div class="data-cell maya">Trusts precision and disclosure. Distrusts polish that hides detail.</div>
+      <div class="data-cell reza">Trusts the spec, the SDK source, the changelog. Distrusts marketing and AI summaries.</div>
+
+      <div class="label-cell">Risk tolerance</div>
+      <div class="data-cell aria"><strong>Very low.</strong> Will not click anything that says "regenerate" or "revoke."</div>
+      <div class="data-cell liam"><strong>Medium.</strong> Pastes AI-generated code if it compiles. Copies-tweaks confidently.</div>
+      <div class="data-cell diego"><strong>Medium.</strong> Uses AI-generated code with working tests. Iterates rapidly.</div>
+      <div class="data-cell maya"><strong>Low-medium.</strong> Would rather skip a feature than be surprised by it.</div>
+      <div class="data-cell reza"><strong>Very low.</strong> Absorbs risk on behalf of 200 engineers.</div>
+
+      <!-- SECTION: DECISION CRITERIA -->
+      <div class="section-divider-row">Decision criteria</div>
+
+      <div class="label-cell">What they ask</div>
+      <div class="data-cell aria">
+        <p class="quote">"Can I fix this without code?"</p>
+        <p class="quote">"Are recovery steps clickable, not codeable?"</p>
+        <p class="quote">"Did the AI explain in language I understand?"</p>
+      </div>
+      <div class="data-cell liam">
+        <p class="quote">"Did the tutorial explain why, not just what?"</p>
+        <p class="quote">"Did the example include everything to run it?"</p>
+        <p class="quote">"Did the AI explain my error?"</p>
+      </div>
+      <div class="data-cell diego">
+        <p class="quote">"Did the example just work?"</p>
+        <p class="quote">"Is auth setup under 30 minutes?"</p>
+        <p class="quote">"Does the Copilot's code compile first try?"</p>
+      </div>
+      <div class="data-cell maya">
+        <p class="quote">"Can I find HTTP truth without fighting the docs?"</p>
+        <p class="quote">"Is the error model coherent?"</p>
+        <p class="quote">"Is there a changelog I can audit?"</p>
+      </div>
+      <div class="data-cell reza">
+        <p class="quote">"Is the spec clean, current, complete?"</p>
+        <p class="quote">"Does the SDK source pass a smell test?"</p>
+        <p class="quote">"Are rate limits and retries explicit?"</p>
+      </div>
+
+      <!-- SECTION: DESIGN IMPLICATION -->
+      <div class="section-divider-row">What the design must do</div>
+
+      <div class="label-cell">Top UX implication</div>
+      <div class="data-cell aria">A <strong>"by-task" access path</strong> alongside SDK-by-language. Plain-English error summaries first; technical detail below. Decision-tree guides. Copilot detects non-developer context and adjusts vocabulary.</div>
+      <div class="data-cell liam">A <strong>"first integration?" onboarding mode</strong>. Walkthroughs that explain rationale. Concept ↔ endpoint bidirectional links. Copilot in explain-mode. Novice-aware error hints.</div>
+      <div class="data-cell diego">Playground that <strong>works out-of-the-box with safe demo credentials</strong>, OR OAuth as the smoothest path in the product. Copilot produces complete runnable code with imports.</div>
+      <div class="data-cell maya">HTTP-first as <strong>co-equal lens</strong>, not buried in a switcher. Capability-first navigation. Error catalogue as first-class IA. Copilot must cite specific docs and link to them.</div>
+      <div class="data-cell reza">A <strong>"For Architects" access path</strong> — direct OpenAPI download, changelog with deprecation history, SDK source links, production-readiness panel per endpoint.</div>
+
+      <!-- SECTION: EVIDENCE -->
+      <div class="section-divider-row">Evidence &amp; strategic value</div>
+
+      <div class="label-cell">Confidence</div>
+      <div class="data-cell aria"><span class="conf-pill medium">Medium</span></div>
+      <div class="data-cell liam"><span class="conf-pill strong">Strong</span></div>
+      <div class="data-cell diego"><span class="conf-pill strong">Strong</span></div>
+      <div class="data-cell maya"><span class="conf-pill strong">Strong</span></div>
+      <div class="data-cell reza"><span class="conf-pill strong">Strong</span></div>
+
+      <div class="label-cell">Why this extreme matters</div>
+      <div class="data-cell aria">By 2027, most organisations will have Aria-equivalents running automations on the same APIs. A portal that fails her fails the next 5–10 years of API consumption.</div>
+      <div class="data-cell liam">Liam becomes Diego in 3–5 years. If his first integration was a frustrating slog, his future team picks competitors. The Copilot teaches him patterns he'll keep.</div>
+      <div class="data-cell diego">Diego is the dominant developer pattern at volume. Solving for Diego solves the common case. <em>Failing</em> Diego fails the redesign.</div>
+      <div class="data-cell maya">Maya is the gate for considered B2B adoption. She decides whether the API is "production-grade" for her team and writes the recommendation upward.</div>
+      <div class="data-cell reza">Reza is the conversion gate for enterprise contracts. Trust signals that pass Reza's test pass everyone else's — he is the design's stress-test.</div>
+
+    </div>
+  </div>
+
+  <div class="how-to-read" style="margin-top: 28px;">
+    <h2>Companion to the deeper analysis</h2>
+    <p>This view summarises. The depth — full goals, full pain points, full psychographics, evidence citations, cross-spectrum design implications, and the relationship to the mode personas — lives in <strong>05-extreme-personas-analysis.md / .html</strong>. The two artifacts together: this one for scanning, that one for argumentation.</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>Beacon Personas — Side-by-Side Comparison · v0.2</p>
+    <p>Prepared by Khushboo Khan · 2026-05-14</p>
+  </div>
+</footer>
+
+</body>
+</html>

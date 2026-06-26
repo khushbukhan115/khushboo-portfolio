@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deliverable 4 · IA Refined · Beacon Developer Portal</title>
+<style>
+:root{
+  --ink:#F4F7F5;--txt:#F4F7F5;--muted:#A4AFA9;--faint:#8E978F;
+  --bg:#050706;--surface:#0d110f;--soft:#080b0a;--softer:#080b0a;
+  --border:rgba(255,255,255,.10);--rule:rgba(255,255,255,.17);--hairline:rgba(255,255,255,.06);
+  --accent:#34E29B;--accent-soft:rgba(52,226,155,.12);
+  --red:#E0625F;--orange:#E8A23D;--amber:#E8A23D;--green:#34E29B;--teal:#3FD0C9;
+  --L1:#5B8DEF;--L2:#3FD0C9;--L3:#34E29B;--L4:#B57EDC;--L5:#E8A23D;
+  --opt-R:#79C4BD;
+  --kept:#A4AFA9;--kept-soft:rgba(164,175,169,.16);
+  --new:#34E29B;--new-soft:rgba(52,226,155,.16);
+  --rescue:#E8A23D;--rescue-soft:rgba(232,162,61,.16);
+  --refine:#3FD0C9;--refine-soft:rgba(63,208,201,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
+
+.topstrip{position:fixed;top:0;left:0;right:0;height:56px;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--hairline);display:flex;align-items:center;padding:0 24px}
+.topstrip .brand{font-weight:700;color:var(--ink);font-size:14px;letter-spacing:.04em}
+.topstrip .brand .num{color:var(--muted);margin-right:8px;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+.topstrip .sep{color:var(--rule);margin:0 14px}
+.topstrip .meta{color:var(--muted);font-size:13px}
+.topstrip .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.topstrip .opt-pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5;background:var(--opt-R)}
+.topstrip a.alt{font-size:13px;color:var(--accent);text-decoration:none;font-weight:600}
+.topstrip a.alt:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-columns:260px 1fr;max-width:1440px;margin:0 auto;padding-top:56px}
+.sidebar{position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;padding:32px 20px 64px;border-right:1px solid var(--hairline)}
+.sidebar .group{margin-bottom:24px}
+.sidebar .group h4{font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px;padding:0 12px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:6px;color:var(--txt);text-decoration:none;font-size:13px;font-weight:500;transition:background .12s}
+.sidebar a:hover{background:var(--soft);color:var(--ink)}
+.sidebar a.active{background:var(--soft);color:var(--ink);font-weight:600}
+.sidebar a .n{font-size:11px;color:var(--faint);font-weight:600;width:18px}
+
+main{padding:48px 56px 120px;min-width:0}
+
+.cover{padding:48px 0 56px;border-bottom:1px solid var(--hairline);margin-bottom:56px}
+.cover .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.cover h1{font-size:46px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);font-weight:700;margin-bottom:16px;max-width:780px}
+.cover h1 .opt{color:var(--opt-R)}
+.cover .sub{font-size:18px;color:var(--muted);font-weight:400;max-width:680px;margin-bottom:32px;line-height:1.5}
+.cover .meta{display:flex;gap:32px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.cover .meta .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted);display:block;margin-bottom:2px}
+.cover .meta .value{color:var(--ink);font-weight:600;font-size:15px}
+.cover .meta .value.url{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:13px;color:var(--accent)}
+.cover .version-badge{display:inline-flex;align-items:center;gap:6px;background:var(--refine-soft);border:1px solid var(--refine);color:var(--refine);padding:6px 14px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.06em;margin-top:14px}
+
+.section{margin-bottom:72px;scroll-margin-top:72px}
+.section-head{margin-bottom:24px}
+.section-head .meta{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5}
+.chip-R{background:var(--opt-R)}
+.section-num{font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.06em}
+.section-title{font-size:30px;line-height:1.2;letter-spacing:-.015em;color:var(--ink);font-weight:700;margin-bottom:10px;max-width:760px}
+.section-frame{font-size:16px;color:var(--muted);max-width:680px;line-height:1.55}
+
+/* === DELTA CARDS === */
+.delta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.delta-card{padding:18px;border:1px solid var(--refine);border-radius:12px;background:var(--refine-soft);position:relative}
+.delta-card .code{position:absolute;top:14px;right:14px;font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:10px;color:var(--refine);font-weight:700;background:#0d110f;padding:2px 6px;border-radius:4px;border:1px solid var(--refine)}
+.delta-card h4{font-size:14px;color:var(--ink);font-weight:700;margin-bottom:6px;padding-right:36px}
+.delta-card p{font-size:12px;color:var(--txt);line-height:1.5;margin-bottom:0}
+.delta-card .src{font-size:10px;color:var(--refine);font-weight:600;margin-top:8px;letter-spacing:.04em}
+
+/* === RAIL COMPARISON === */
+.rail-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rail-col{padding:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0d110f}
+.rail-col h4{padding:14px 18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--hairline)}
+.rail-col.v1 h4{background:#0d110f;color:var(--red)}
+.rail-col.v2 h4{background:var(--refine-soft);color:var(--refine)}
+.rail-list{padding:14px 16px}
+.rail-list .group-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;margin-top:16px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+.rail-list .group-h:first-child{margin-top:0}
+.rail-list .group-h.new{color:var(--new)}
+.rail-list .item{font-size:14px;padding:6px 8px;color:var(--txt);display:flex;align-items:center;gap:8px}
+.rail-list .item.indent{padding-left:24px;color:var(--muted);font-size:13px}
+.rail-list .item.new{color:var(--new);font-weight:600}
+.rail-list .item.new::before{content:"+";color:var(--new);font-weight:700;margin-right:4px}
+.rail-list .item.refined{color:var(--refine);font-weight:600}
+.rail-list .item.refined::before{content:"⟳";color:var(--refine);font-weight:700;margin-right:4px}
+.rail-list .item.rescue{color:var(--rescue);font-weight:600}
+.rail-list .item.rescue::before{content:"⚐";color:var(--rescue);font-weight:700;margin-right:4px}
+.rail-list .item.orphan{color:var(--rescue);font-style:italic}
+.rail-list .item.tag{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.04em}
+
+.legend{display:flex;gap:18px;margin-top:14px;padding:14px;background:var(--surface);border-radius:8px;font-size:13px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-item .sw{width:12px;height:12px;border-radius:3px}
+.legend-item .sw.kept{background:var(--ink)}
+.legend-item .sw.new{background:var(--new)}
+.legend-item .sw.refined{background:var(--refine)}
+.legend-item .sw.rescue{background:var(--rescue)}
+
+/* === CROSS-CUTTING RULES === */
+.rules-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rule-card{padding:18px;border:1px solid var(--border);border-radius:10px;background:#0d110f;border-left:3px solid var(--refine)}
+.rule-card .topic{font-size:10px;color:var(--refine);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.rule-card h4{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.rule-card p{font-size:13px;color:var(--txt);line-height:1.55;margin-bottom:8px}
+.rule-card p:last-child{margin-bottom:0}
+.rule-card code{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px;color:var(--ink)}
+.rule-card .audit-ref{font-size:10px;color:var(--muted);font-weight:600;font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;margin-top:8px;padding-top:8px;border-top:1px dashed var(--hairline)}
+
+/* === DECISIONS === */
+.decisions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.decision-card{padding:22px;border:1px solid var(--refine);border-radius:12px;background:var(--refine-soft)}
+.decision-card .gate-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--refine);color:#F4F7F5;letter-spacing:.06em;display:inline-block;margin-bottom:12px}
+.decision-card h4{font-size:16px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.decision-card .chose{padding:10px 12px;background:#0d110f;border:1px solid var(--refine);border-radius:8px;margin-bottom:10px}
+.decision-card .chose .label{font-size:10px;color:var(--refine);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.decision-card .chose .val{font-size:14px;color:var(--ink);font-weight:600}
+.decision-card .why{font-size:13px;color:var(--txt);line-height:1.55}
+
+/* === PHASING === */
+.phasing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.phase-card{padding:24px;border:1px solid var(--border);border-radius:12px;background:#0d110f;position:relative}
+.phase-card.w1{border-top:3px solid var(--green)}
+.phase-card.w2{border-top:3px solid var(--accent)}
+.phase-card.w3{border-top:3px solid var(--orange)}
+.phase-card .phase{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.phase-card.w1 .phase{color:var(--green)}
+.phase-card.w2 .phase{color:var(--accent)}
+.phase-card.w3 .phase{color:var(--orange)}
+.phase-card h4{font-size:18px;color:var(--ink);font-weight:700;margin-bottom:6px}
+.phase-card .eff{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:14px}
+.phase-card .surfaces{font-size:13px;color:var(--txt);line-height:1.7}
+.phase-card .surfaces li{padding-left:14px;position:relative;list-style:none}
+.phase-card .surfaces li::before{content:"·";position:absolute;left:4px;color:var(--faint)}
+.phase-card .rationale{margin-top:14px;padding-top:14px;border-top:1px solid var(--hairline);font-size:12px;color:var(--muted);line-height:1.5}
+
+/* === IMPLEMENTATION TABLE === */
+.impl-table{width:100%;border-collapse:collapse;font-size:13px}
+.impl-table th{text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700;background:var(--surface)}
+.impl-table td{padding:14px;border-bottom:1px solid var(--hairline);vertical-align:top}
+.impl-table .pg{font-weight:600;color:var(--ink);font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px}
+.impl-table .home{color:var(--ink);font-weight:600}
+.impl-table .tag{font-size:9px;font-weight:700;padding:3px 7px;border-radius:99px;letter-spacing:.06em;display:inline-block;text-transform:uppercase}
+.impl-table .tag.kept{background:var(--kept-soft);color:var(--kept)}
+.impl-table .tag.regroup{background:#0d110f;color:var(--accent)}
+.impl-table .tag.rescue{background:var(--rescue-soft);color:var(--rescue)}
+.impl-table .tag.new{background:var(--new-soft);color:var(--new)}
+.impl-table .tag.refined{background:var(--refine-soft);color:var(--refine)}
+.impl-table .tag.split{background:#121714;color:#E95391}
+
+/* === F-CODE MATRIX === */
+.matrix-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.matrix-meta .m-card{padding:14px;border:1px solid var(--border);border-radius:8px;background:#0d110f}
+.matrix-meta .m-card .m-num{font-size:24px;color:var(--ink);font-weight:700;line-height:1}
+.matrix-meta .m-card .m-lbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.matrix-meta .m-card.ia .m-num{color:var(--accent)}
+.matrix-meta .m-card.content .m-num{color:var(--orange)}
+.matrix-meta .m-card.ui .m-num{color:#E95391}
+.matrix-meta .m-card.a11y .m-num{color:var(--muted)}
+.matrix-meta .m-card.oos .m-num{color:var(--faint)}
+
+.fcode-table{width:100%;border-collapse:collapse;font-size:13px}
+.fcode-table th{text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 12px;border-bottom:1px solid var(--border);font-weight:700;background:var(--surface)}
+.fcode-table td{padding:10px 12px;border-bottom:1px solid var(--hairline);vertical-align:top}
+.fcode-table .fc{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;color:var(--ink);font-weight:700;width:60px}
+.fcode-table .desc{color:var(--txt);font-size:13px}
+.fcode-table .res-type{width:90px}
+.fcode-table .where{color:var(--muted);font-size:12px;width:200px}
+.fcode-table .status{width:90px;text-align:center}
+.fcode-table .res-pill{font-size:9px;font-weight:700;padding:3px 7px;border-radius:99px;letter-spacing:.06em;display:inline-block;text-transform:uppercase}
+.fcode-table .res-pill.ia{background:#0d110f;color:var(--accent)}
+.fcode-table .res-pill.content{background:#0d110f;color:var(--orange)}
+.fcode-table .res-pill.ui{background:#121714;color:#E95391}
+.fcode-table .res-pill.a11y{background:var(--kept-soft);color:var(--kept)}
+.fcode-table .res-pill.oos{background:var(--soft);color:var(--faint)}
+.fcode-table .status-pill{font-size:9px;font-weight:700;padding:3px 7px;border-radius:99px;letter-spacing:.06em;display:inline-block}
+.fcode-table .status-pill.resolved{background:#0d110f;color:var(--green)}
+.fcode-table .status-pill.w1{background:#0d110f;color:var(--green)}
+.fcode-table .status-pill.w2{background:#0d110f;color:var(--accent)}
+.fcode-table .status-pill.w3{background:#0d110f;color:var(--orange)}
+.fcode-table .status-pill.deferred{background:var(--kept-soft);color:var(--kept)}
+.fcode-cat{padding:10px 12px;background:var(--soft);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);border-bottom:1px solid var(--border)}
+
+/* === KEPT GRID === */
+.kept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kept-card{padding:18px;border:1px solid var(--border);border-radius:10px;background:#0d110f;border-left:3px solid var(--kept)}
+.kept-card h4{font-size:14px;color:var(--ink);font-weight:700;margin-bottom:6px}
+.kept-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.kept-card .tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;background:var(--kept-soft);color:var(--kept);border-radius:99px;letter-spacing:.06em;margin-bottom:8px}
+
+/* === NEW GRID === */
+.new-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.new-card{padding:22px;border:1px solid var(--border);border-radius:12px;background:#0d110f;border-left:3px solid var(--new)}
+.new-card h4{font-size:11px;color:var(--new);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px}
+.new-card h3{font-size:17px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.new-card p{font-size:14px;color:var(--muted);line-height:1.55}
+.new-card.from-audit{border-left-color:var(--refine)}
+.new-card.from-audit h4{color:var(--refine)}
+.new-card .audit-ref{font-size:10px;color:var(--muted);font-weight:600;font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;margin-top:8px}
+
+/* === RATIONALE === */
+.rationale-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rat-card{padding:20px;border:1px solid var(--border);border-radius:10px;background:#0d110f}
+.rat-card .num{font-size:24px;font-weight:700;color:var(--opt-R);margin-bottom:6px}
+.rat-card h4{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.rat-card p{font-size:13px;color:var(--muted);line-height:1.55}
+
+.crosslink{margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.crosslink h4{font-size:13px;color:var(--ink);font-weight:700;margin-bottom:8px}
+.crosslink p{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:8px}
+.crosslink a{color:var(--accent);text-decoration:none;font-weight:600}
+.crosslink a:hover{text-decoration:underline}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  main{padding:32px 20px 80px}
+  .delta-grid,.rules-grid,.kept-grid,.new-grid,.rail-compare,.decisions-grid,.phasing-grid,.rationale-grid{grid-template-columns:1fr}
+  .matrix-meta{grid-template-columns:repeat(2,1fr)}
+}
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="topstrip">
+  <span class="brand"><span class="num">Deliverable 4</span> IA · Refined after Audit Pass</span>
+  <span class="sep">·</span>
+  <span class="opt-pill">IA v2 · CANONICAL</span>
+  <div class="right">
+    <a class="alt" href="Deliverable-3-IA-Current-Portal-Improvement.html">← v1 (superseded)</a>
+    <a class="alt" href="Deliverable-3-IA-Audit-Pass.html">Audit pass</a>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="group">
+      <h4>Cover</h4>
+      <a href="#cover"><span class="n">·</span> Overview</a>
+      <a href="#delta"><span class="n">·</span> What changed</a>
+    </div>
+    <div class="group">
+      <h4>The IA</h4>
+      <a href="#regroup"><span class="n">01</span> Refined re-grouping</a>
+      <a href="#kept"><span class="n">02</span> What is preserved</a>
+      <a href="#new"><span class="n">03</span> What is new</a>
+    </div>
+    <div class="group">
+      <h4>Rules</h4>
+      <a href="#rules"><span class="n">04</span> Cross-cutting rules</a>
+      <a href="#121714isions"><span class="n">05</span> Decisions made</a>
+      <a href="#phasing"><span class="n">06</span> Implementation phasing</a>
+    </div>
+    <div class="group">
+      <h4>Implementation</h4>
+      <a href="#impl"><span class="n">07</span> Page-by-page</a>
+      <a href="#matrix"><span class="n">08</span> F-code coverage</a>
+    </div>
+    <div class="group">
+      <h4>Why</h4>
+      <a href="#why"><span class="n">09</span> Label vocabulary</a>
+      <a href="#close"><span class="n">·</span> Closing</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- COVER -->
+    <section class="cover" id="cover">
+      <div class="kicker">Deliverable 4 · IA Refined · Beacon Developer Portal</div>
+      <h1>The canonical IA, <span class="opt">audited and refined.</span></h1>
+      <p class="sub">All twenty-one findings from the nine-lens audit pass have been applied. Three decision gates resolved. Eighteen polish fixes integrated. This file supersedes Deliverable 3 v1 as the canonical assignment IA.</p>
+      <div class="meta">
+        <div><span class="label">Portal</span><span class="value url">beacon-api-copilot.netlify.app</span></div>
+        <div><span class="label">Reference page</span><span class="value url">/#/net-standard-library/quick-start/overview</span></div>
+        <div><span class="label">Supersedes</span><span class="value">D3 v1 (kept for diff reference)</span></div>
+        <div><span class="label">Audit basis</span><span class="value">D3 Audit Pass · 9 lenses · 21 findings</span></div>
+        <div><span class="label">By</span><span class="value">Khushboo Khan</span></div>
+        <div><span class="label">Date</span><span class="value">May 15, 2026</span></div>
+      </div>
+      <span class="version-badge">⟳ IA v2 · Refined</span>
+    </section>
+
+    <!-- DELTA -->
+    <section class="section" id="delta">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Delta</span>
+          <span class="section-num">What changed from v1</span>
+        </div>
+        <h2 class="section-title">Nine deltas from v1 to v2.</h2>
+        <p class="section-frame">Six structural changes and three new sections. Every delta traces back to an audit finding code.</p>
+      </header>
+
+      <div class="delta-grid">
+        <div class="delta-card">
+          <span class="code">A4.1</span>
+          <h4>Compliance is now a Quick Start node.</h4>
+          <p>Reza sees compliance evidence before any auth ask. Decision gate resolved with Option A.</p>
+          <div class="src">Source · Gate decision</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A5.1</span>
+          <h4>Operate moved to portal root.</h4>
+          <p>URLs become <code style="background:#0d110f;padding:1px 4px;border-radius:3px;font-family:monospace;font-size:11px">/operate/...</code> instead of per-SDK. Cross-SDK content lives once.</p>
+          <div class="src">Source · Gate decision</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A6.1</span>
+          <h4>SDK × Version picker added.</h4>
+          <p>The SDK picker becomes a two-part SDK and API-version selector. Handles v1 vs v2 cleanly.</p>
+          <div class="src">Source · Gate decision</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A7.1</span>
+          <h4>SDKs and OpenAPI split.</h4>
+          <p>Two distinct nodes under Reference: SDKs (libraries) and OpenAPI spec (machine spec).</p>
+          <div class="src">Source · Naming precision</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A7.2</span>
+          <h4>Logs and Runbook split.</h4>
+          <p>Two distinct nodes under Operate: Logs (your usage history) and Runbook (incident response).</p>
+          <div class="src">Source · Naming precision</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A1.1</span>
+          <h4>Changelog explicit under Reference.</h4>
+          <p>Previously implied in secondary nav but missing from the implementation table. Now formally placed.</p>
+          <div class="src">Source · Group composition</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A3.1</span>
+          <h4>F-code coverage matrix added.</h4>
+          <p>All 40 audit findings from D1 mapped to resolution path. Highest-leverage addition in v2.</p>
+          <div class="src">Source · NEW appendix</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A8.1</span>
+          <h4>Implementation phasing added.</h4>
+          <p>Three waves explicit. Content-only first, status pipeline second, per-key telemetry third.</p>
+          <div class="src">Source · NEW section</div>
+        </div>
+        <div class="delta-card">
+          <span class="code">A2.1 - A9.3</span>
+          <h4>Cross-cutting rules section added.</h4>
+          <p>Twelve rules consolidated: cross-link routes, cross-SDK content, mobile rail, access model, search results, accessibility scope.</p>
+          <div class="src">Source · NEW section</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFINED RE-GROUPING -->
+    <section class="section" id="regroup">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">The IA</span>
+          <span class="section-num">01 / 09</span>
+        </div>
+        <h2 class="section-title">Refined left-rail re-grouping.</h2>
+        <p class="section-frame">Same four cognitive groups. Refined contents. Compliance enters Quick Start. SDKs and OpenAPI split into siblings. Logs and Runbook split. Changelog explicit. Nothing else moves.</p>
+      </header>
+
+      <div class="rail-compare">
+        <div class="rail-col v1">
+          <h4>v1 · Pre-audit</h4>
+          <div class="rail-list">
+            <div class="group-h">Quick Start</div>
+            <div class="item indent">Overview</div>
+            <div class="item indent">Authentication</div>
+            <div class="item indent">First call</div>
+            <div class="group-h">Build</div>
+            <div class="item indent">Walkthroughs</div>
+            <div class="item indent">Recipes</div>
+            <div class="item indent">Migrations</div>
+            <div class="group-h">Reference</div>
+            <div class="item indent">Endpoints</div>
+            <div class="item indent">Try It Out</div>
+            <div class="item indent">SDKs &amp; OpenAPI</div>
+            <div class="item indent">Error codes</div>
+            <div class="group-h">Operate</div>
+            <div class="item indent">Status</div>
+            <div class="item indent">Deprecations</div>
+            <div class="item indent">Rate limits</div>
+            <div class="item indent">Webhook events</div>
+            <div class="item indent">Logs &amp; Runbook</div>
+          </div>
+        </div>
+        <div class="rail-col v2">
+          <h4>v2 · Post-audit (canonical)</h4>
+          <div class="rail-list">
+            <div class="group-h">Quick Start</div>
+            <div class="item indent">Overview</div>
+            <div class="item indent">Authentication</div>
+            <div class="item indent">First call</div>
+            <div class="item indent new">Compliance</div>
+            <div class="group-h">Build</div>
+            <div class="item indent">Walkthroughs</div>
+            <div class="item indent">Recipes</div>
+            <div class="item indent">Migrations</div>
+            <div class="group-h">Reference</div>
+            <div class="item indent">Endpoints</div>
+            <div class="item indent">Try It Out</div>
+            <div class="item indent refined">SDKs</div>
+            <div class="item indent refined">OpenAPI spec</div>
+            <div class="item indent">Error codes</div>
+            <div class="item indent refined">Changelog</div>
+            <div class="group-h">Operate <span style="font-size:9px;background:var(--new-soft);color:var(--new);padding:2px 6px;border-radius:99px;margin-left:6px">/operate/ root</span></div>
+            <div class="item indent">Status</div>
+            <div class="item indent">Deprecations</div>
+            <div class="item indent">Rate limits</div>
+            <div class="item indent">Webhook events</div>
+            <div class="item indent refined">Logs</div>
+            <div class="item indent refined">Runbook</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="sw kept"></span><span>Kept from v1</span></div>
+        <div class="legend-item"><span class="sw new"></span><span>New node added by audit</span></div>
+        <div class="legend-item"><span class="sw refined"></span><span>Refined or split by audit</span></div>
+      </div>
+    </section>
+
+    <!-- KEPT -->
+    <section class="section" id="kept">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">The IA</span>
+          <span class="section-num">02 / 09</span>
+        </div>
+        <h2 class="section-title">What is preserved.</h2>
+        <p class="section-frame">Six surfaces that the audit confirmed should not change. v2 is conservative on the foundations developers already rely on.</p>
+      </header>
+
+      <div class="kept-grid">
+        <div class="kept-card"><span class="tag">KEPT</span><h4>SDK picker (now SDK × Version)</h4><p>The orthogonal axis remains untouched in spirit. The audit added a version dimension to it. The mechanism stays the same.</p></div>
+        <div class="kept-card"><span class="tag">KEPT</span><h4>Quick Start name</h4><p>Industry-standard term. Bookmarks and Stack Overflow references survive. Confirmed by audit lens 7.</p></div>
+        <div class="kept-card"><span class="tag">KEPT</span><h4>Endpoint pages</h4><p>The portal's strongest surface. v2 promotes them into Reference but does not change page layout.</p></div>
+        <div class="kept-card"><span class="tag">KEPT</span><h4>Language tabs</h4><p>Sticky language selection extends across walkthrough samples, SDK pages, and code blocks portal-wide.</p></div>
+        <div class="kept-card"><span class="tag">KEPT</span><h4>Try-It panel mechanics</h4><p>Same inline call surface. Now formally inline-primary on every endpoint plus standalone playground node.</p></div>
+        <div class="kept-card"><span class="tag">KEPT</span><h4>Existing URLs (with additions)</h4><p>v1 was non-breaking. v2 stays non-breaking for existing URLs. New URLs are additive: /operate, /build, /reference root paths.</p></div>
+      </div>
+    </section>
+
+    <!-- NEW -->
+    <section class="section" id="new">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">The IA</span>
+          <span class="section-num">03 / 09</span>
+        </div>
+        <h2 class="section-title">What is new.</h2>
+        <p class="section-frame">Six additions from v1, plus five from the audit pass. Eleven total. Each card identifies whether it shipped in v1 or arrived in v2.</p>
+      </header>
+
+      <div class="new-grid">
+        <div class="new-card">
+          <h4>Addition 01 · v1</h4>
+          <h3>Operate group at portal root</h3>
+          <p>Status, Deprecations, Rate limits, Webhook events, Logs, Runbook. Lives at <code style="font-family:monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px">/operate/...</code> (clarified by audit A5.1).</p>
+        </div>
+        <div class="new-card">
+          <h4>Addition 02 · v1</h4>
+          <h3>Walkthroughs cross-linked to Reference</h3>
+          <p>Rescued from orphan. Two-way deep-links between Build and Reference.</p>
+        </div>
+        <div class="new-card">
+          <h4>Addition 03 · v1</h4>
+          <h3>Breadcrumb across all pages</h3>
+          <p>SDK › Group › Page. Mobile truncation behaviour added in v2 (audit A9.3).</p>
+        </div>
+        <div class="new-card">
+          <h4>Addition 04 · v1</h4>
+          <h3>Copilot anchored to context</h3>
+          <p>SDK, group, page captured in anchor pill. Seeded prompts scoped to surface.</p>
+        </div>
+        <div class="new-card">
+          <h4>Addition 05 · v1</h4>
+          <h3>Search grouped by intent</h3>
+          <p>Cmd-K opens search. Results group under Quick Start, Build, Reference, Operate. v2 adds full results page format (audit A6.3).</p>
+        </div>
+        <div class="new-card">
+          <h4>Addition 06 · v1</h4>
+          <h3>Recipes and Migrations under Build</h3>
+          <p>Two L3 content surfaces beyond Walkthroughs.</p>
+        </div>
+        <div class="new-card from-audit">
+          <h4>Addition 07 · v2 · from audit</h4>
+          <h3>Compliance node under Quick Start</h3>
+          <p>SOC 2, audit log, data residency, scopes. Reza's evaluation surface, accessible before any auth.</p>
+          <div class="audit-ref">A4.1 · Gate decision · Option A applied</div>
+        </div>
+        <div class="new-card from-audit">
+          <h4>Addition 08 · v2 · from audit</h4>
+          <h3>SDK × Version picker</h3>
+          <p>The persistent header picker becomes two-part. Default: latest stable. Deprecation calendar links into the version side.</p>
+          <div class="audit-ref">A6.1 · Gate decision · Option A applied</div>
+        </div>
+        <div class="new-card from-audit">
+          <h4>Addition 09 · v2 · from audit</h4>
+          <h3>Out-of-IA utility cluster</h3>
+          <p>Sign in, Pricing, Support in the top-right. Terms, Privacy, Cookies in the footer. Outside the four cognitive groups but inside the portal chrome.</p>
+          <div class="audit-ref">A6.2 · Auto-apply</div>
+        </div>
+        <div class="new-card from-audit">
+          <h4>Addition 10 · v2 · from audit</h4>
+          <h3>Search results page format</h3>
+          <p>Results group by primary, max 3 per group above the fold. "More in [group]" expands. Empty state suggests Copilot.</p>
+          <div class="audit-ref">A6.3 · Auto-apply</div>
+        </div>
+        <div class="new-card from-audit">
+          <h4>Addition 11 · v2 · from audit</h4>
+          <h3>Mobile rail behaviour</h3>
+          <p>Below 980px the four-group rail collapses to a hamburger sheet. Status pins to header below 720px for paging SREs.</p>
+          <div class="audit-ref">A9.1 · Auto-apply</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CROSS-CUTTING RULES -->
+    <section class="section" id="rules">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Rules</span>
+          <span class="section-num">04 / 09</span>
+        </div>
+        <h2 class="section-title">Cross-cutting rules.</h2>
+        <p class="section-frame">Twelve clarifications the audit caught. None of these change the IA structure. They make explicit what was implicit in v1.</p>
+      </header>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="topic">Cross-link routes</div>
+          <h4>Next-step CTAs out of Quick Start.</h4>
+          <p>After <code>Quick Start › First call</code>, show two explicit Next CTAs: "Build a real integration → Build › First integration" and "Browse the API → Reference › Endpoints".</p>
+          <div class="audit-ref">A2.1</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Cross-link routes</div>
+          <h4>Conditional "Used in walkthrough" behaviour.</h4>
+          <p>Show the link on an endpoint page only if at least one walkthrough references that endpoint. Otherwise show "Ask Copilot to draft a walkthrough" as a substitute affordance.</p>
+          <div class="audit-ref">A2.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Cross-SDK content</div>
+          <h4>SDK landing page contents.</h4>
+          <p>The root inside an SDK (<code>/[sdk]/</code>) shows: working curl in the SDK's language, a capability hint strip, and direct links to each of the four groups for that SDK.</p>
+          <div class="audit-ref">A4.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Cross-SDK content</div>
+          <h4>SDK-switching context preservation.</h4>
+          <p>Switching the SDK picker mid-walkthrough or mid-endpoint preserves topic context. If equivalent page exists in target SDK, route there. If not, fall back to that SDK's Quick Start with a banner.</p>
+          <div class="audit-ref">A4.3</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Cross-SDK content</div>
+          <h4>Walkthroughs author-once.</h4>
+          <p>Walkthroughs live at <code>/build/walkthroughs/...</code> at portal root. Code samples per language. SDK picker filters which walkthroughs have samples in the active SDK.</p>
+          <div class="audit-ref">A5.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Cross-SDK content</div>
+          <h4>Empty-group behaviour.</h4>
+          <p>If a group node has no content for the active SDK, the header still shows. Empty state reads: "No Recipes for Python yet. Ask Copilot for a custom one, or browse Recipes in other SDKs."</p>
+          <div class="audit-ref">A5.3</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Access model</div>
+          <h4>Operate public vs auth-gated.</h4>
+          <p><strong>Public:</strong> Status, Deprecations, Rate limits (general doc), Runbook. <strong>Auth-gated:</strong> Logs, Webhook events, Rate limits (your usage). Diego-Ops can verify the ops story before signup.</p>
+          <div class="audit-ref">A4.4</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Naming</div>
+          <h4>Try It Out has two homes.</h4>
+          <p><strong>Inline on every endpoint page</strong> is primary. <strong>Standalone <code>Reference › Try It Out</code></strong> is a fallback playground for users without a specific endpoint in mind. The duplication is deliberate.</p>
+          <div class="audit-ref">A1.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Naming</div>
+          <h4>Changelog placement.</h4>
+          <p>Changelog lives under Reference. URL: <code>/reference/changelog</code>. Linked from the deprecation calendar in Operate and from version-bump banners.</p>
+          <div class="audit-ref">A1.1</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Out of IA</div>
+          <h4>Utility cluster and footer.</h4>
+          <p>Top-right: Sign in, Pricing, Support. Outside the four cognitive groups but inside the portal chrome. Footer: Terms, Privacy, Cookies, Security disclosure, Status badge.</p>
+          <div class="audit-ref">A6.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Out of IA</div>
+          <h4>Search results page format.</h4>
+          <p>Results group by Quick Start, Build, Reference, Operate. Max 3 results per group above the fold. "More in [group]" link expands per group. Zero-result state offers Copilot prompt.</p>
+          <div class="audit-ref">A6.3</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Mobile + A11y</div>
+          <h4>Accessibility scope statement.</h4>
+          <p>Component-level a11y (focus traps, keyboard nav, contrast) is addressed in the wireframe spec at Deliverable 2, not at the IA level. The IA contributes by giving every navigable surface a clear semantic hierarchy and predictable keyboard reach.</p>
+          <div class="audit-ref">A9.2</div>
+        </div>
+        <div class="rule-card">
+          <div class="topic">Mobile + A11y</div>
+          <h4>Breadcrumb mobile truncation.</h4>
+          <p>On viewports below 720px, truncate the middle of the breadcrumb: show first crumb + current crumb (e.g., <code>NET ... › Get an album</code>). Long-press reveals the full chain.</p>
+          <div class="audit-ref">A9.3</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DECISIONS -->
+    <section class="section" id="decisions">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Rules</span>
+          <span class="section-num">05 / 09</span>
+        </div>
+        <h2 class="section-title">Decisions made.</h2>
+        <p class="section-frame">Three audit decision gates. All three resolved with Option A (the recommended path). Documented here so future revisits have a clear record of what was chosen and why.</p>
+      </header>
+
+      <div class="decisions-grid">
+        <div class="decision-card">
+          <span class="gate-tag">GATE 1 · A4.1</span>
+          <h4>Compliance placement</h4>
+          <div class="chose"><span class="label">Decision</span><span class="val">Quick Start › Compliance</span></div>
+          <p class="why">Reza must see compliance evidence before any auth ask. Placing Compliance under Quick Start means it sits before authentication on the cognitive path. Under Operate would have required navigating past auth to reach it, breaking his evaluation flow.</p>
+        </div>
+        <div class="decision-card">
+          <span class="gate-tag">GATE 2 · A5.1</span>
+          <h4>Operate URL structure</h4>
+          <div class="chose"><span class="label">Decision</span><span class="val">/operate/... at portal root</span></div>
+          <p class="why">Operate content is cross-SDK by nature. Status, Deprecations, Rate limits, Runbook apply to the API itself, not to any specific SDK. Per-SDK duplication would create six surfaces × N SDKs = waste. Logs and Webhook events stay under the user's account scope.</p>
+        </div>
+        <div class="decision-card">
+          <span class="gate-tag">GATE 3 · A6.1</span>
+          <h4>API versioning surface</h4>
+          <div class="chose"><span class="label">Decision</span><span class="val">SDK × Version picker</span></div>
+          <p class="why">The SDK picker becomes two-part: SDK on the left, API version on the right. Default: latest stable. The deprecation calendar in Operate deep-links into the version side of the picker. Versions as distinct SDKs would have lost semantic grouping.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASING -->
+    <section class="section" id="phasing">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Rules</span>
+          <span class="section-num">06 / 09</span>
+        </div>
+        <h2 class="section-title">Implementation phasing.</h2>
+        <p class="section-frame">The Figma can show all surfaces. The engineering ship is staged. Three waves of decreasing build cost and increasing telemetry dependency.</p>
+      </header>
+
+      <div class="phasing-grid">
+        <div class="phase-card w1">
+          <div class="phase">Wave 1 · content-only</div>
+          <h4>Ship the writing first.</h4>
+          <div class="eff">Build effort: low · Content effort: medium</div>
+          <ul class="surfaces">
+            <li>Recipes</li>
+            <li>Migrations</li>
+            <li>Runbook</li>
+            <li>Compliance</li>
+            <li>Changelog</li>
+            <li>Quick Start refinement (hero code, tier ladder)</li>
+            <li>Cross-link cross-references</li>
+          </ul>
+          <p class="rationale">No backend dependencies. The IA structure is purely informational at this stage. Reviewers see the portal's shape immediately. Maya, Aria, and Reza all unblocked in this wave.</p>
+        </div>
+        <div class="phase-card w2">
+          <div class="phase">Wave 2 · status + policy</div>
+          <h4>Add operational visibility.</h4>
+          <div class="eff">Build effort: medium · Pipeline dependency</div>
+          <ul class="surfaces">
+            <li>Status (StatusPage or custom)</li>
+            <li>Deprecations (calendar + horizons)</li>
+            <li>Versioning policy publication</li>
+            <li>Subscribe affordance</li>
+          </ul>
+          <p class="rationale">Requires an uptime data pipeline and a published deprecation policy. Status surfaces become live. Diego-Ops's evaluation path unblocked. Reza's deprecation horizon visibility complete.</p>
+        </div>
+        <div class="phase-card w3">
+          <div class="phase">Wave 3 · per-key telemetry</div>
+          <h4>Personal operations data.</h4>
+          <div class="eff">Build effort: high · Storage + access infra</div>
+          <ul class="surfaces">
+            <li>Logs (per-key request history)</li>
+            <li>Rate limits (live usage meter)</li>
+            <li>Webhook events (replay surface)</li>
+          </ul>
+          <p class="rationale">Requires per-developer telemetry storage and an access-controlled retrieval API. Sara's full operational reach. Liam's production debugging. The most expensive wave but the highest unique value once shipped.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPLEMENTATION TABLE -->
+    <section class="section" id="impl">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Implementation</span>
+          <span class="section-num">07 / 09</span>
+        </div>
+        <h2 class="section-title">Page-by-page implementation.</h2>
+        <p class="section-frame">Every existing portal page mapped to its v2 home. Every new page proposed. Audit refinements integrated into the table.</p>
+      </header>
+
+      <table class="impl-table">
+        <thead><tr><th>Current / proposed page</th><th>Today's home</th><th>v2 home</th><th>Change</th><th>What changes</th><th>Wave</th></tr></thead>
+        <tbody>
+          <tr><td class="pg">/quick-start/overview</td><td>Quick Start (flat)</td><td class="home">Quick Start › Overview</td><td><span class="tag kept">Kept</span></td><td>Same URL. Hero gets working code, capability hint strip, Next-step CTAs (A2.1).</td><td>W1</td></tr>
+          <tr><td class="pg">/quick-start/authentication</td><td>Quick Start (flat)</td><td class="home">Quick Start › Authentication</td><td><span class="tag kept">Kept</span></td><td>Same URL. Tier ladder visible. OAuth preamble copy.</td><td>W1</td></tr>
+          <tr><td class="pg">/quick-start/first-call</td><td>Quick Start › Test Call</td><td class="home">Quick Start › First call</td><td><span class="tag regroup">Renamed</span></td><td>"Test Call" → "First call". Redirect from old path. Next-step CTAs added.</td><td>W1</td></tr>
+          <tr><td class="pg">/quick-start/compliance</td><td>—</td><td class="home">Quick Start › Compliance</td><td><span class="tag new">New (audit A4.1)</span></td><td>SOC 2, audit log, data residency, scopes. Reza's evaluation surface, public-readable.</td><td>W1</td></tr>
+          <tr><td class="pg">/build/walkthroughs</td><td>Walkthroughs (orphan)</td><td class="home">Build › Walkthroughs</td><td><span class="tag rescue">Rescued</span></td><td>Authored at portal root. Each step deep-links to endpoint reference. Progress persists client-side.</td><td>W1</td></tr>
+          <tr><td class="pg">/build/recipes</td><td>—</td><td class="home">Build › Recipes</td><td><span class="tag new">New</span></td><td>Pre-built integrations to copy. Tagged by topic. Empty state per SDK per A5.3.</td><td>W1</td></tr>
+          <tr><td class="pg">/build/migrations</td><td>—</td><td class="home">Build › Migrations</td><td><span class="tag new">New</span></td><td>v1→v2 with codemod snippets. Each entry links to migration walkthrough.</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/endpoints</td><td>Endpoints (flat)</td><td class="home">Reference › Endpoints</td><td><span class="tag regroup">Re-grouped</span></td><td>Promoted into Reference group. Endpoint pages get pre-populated response, "Used in walkthrough" conditional link (A2.2), "Production behavior" link to Operate.</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/try-it-out</td><td>Try It Out (flat)</td><td class="home">Reference › Try It Out · plus inline on each endpoint</td><td><span class="tag regroup">Two homes</span></td><td>Inline-primary on every endpoint page. Standalone Reference node as playground fallback (A1.2).</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/sdks</td><td>Resources (catch-all)</td><td class="home">Reference › SDKs</td><td><span class="tag split">Split (audit A7.1)</span></td><td>SDK download per language. Setup instructions per SDK. Was bundled with OpenAPI; now its own node.</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/openapi-spec</td><td>Resources (catch-all)</td><td class="home">Reference › OpenAPI spec</td><td><span class="tag split">Split (audit A7.1)</span></td><td>OpenAPI download in v1, v2. Was bundled with SDKs; now its own node.</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/error-codes</td><td>Resources (catch-all)</td><td class="home">Reference › Error codes</td><td><span class="tag regroup">Re-grouped</span></td><td>Index of all 4xx/5xx codes. Searchable. Each code linked to fix guidance.</td><td>W1</td></tr>
+          <tr><td class="pg">/reference/changelog</td><td>(implied)</td><td class="home">Reference › Changelog</td><td><span class="tag refined">Explicit (audit A1.1)</span></td><td>Release notes per version. Linked from version banners and deprecation calendar.</td><td>W1</td></tr>
+          <tr><td class="pg">/operate/status</td><td>—</td><td class="home">Operate › Status</td><td><span class="tag new">New</span></td><td>30-day uptime grid. Live incident banner. Subscribe affordance. Public-readable.</td><td>W2</td></tr>
+          <tr><td class="pg">/operate/deprecations</td><td>—</td><td class="home">Operate › Deprecations</td><td><span class="tag new">New</span></td><td>Calendar sorted by horizon. Sub-30 day items flagged urgent. Each item links to migration walkthrough. Public-readable.</td><td>W2</td></tr>
+          <tr><td class="pg">/operate/rate-limits</td><td>—</td><td class="home">Operate › Rate limits</td><td><span class="tag new">New</span></td><td>General doc (public) + your-usage live meter (auth-gated). Per A4.4 access model.</td><td>W3</td></tr>
+          <tr><td class="pg">/operate/webhook-events</td><td>—</td><td class="home">Operate › Webhook events</td><td><span class="tag new">New</span></td><td>Event log with filter grid. Per-event "Resend" affordance. Auth-gated.</td><td>W3</td></tr>
+          <tr><td class="pg">/operate/logs</td><td>—</td><td class="home">Operate › Logs</td><td><span class="tag split">Split (audit A7.2)</span></td><td>Last 50 requests per active key. Each row has "Reproduce in Try-It". Was bundled with Runbook; now its own node. Auth-gated.</td><td>W3</td></tr>
+          <tr><td class="pg">/operate/runbook</td><td>—</td><td class="home">Operate › Runbook</td><td><span class="tag split">Split (audit A7.2)</span></td><td>Common incidents, response codes, escalation. Linked from every endpoint as "Production behavior". Was bundled with Logs; now its own node. Public-readable.</td><td>W1</td></tr>
+          <tr><td class="pg">/[sdk]/</td><td>(undefined)</td><td class="home">SDK landing page</td><td><span class="tag new">New (audit A4.2)</span></td><td>Root inside an SDK. Working curl in the SDK's language, capability hint strip, direct links to each of the four groups.</td><td>W1</td></tr>
+          <tr><td class="pg">/search</td><td>(absent)</td><td class="home">Search results page</td><td><span class="tag new">New (audit A6.3)</span></td><td>Cmd-K results page. Grouped by primary, max 3 per group above fold. Empty state suggests Copilot.</td><td>W1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- F-CODE MATRIX -->
+    <section class="section" id="matrix">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Implementation</span>
+          <span class="section-num">08 / 09</span>
+        </div>
+        <h2 class="section-title">F-code coverage matrix.</h2>
+        <p class="section-frame">All thirty-eight audit findings from Deliverable 1 mapped to resolution path. The highest-leverage addition in v2. Reviewers can verify at a glance that every named issue lands somewhere in the redesign or is explicitly out of IA scope.</p>
+      </header>
+
+      <div class="matrix-meta">
+        <div class="m-card ia"><div class="m-num">19</div><div class="m-lbl">Resolved by IA</div></div>
+        <div class="m-card content"><div class="m-num">7</div><div class="m-lbl">Resolved by content</div></div>
+        <div class="m-card ui"><div class="m-num">6</div><div class="m-lbl">Resolved by UI / wireframe</div></div>
+        <div class="m-card a11y"><div class="m-num">6</div><div class="m-lbl">A11y · component-level</div></div>
+        <div class="m-card oos"><div class="m-num">0</div><div class="m-lbl">Out of scope</div></div>
+      </div>
+
+      <table class="fcode-table">
+        <thead><tr><th>F-code</th><th>Description</th><th>Resolution</th><th>Where it lands</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td colspan="5" class="fcode-cat">Category 1 · Layering &amp; Progressive Disclosure</td></tr>
+          <tr><td class="fc">F1.1</td><td class="desc">No working code on hero</td><td><span class="res-pill content">Content</span></td><td class="where">Quick Start › Overview hero</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F1.2</td><td class="desc">No capability picker on entry</td><td><span class="res-pill ia">IA</span></td><td class="where">SDK landing page + Quick Start hero</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F1.3</td><td class="desc">L1 collapses into L4</td><td><span class="res-pill ia">IA</span></td><td class="where">Quick Start as distinct group</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F1.4</td><td class="desc">No surface picker for SDK choice</td><td><span class="res-pill ia">IA</span></td><td class="where">SDK × Version picker (A6.1)</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 2 · Navigation &amp; IA</td></tr>
+          <tr><td class="fc">F2.1</td><td class="desc">Flat hierarchy (all items same depth)</td><td><span class="res-pill ia">IA</span></td><td class="where">Four-group rail</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F2.2</td><td class="desc">No breadcrumb</td><td><span class="res-pill ia">IA</span></td><td class="where">Breadcrumb across all pages + mobile truncation (A9.3)</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F2.3</td><td class="desc">No deep-link between walkthroughs and reference</td><td><span class="res-pill ia">IA</span></td><td class="where">Cross-linked walkthroughs · two-way</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F2.4</td><td class="desc">No search ranked by layer / intent</td><td><span class="res-pill ia">IA</span></td><td class="where">Cmd-K + search results page format (A6.3)</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 3 · Onboarding &amp; OAuth</td></tr>
+          <tr><td class="fc">F4.1</td><td class="desc">OAuth modal with no preamble</td><td><span class="res-pill content">Content</span></td><td class="where">Quick Start › Authentication copy</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F4.2</td><td class="desc">No tiered auth model</td><td><span class="res-pill ia">IA</span></td><td class="where">Quick Start › Authentication tier ladder</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F4.3</td><td class="desc">OAuth failure states unhandled</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · OAuth modal spec</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F4.4</td><td class="desc">OAuth required to see any response</td><td><span class="res-pill content">Content</span></td><td class="where">Anonymous tier in Authentication ladder</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 4 · Endpoint Reference UX</td></tr>
+          <tr><td class="fc">F5.1</td><td class="desc">Response empty until Try-It runs</td><td><span class="res-pill content">Content</span></td><td class="where">Pre-populated response on endpoint pages</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F5.2</td><td class="desc">Language tabs buried</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · endpoint page</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F5.3</td><td class="desc">Error codes not inline</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · endpoint response panel</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F5.4</td><td class="desc">Path / query parameter visual confusion</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · parameter component</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F5.5</td><td class="desc">Error response codes in footer table</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · endpoint response tabs</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 5 · Copilot UX</td></tr>
+          <tr><td class="fc">F6.1</td><td class="desc">Drawer rootless</td><td><span class="res-pill ia">IA</span></td><td class="where">Anchored to SDK, group, page</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F6.2</td><td class="desc">No seeded prompts</td><td><span class="res-pill content">Content</span></td><td class="where">Copilot drawer · prompt seed set per surface</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F6.3</td><td class="desc">No deep-link from output</td><td><span class="res-pill ia">IA</span></td><td class="where">Output renders into surface with cross-group deep-links</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F6.4</td><td class="desc">No layer awareness</td><td><span class="res-pill ia">IA</span></td><td class="where">Anchor pill names current group</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F6.5</td><td class="desc">Copilot parallel, not spinal</td><td><span class="res-pill ia">IA</span></td><td class="where">Copilot as cross-cutting spine across four groups</td><td class="status"><span class="status-pill w2">Wave 2</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 6 · Workflow Continuity</td></tr>
+          <tr><td class="fc">F7.1</td><td class="desc">Walkthroughs orphaned from L4</td><td><span class="res-pill ia">IA</span></td><td class="where">Rescued under Build group · two-way cross-links</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F7.2</td><td class="desc">Walkthrough steps do not deep-link</td><td><span class="res-pill ia">IA</span></td><td class="where">Inline endpoint links per step</td><td class="status"><span class="status-pill resolved">Resolved</span></td></tr>
+          <tr><td class="fc">F7.3</td><td class="desc">No progress tracking on walkthroughs</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · walkthrough step rail</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F7.4</td><td class="desc">No stuck → Copilot handoff</td><td><span class="res-pill ui">UI</span></td><td class="where">D2 wireframe · walkthrough stuck affordance</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 7 · Accessibility (component-level, not IA)</td></tr>
+          <tr><td class="fc">F8.1</td><td class="desc">Insufficient contrast</td><td><span class="res-pill a11y">A11y</span></td><td class="where">Design system handoff · color token pass</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F8.2</td><td class="desc">OAuth modal focus trap</td><td><span class="res-pill a11y">A11y</span></td><td class="where">D2 wireframe · modal component spec</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F8.3</td><td class="desc">Copilot keyboard inaccessible</td><td><span class="res-pill a11y">A11y</span></td><td class="where">D2 wireframe · Copilot drawer spec</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F8.4</td><td class="desc">Copy buttons mouse-only</td><td><span class="res-pill a11y">A11y</span></td><td class="where">Component-level · code block spec</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F8.5</td><td class="desc">No skip-to-content link</td><td><span class="res-pill a11y">A11y</span></td><td class="where">Portal chrome · semantic landmarks</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+          <tr><td class="fc">F8.6</td><td class="desc">Language tabs do not announce state</td><td><span class="res-pill a11y">A11y</span></td><td class="where">D2 wireframe · language tab ARIA spec</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+
+          <tr><td colspan="5" class="fcode-cat">Category 8 · Operational UX Gaps</td></tr>
+          <tr><td class="fc">F9.1</td><td class="desc">No status page</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Status</td><td class="status"><span class="status-pill w2">Wave 2</span></td></tr>
+          <tr><td class="fc">F9.2</td><td class="desc">No deprecation calendar</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Deprecations</td><td class="status"><span class="status-pill w2">Wave 2</span></td></tr>
+          <tr><td class="fc">F9.3</td><td class="desc">No rate limits doc</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Rate limits (general public + your-usage gated)</td><td class="status"><span class="status-pill w3">Wave 3</span></td></tr>
+          <tr><td class="fc">F9.4</td><td class="desc">No webhook events explorer / replay</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Webhook events</td><td class="status"><span class="status-pill w3">Wave 3</span></td></tr>
+          <tr><td class="fc">F9.5</td><td class="desc">No request logs</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Logs (split from Runbook per A7.2)</td><td class="status"><span class="status-pill w3">Wave 3</span></td></tr>
+          <tr><td class="fc">F9.6</td><td class="desc">No production runbook</td><td><span class="res-pill ia">IA</span></td><td class="where">Operate › Runbook (split from Logs per A7.2)</td><td class="status"><span class="status-pill w1">Wave 1</span></td></tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:18px;font-size:13px;color:var(--muted);line-height:1.55;max-width:760px">All thirty-eight findings have a defined resolution path. Nineteen resolve directly through the IA structure. Seven resolve through content rewrites in surfaces the IA defines. Six resolve through wireframe and UI specifications in Deliverable 2. Six are component-level accessibility findings addressed in the design system handoff. Zero findings are out of scope.</p>
+    </section>
+
+    <!-- WHY -->
+    <section class="section" id="why">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-R">Why</span>
+          <span class="section-num">09 / 09</span>
+        </div>
+        <h2 class="section-title">Why this label vocabulary.</h2>
+        <p class="section-frame">Quick Start kept. Build, Reference, Operate added as new groups. Three reasons unchanged from v1. v2 adds two precision splits (SDKs / OpenAPI · Logs / Runbook) per audit A7.1 and A7.2.</p>
+      </header>
+
+      <div class="rationale-grid">
+        <div class="rat-card"><div class="num">01</div><h4>Cost of renaming Quick Start is real.</h4><p>Bookmarks, Stack Overflow answers, screenshots, internal team docs. Renaming would cost every existing reference. The audit confirmed the content was thin, not the label.</p></div>
+        <div class="rat-card"><div class="num">02</div><h4>Three new groups deserve clean verbs.</h4><p>Build, Reference, Operate. Industry-standard, action-led, scannable. v2 added Compliance under Quick Start (a noun) but the four group labels stayed verb-led for symmetry.</p></div>
+        <div class="rat-card"><div class="num">03</div><h4>Four groups fit the rail.</h4><p>Five would crowd a sidebar. Three would leave Operate as a footnote. Four is the right density for an SDK left rail. Confirmed by audit lens 7.</p></div>
+      </div>
+
+      <div class="crosslink">
+        <h4>Naming precision splits applied in v2</h4>
+        <p>Two compound nodes from v1 split into siblings per audit recommendations:</p>
+        <p>· <strong>SDKs &amp; OpenAPI</strong> → <code style="font-family:monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px">Reference › SDKs</code> + <code style="font-family:monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px">Reference › OpenAPI spec</code></p>
+        <p>· <strong>Logs &amp; Runbook</strong> → <code style="font-family:monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px">Operate › Logs</code> + <code style="font-family:monospace;font-size:12px;background:var(--soft);padding:1px 5px;border-radius:3px">Operate › Runbook</code></p>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section" id="close">
+      <div class="crosslink">
+        <h4>Where this lands in the deliverable chain</h4>
+        <p>This is the canonical assignment IA. v2. All audit findings applied. All decision gates resolved.</p>
+        <p>
+          <a href="Deliverable-1-UX-UI-Audit-Research.pdf">Deliverable 1 · Audit</a>
+          &nbsp;·&nbsp;
+          <a href="Deliverable-2-Wireframes-Interaction-Architecture.html">Deliverable 2 · Wireframes</a>
+          &nbsp;·&nbsp;
+          <a href="Deliverable-3-IA-Current-Portal-Improvement.html">D3 v1 · IA (superseded)</a>
+          &nbsp;·&nbsp;
+          <a href="Deliverable-3-IA-Audit-Pass.html">D3 audit pass</a>
+          &nbsp;·&nbsp;
+          <a href="Deliverable-4-Persona-Competitor-Validation.html">D4 · Persona × Competitor validation</a>
+        </p>
+        <p style="margin-top:16px;color:var(--ink);font-weight:600">This file (Deliverable 4 · IA Refined) is the canonical IA. Apply it. Reference it. Ship from it.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sidebar a');
+function updateActive(){
+  let current = '';
+  sections.forEach(s => {
+    const r = s.getBoundingClientRect();
+    if(r.top <= 120 && r.bottom > 120) current = s.id;
+  });
+  navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+}
+document.addEventListener('scroll', updateActive, {passive:true});
+window.addEventListener('load', updateActive);
+</script>
+</body>
+</html>

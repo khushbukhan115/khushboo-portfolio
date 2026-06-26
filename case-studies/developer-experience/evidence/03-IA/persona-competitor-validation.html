@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deliverable 4 · Persona × Competitor Validation · Beacon IA Defense</title>
+<style>
+:root{
+  --ink:#F4F7F5;--txt:#F4F7F5;--muted:#A4AFA9;--faint:#8E978F;
+  --bg:#050706;--surface:#0d110f;--soft:#080b0a;--softer:#080b0a;
+  --border:rgba(255,255,255,.10);--rule:rgba(255,255,255,.17);--hairline:rgba(255,255,255,.06);
+  --accent:#34E29B;--accent-soft:rgba(52,226,155,.12);
+  --red:#E0625F;--orange:#E8A23D;--amber:#E8A23D;--green:#34E29B;
+  --L1:#5B8DEF;--L2:#3FD0C9;--L3:#34E29B;--L4:#B57EDC;--L5:#E8A23D;
+  --L1-soft:rgba(91,141,239,.14);--L2-soft:rgba(63,208,201,.14);--L3-soft:rgba(52,226,155,.14);--L4-soft:rgba(181,126,220,.14);--L5-soft:rgba(232,162,61,.14);
+  --opt-D:#F4F7F5;
+  /* Persona colors */
+  --pM:#3B82F6;--pD:#06B6D4;--pS:#F59E0B;
+  --pA:#BFA5FA;--pL:#10B981;--pDO:#14B8A6;--pMC:#F472B6;--pR:#EB8787;
+  /* Fit levels */
+  --fit-s:#10B981;--fit-s-bg:#080b0a;
+  --fit-m:#F59E0B;--fit-m-bg:#080b0a;
+  --fit-w:#9CA3AF;--fit-w-bg:#080b0a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55;color:var(--txt);background:var(--bg);-webkit-font-smoothing:antialiased}
+
+.topstrip{position:fixed;top:0;left:0;right:0;height:56px;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--hairline);display:flex;align-items:center;padding:0 24px}
+.topstrip .brand{font-weight:700;color:var(--ink);font-size:14px;letter-spacing:.04em}
+.topstrip .brand .num{color:var(--muted);margin-right:8px;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+.topstrip .sep{color:var(--rule);margin:0 14px}
+.topstrip .meta{color:var(--muted);font-size:13px}
+.topstrip .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.topstrip .opt-pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5;background:var(--opt-D)}
+.topstrip a.alt{font-size:13px;color:var(--accent);text-decoration:none;font-weight:600}
+.topstrip a.alt:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-columns:280px 1fr;max-width:1440px;margin:0 auto;padding-top:56px}
+.sidebar{position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;padding:32px 20px 64px;border-right:1px solid var(--hairline)}
+.sidebar .group{margin-bottom:28px}
+.sidebar .group h4{font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;font-weight:700;margin-bottom:10px;padding:0 12px}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;color:var(--txt);text-decoration:none;font-size:14px;font-weight:500;transition:background .12s}
+.sidebar a:hover{background:var(--soft);color:var(--ink)}
+.sidebar a.active{background:var(--soft);color:var(--ink);font-weight:600}
+.sidebar a .n{font-size:11px;color:var(--faint);font-weight:600;width:18px}
+
+main{padding:48px 56px 120px;min-width:0}
+
+.cover{padding:48px 0 72px;border-bottom:1px solid var(--hairline);margin-bottom:64px}
+.cover .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.cover h1{font-size:48px;line-height:1.1;letter-spacing:-.02em;color:var(--ink);font-weight:700;margin-bottom:16px;max-width:780px}
+.cover h1 .opt{color:var(--opt-D)}
+.cover .sub{font-size:18px;color:var(--muted);font-weight:400;max-width:680px;margin-bottom:32px;line-height:1.5}
+.cover .meta{display:flex;gap:32px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.cover .meta .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted);display:block;margin-bottom:2px}
+.cover .meta .value{color:var(--ink);font-weight:600;font-size:15px}
+
+.section{margin-bottom:88px;scroll-margin-top:72px}
+.section-head{margin-bottom:28px}
+.section-head .meta{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:99px;letter-spacing:.06em;color:#F4F7F5}
+.chip-D{background:var(--opt-D)}
+.section-num{font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.06em}
+.section-title{font-size:32px;line-height:1.15;letter-spacing:-.015em;color:var(--ink);font-weight:700;margin-bottom:10px;max-width:760px}
+.section-frame{font-size:16px;color:var(--muted);max-width:680px;line-height:1.55}
+
+/* === PERSONA BRIEFING GRID === */
+.persona-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.persona-card{padding:18px;border:1px solid var(--border);border-radius:12px;background:#0d110f;border-top:3px solid}
+.persona-card.M{border-top-color:var(--pM)}
+.persona-card.D{border-top-color:var(--pD)}
+.persona-card.S{border-top-color:var(--pS)}
+.persona-card.A{border-top-color:var(--pA)}
+.persona-card.L{border-top-color:var(--pL)}
+.persona-card.DO{border-top-color:var(--pDO)}
+.persona-card.MC{border-top-color:var(--pMC)}
+.persona-card.R{border-top-color:var(--pR)}
+.persona-card .head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.persona-card .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F4F7F5;font-weight:700;font-size:14px;flex-shrink:0}
+.persona-card.M .avatar{background:var(--pM)}
+.persona-card.D .avatar{background:var(--pD)}
+.persona-card.S .avatar{background:var(--pS)}
+.persona-card.A .avatar{background:var(--pA)}
+.persona-card.L .avatar{background:var(--pL)}
+.persona-card.DO .avatar{background:var(--pDO)}
+.persona-card.MC .avatar{background:var(--pMC)}
+.persona-card.R .avatar{background:var(--pR)}
+.persona-card .who h4{font-size:14px;color:var(--ink);font-weight:700;line-height:1.2}
+.persona-card .who .tag{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.persona-card .role{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.45}
+.persona-card .breaks{font-size:11px;color:var(--ink);font-weight:600;padding:6px 8px;background:var(--soft);border-radius:6px;border-left:2px solid;margin-bottom:6px}
+.persona-card.M .breaks{border-color:var(--pM)}.persona-card.D .breaks{border-color:var(--pD)}.persona-card.S .breaks{border-color:var(--pS)}.persona-card.A .breaks{border-color:var(--pA)}.persona-card.L .breaks{border-color:var(--pL)}.persona-card.DO .breaks{border-color:var(--pDO)}.persona-card.MC .breaks{border-color:var(--pMC)}.persona-card.R .breaks{border-color:var(--pR)}
+.persona-card .breaks .b-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-right:4px}
+.persona-card .need{font-size:12px;color:var(--txt);line-height:1.5;margin-top:8px}
+
+/* === COMPETITOR BRIEFING === */
+.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.comp-card{padding:16px;border:1px solid var(--border);border-radius:12px;background:#0d110f;position:relative;overflow:hidden}
+.comp-card .brand-band{position:absolute;top:0;left:0;right:0;height:4px}
+.comp-card h4{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:6px;margin-top:8px}
+.comp-card .arch{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.comp-card .sig{font-size:12px;color:var(--txt);line-height:1.5}
+.comp-card .url{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:10px;color:var(--faint);margin-top:8px}
+
+/* === MATRIX === */
+.matrix-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:#0d110f}
+.matrix{width:100%;border-collapse:collapse;font-size:12px;min-width:760px}
+.matrix th,.matrix td{padding:0;border:0}
+.matrix .corner{padding:14px;background:var(--surface);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;text-align:left;min-width:160px;border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline)}
+.matrix .col-head{padding:12px 10px;background:var(--surface);text-align:center;font-size:11px;color:var(--ink);font-weight:700;border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline);min-width:96px;position:relative}
+.matrix .col-head .band{position:absolute;top:0;left:8px;right:8px;height:3px;border-radius:0 0 2px 2px}
+.matrix .col-head .name{margin-top:6px;display:block}
+.matrix .col-head .arch{display:block;font-size:9px;color:var(--muted);font-weight:600;margin-top:2px;letter-spacing:.04em}
+.matrix .row-head{padding:10px 12px;background:var(--surface);border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline);min-width:160px}
+.matrix .row-head .h-inner{display:flex;align-items:center;gap:8px}
+.matrix .row-head .av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F4F7F5;font-weight:700;font-size:11px;flex-shrink:0}
+.matrix .row-head .av.M{background:var(--pM)}
+.matrix .row-head .av.D{background:var(--pD)}
+.matrix .row-head .av.S{background:var(--pS)}
+.matrix .row-head .av.A{background:var(--pA)}
+.matrix .row-head .av.L{background:var(--pL)}
+.matrix .row-head .av.DO{background:var(--pDO)}
+.matrix .row-head .av.MC{background:var(--pMC)}
+.matrix .row-head .av.R{background:var(--pR)}
+.matrix .row-head .name{font-size:12px;color:var(--ink);font-weight:700;line-height:1.2}
+.matrix .row-head .tag{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;display:block;margin-top:1px}
+.matrix .cell{padding:0;border-right:1px solid var(--hairline);border-bottom:1px solid var(--hairline);text-align:center;vertical-align:middle;cursor:default;height:80px}
+.matrix .cell .fit{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px}
+.matrix .cell.strong .fit{background:var(--fit-s-bg)}
+.matrix .cell.moderate .fit{background:var(--fit-m-bg)}
+.matrix .cell.weak .fit{background:var(--fit-w-bg)}
+.matrix .cell .dots{font-size:14px;letter-spacing:1px;margin-bottom:4px}
+.matrix .cell.strong .dots{color:var(--fit-s)}
+.matrix .cell.moderate .dots{color:var(--fit-m)}
+.matrix .cell.weak .dots{color:var(--fit-w)}
+.matrix .cell .note{font-size:10px;color:var(--ink);line-height:1.3;font-weight:600;text-align:center}
+.matrix .cell.weak .note{color:var(--muted)}
+
+.matrix-legend{display:flex;gap:18px;margin-top:14px;padding:12px 16px;background:var(--surface);border-radius:8px;font-size:12px;flex-wrap:wrap}
+.matrix-legend .lg-item{display:flex;align-items:center;gap:6px}
+.matrix-legend .lg-swatch{width:14px;height:14px;border-radius:3px}
+.matrix-legend .lg-swatch.s{background:var(--fit-s-bg);border:1px solid var(--fit-s)}
+.matrix-legend .lg-swatch.m{background:var(--fit-m-bg);border:1px solid var(--fit-m)}
+.matrix-legend .lg-swatch.w{background:var(--fit-w-bg);border:1px solid var(--fit-w)}
+
+/* === PERSONA WALKTHROUGH CARDS === */
+.walk-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.walk-card{display:grid;grid-template-columns:200px 1fr;border:1px solid var(--border);border-radius:14px;background:#0d110f;overflow:hidden}
+.walk-side{padding:20px;border-right:1px solid var(--hairline);position:relative}
+.walk-side .av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F4F7F5;font-weight:700;font-size:18px;margin-bottom:10px}
+.walk-card.M .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.D .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.S .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.A .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.L .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.DO .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.MC .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.R .walk-side{background:linear-gradient(180deg,#0d110f,#0d110f)}
+.walk-card.M .walk-side .av{background:var(--pM)}
+.walk-card.D .walk-side .av{background:var(--pD)}
+.walk-card.S .walk-side .av{background:var(--pS)}
+.walk-card.A .walk-side .av{background:var(--pA)}
+.walk-card.L .walk-side .av{background:var(--pL)}
+.walk-card.DO .walk-side .av{background:var(--pDO)}
+.walk-card.MC .walk-side .av{background:var(--pMC)}
+.walk-card.R .walk-side .av{background:var(--pR)}
+.walk-side h4{font-size:18px;color:var(--ink);font-weight:700;margin-bottom:4px}
+.walk-side .role{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.walk-side .breaks{font-size:12px;color:var(--ink);padding:8px 10px;background:#0d110f;border-radius:6px;border:1px solid var(--hairline);border-left:3px solid}
+.walk-card.M .walk-side .breaks{border-left-color:var(--pM)}
+.walk-card.D .walk-side .breaks{border-left-color:var(--pD)}
+.walk-card.S .walk-side .breaks{border-left-color:var(--pS)}
+.walk-card.A .walk-side .breaks{border-left-color:var(--pA)}
+.walk-card.L .walk-side .breaks{border-left-color:var(--pL)}
+.walk-card.DO .walk-side .breaks{border-left-color:var(--pDO)}
+.walk-card.MC .walk-side .breaks{border-left-color:var(--pMC)}
+.walk-card.R .walk-side .breaks{border-left-color:var(--pR)}
+.walk-side .breaks .label{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:2px}
+.walk-body{padding:20px 24px}
+.walk-body h5{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:8px;margin-top:16px}
+.walk-body h5:first-child{margin-top:0}
+.walk-body .need{font-size:14px;color:var(--ink);font-weight:600;line-height:1.5;padding-bottom:14px;border-bottom:1px dashed var(--hairline);margin-bottom:6px}
+.walk-body .inspirations{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.walk-body .insp{padding:12px;background:var(--softer);border-radius:8px;border-left:3px solid}
+.walk-body .insp .by{font-size:11px;color:var(--ink);font-weight:700;margin-bottom:4px}
+.walk-body .insp .ptn{font-size:12px;color:var(--txt);line-height:1.5}
+.walk-body .served{padding:14px 16px;background:linear-gradient(135deg,#0d110f,#0d110f);border:1px solid #BBF7D0;border-radius:8px;margin-top:8px}
+.walk-body .served .label{font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.walk-body .served .where{font-size:13px;color:var(--ink);line-height:1.5}
+.walk-body .served .where code{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;background:#0d110f;padding:1px 6px;border-radius:3px;border:1px solid #BBF7D0;color:var(--green);font-weight:600}
+
+/* === PATTERNS SYNTHESIS === */
+.patterns-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.pattern-row{display:grid;grid-template-columns:48px 1fr 220px 220px;gap:14px;align-items:center;padding:16px;border:1px solid var(--border);border-radius:10px;background:#0d110f}
+.pattern-row .pn{width:36px;height:36px;border-radius:8px;background:var(--opt-D);color:#F4F7F5;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.pattern-row .pdesc h4{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:4px}
+.pattern-row .pdesc p{font-size:13px;color:var(--muted);line-height:1.5}
+.pattern-row .pgroup{display:flex;flex-direction:column;gap:4px}
+.pattern-row .pgroup .label{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.pattern-row .pgroup .val{font-size:12px;color:var(--ink);font-weight:600;line-height:1.4}
+.pattern-row .pgroup.serves .val{color:var(--accent)}
+
+/* === MOAT === */
+.moat{padding:32px;background:linear-gradient(135deg,#0d110f,#0d110f);border:1px solid #283029;border-radius:14px}
+.moat .badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#A78BFA,#3B82F6);color:#F4F7F5;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.06em;margin-bottom:14px}
+.moat h3{font-size:24px;color:var(--ink);font-weight:700;margin-bottom:10px}
+.moat p{font-size:15px;color:var(--txt);line-height:1.6;margin-bottom:14px;max-width:680px}
+.moat .seven-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:18px 0}
+.moat .seven-cell{padding:10px 8px;background:#0d110f;border:1px solid var(--border);border-radius:6px;text-align:center;font-size:11px;color:var(--ink);font-weight:600}
+.moat .seven-cell .x{display:block;color:var(--red);font-size:14px;font-weight:700;margin-bottom:2px}
+.moat .served{padding:14px 16px;background:#0d110f;border:1px solid #283029;border-radius:8px;margin-top:8px}
+.moat .served .label{font-size:10px;color:var(--opt-D);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.moat .served .where{font-size:13px;color:var(--ink);line-height:1.5}
+.moat .served .where code{font-family:ui-monospace,"IBM Plex Mono",Menlo,monospace;font-size:12px;background:#0d110f;padding:1px 6px;border-radius:3px;color:var(--opt-D);font-weight:600}
+
+/* === CLOSING === */
+.closing{padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-align:center}
+.closing h3{font-size:22px;color:var(--ink);font-weight:700;margin-bottom:10px}
+.closing p{font-size:14px;color:var(--muted);line-height:1.55;max-width:600px;margin:0 auto 18px}
+.closing .links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.closing .links a{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:#0d110f;border:1px solid var(--border);border-radius:8px;color:var(--ink);text-decoration:none;font-weight:600;font-size:13px}
+.closing .links a:hover{border-color:var(--accent);color:var(--accent)}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  main{padding:32px 20px 80px}
+  .persona-grid,.comp-grid{grid-template-columns:1fr 1fr}
+  .walk-card{grid-template-columns:1fr}
+  .walk-side{border-right:0;border-bottom:1px solid var(--hairline)}
+  .walk-body .inspirations{grid-template-columns:1fr}
+  .pattern-row{grid-template-columns:1fr}
+  .moat .seven-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="topstrip">
+  <span class="brand"><span class="num">Deliverable 4</span> Persona × Competitor Validation</span>
+  <span class="sep">·</span>
+  <span class="opt-pill">IA DEFENSE</span>
+  <div class="right">
+    <a class="alt" href="Deliverable-3-IA-Current-Portal-Improvement.html">← View D3 IA Improvement</a>
+  </div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="group">
+      <h4>Cover</h4>
+      <a href="#cover"><span class="n">·</span> Overview</a>
+    </div>
+    <div class="group">
+      <h4>Inputs</h4>
+      <a href="#personas"><span class="n">02</span> Persona briefing</a>
+      <a href="#competitors"><span class="n">03</span> Competitor briefing</a>
+    </div>
+    <div class="group">
+      <h4>Evidence</h4>
+      <a href="#matrix"><span class="n">04</span> Fit matrix</a>
+      <a href="#walks"><span class="n">05</span> Persona walkthroughs</a>
+    </div>
+    <div class="group">
+      <h4>Synthesis</h4>
+      <a href="#patterns"><span class="n">06</span> Patterns in D3</a>
+      <a href="#moat"><span class="n">07</span> The unborrowed move</a>
+      <a href="#close"><span class="n">08</span> Where it lands</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- COVER -->
+    <section class="cover" id="cover">
+      <div class="kicker">Deliverable 4 · IA Defense · Beacon Developer Portal</div>
+      <h1>One IA, <span class="opt">eight personas, seven competitors.</span></h1>
+      <p class="sub">The improved IA proposed in Deliverable 3 was not opinion. It was a translation of competitor-proven patterns into a structure that resolves every persona's documented break-point. This file shows the proof.</p>
+      <div class="meta">
+        <div><span class="label">Validates</span><span class="value">Deliverable 3 · Current Portal Improvement</span></div>
+        <div><span class="label">Personas</span><span class="value">8 · 3 modes + 5 extremes</span></div>
+        <div><span class="label">Competitors</span><span class="value">7 portals in scope</span></div>
+        <div><span class="label">By</span><span class="value">Khushboo Khan</span></div>
+        <div><span class="label">Date</span><span class="value">May 15, 2026</span></div>
+      </div>
+    </section>
+
+    <!-- 02 PERSONAS -->
+    <section class="section" id="personas">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Inputs</span>
+          <span class="section-num">02 / 08</span>
+        </div>
+        <h2 class="section-title">The eight personas at a glance.</h2>
+        <p class="section-frame">Three Mode personas model the lifecycle axis. Five Extreme personas pressure-test the spectrum of expertise and risk tolerance. Each persona carries their consistent color through the rest of this document.</p>
+      </header>
+
+      <div class="persona-grid">
+        <div class="persona-card M">
+          <div class="head">
+            <div class="avatar">M</div>
+            <div class="who"><h4>Maya</h4><span class="tag">Mode 1 · Trial &amp; Trust</span></div>
+          </div>
+          <div class="role">Senior engineer evaluating in a 30-min window.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L1 · no working code on hero</div>
+          <div class="need">Needs verb-led entry and immediate code visibility.</div>
+        </div>
+        <div class="persona-card D">
+          <div class="head">
+            <div class="avatar">D</div>
+            <div class="who"><h4>Diego</h4><span class="tag">Mode 2 · Implementation</span></div>
+          </div>
+          <div class="role">Mid-level engineer building a real integration.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L2 → L4 · empty response until Try-It</div>
+          <div class="need">Needs response shapes before auth and walkthroughs cross-linked to endpoints.</div>
+        </div>
+        <div class="persona-card S">
+          <div class="head">
+            <div class="avatar">S</div>
+            <div class="who"><h4>Sara</h4><span class="tag">Mode 3 · Operations</span></div>
+          </div>
+          <div class="role">SRE on call returning when production breaks.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L5 · does not exist</div>
+          <div class="need">Needs status, deprecation, rate limits, and logs reachable from anywhere.</div>
+        </div>
+        <div class="persona-card A">
+          <div class="head">
+            <div class="avatar">A</div>
+            <div class="who"><h4>Aria</h4><span class="tag">Extreme · Curious &amp; Code-shy</span></div>
+          </div>
+          <div class="role">PM or junior who reads code but does not write OAuth.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L2 · OAuth wall</div>
+          <div class="need">Needs anonymous mock and placeholder keys in samples.</div>
+        </div>
+        <div class="persona-card L">
+          <div class="head">
+            <div class="avatar">L</div>
+            <div class="who"><h4>Liam</h4><span class="tag">Extreme · Code-Fluent Speed-runner</span></div>
+          </div>
+          <div class="role">Senior engineer wanting the fast path from hero to ship.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L5 · production errors with no docs</div>
+          <div class="need">Needs hero code, sticky language, and visible ops surface.</div>
+        </div>
+        <div class="persona-card DO">
+          <div class="head">
+            <div class="avatar">D+</div>
+            <div class="who"><h4>Diego (Ops-aware)</h4><span class="tag">Extreme · Ops-aware Builder</span></div>
+          </div>
+          <div class="role">Refuses to integrate without verifying the ops story.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> Evaluation · L5 not visible</div>
+          <div class="need">Needs L5 readable during evaluation, not only after deployment.</div>
+        </div>
+        <div class="persona-card MC">
+          <div class="head">
+            <div class="avatar">M+</div>
+            <div class="who"><h4>Maya (Curious)</h4><span class="tag">Extreme · Time-pressured</span></div>
+          </div>
+          <div class="role">Bouncier variant of Mode Maya. Sub-60-second window.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> L1 · faster bounce</div>
+          <div class="need">Needs sub-10-second comprehension and frictionless first call.</div>
+        </div>
+        <div class="persona-card R">
+          <div class="head">
+            <div class="avatar">R</div>
+            <div class="who"><h4>Reza</h4><span class="tag">Extreme · Compliance-First Enterprise</span></div>
+          </div>
+          <div class="role">Compliance or security reviewer at an enterprise buyer.</div>
+          <div class="breaks"><span class="b-label">Breaks at</span> Evaluation cannot start</div>
+          <div class="need">Needs scopes, audit log, deprecation horizons before any code runs.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 COMPETITORS -->
+    <section class="section" id="competitors">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Inputs</span>
+          <span class="section-num">03 / 08</span>
+        </div>
+        <h2 class="section-title">The seven competitor portals.</h2>
+        <p class="section-frame">Each portal solves the developer onboarding problem in a different shape. We named these shapes "archetypes" in the original layering deep-dive. Each one earns at least one persona slot in the matrix below.</p>
+      </header>
+
+      <div class="comp-grid">
+        <div class="comp-card"><div class="brand-band" style="background:#635BFF"></div><h4>Stripe</h4><div class="arch">Capability-First</div><div class="sig">Verb-led tiles. Pre-populated responses. Full L5 surface in dashboard.</div><div class="url">docs.stripe.com</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#F22F46"></div><h4>Twilio</h4><div class="arch">Product-Line × Use-Case</div><div class="sig">Two-axis L1. Quickstart deep-links to API reference at every step.</div><div class="url">twilio.com/docs</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#7B68EE"></div><h4>ClickUp</h4><div class="arch">Capability Cards</div><div class="sig">Four-card landing (API · MCP · Webhooks · OAuth). Verb-led, modest L5.</div><div class="url">developer.clickup.com</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#A259FF"></div><h4>Figma</h4><div class="arch">Choose-Your-Surface</div><div class="sig">REST / Plugin / Widget split. Personal access tokens, no OAuth dance.</div><div class="url">developers.figma.com</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#FF6C37"></div><h4>Postman</h4><div class="arch">Task-Mode Card Grid</div><div class="sig">Collections, Mock Servers, Monitors as primary primitives. Mock-first auth.</div><div class="url">learning.postman.com</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#4285F4"></div><h4>Google Workspace</h4><div class="arch">App-Grid Two-Axis</div><div class="sig">Apps × API surfaces grid. Explicit deprecation calendar. Quotas dashboard.</div><div class="url">developers.google.com/workspace</div></div>
+        <div class="comp-card"><div class="brand-band" style="background:#D97706"></div><h4>Claude (Anthropic)</h4><div class="arch">Code-on-Hero</div><div class="sig">Working curl on hero with placeholder key. Surface picker. Clean L4.</div><div class="url">platform.claude.com/docs</div></div>
+      </div>
+    </section>
+
+    <!-- 04 MATRIX -->
+    <section class="section" id="matrix">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Evidence</span>
+          <span class="section-num">04 / 08</span>
+        </div>
+        <h2 class="section-title">Persona × Competitor fit matrix.</h2>
+        <p class="section-frame">Rows are personas. Columns are competitors. Each cell shows the fit strength of that portal's pattern for that persona, plus the specific pattern that earns the fit. Strong fit means the portal pattern resolves the persona's break-point directly. The matrix is the visual proof that the patterns we recommend are not single-source.</p>
+      </header>
+
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th class="corner">Personas ↓ &nbsp; / &nbsp; Competitors →</th>
+              <th class="col-head"><div class="band" style="background:#635BFF"></div><span class="name">Stripe</span><span class="arch">Capability</span></th>
+              <th class="col-head"><div class="band" style="background:#F22F46"></div><span class="name">Twilio</span><span class="arch">Product × Use</span></th>
+              <th class="col-head"><div class="band" style="background:#7B68EE"></div><span class="name">ClickUp</span><span class="arch">Capability cards</span></th>
+              <th class="col-head"><div class="band" style="background:#A259FF"></div><span class="name">Figma</span><span class="arch">Choose surface</span></th>
+              <th class="col-head"><div class="band" style="background:#FF6C37"></div><span class="name">Postman</span><span class="arch">Task mode</span></th>
+              <th class="col-head"><div class="band" style="background:#4285F4"></div><span class="name">Google</span><span class="arch">App-grid</span></th>
+              <th class="col-head"><div class="band" style="background:#D97706"></div><span class="name">Claude</span><span class="arch">Code-on-hero</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av M">M</div><div><span class="name">Maya</span><span class="tag">Mode 1</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Verb tiles</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Use-case picker</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">4-card landing</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Surface picker</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Collections</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">Too broad</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Code on hero</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av D">D</div><div><span class="name">Diego</span><span class="tag">Mode 2</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Pre-pop response</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Inline deep-link</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">API docs ok</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Quickstart checklist</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Workspaces</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Apps Script</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Sticky language</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av S">S</div><div><span class="name">Sara</span><span class="tag">Mode 3</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Full L5</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Error logger</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No ops</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No ops</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Monitors</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Quotas dashboard</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Usage + deprecation</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av A">A</div><div><span class="name">Aria</span><span class="tag">Extreme</span></div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Demo data</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Console</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">OAuth needed</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">PAT generator</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Mock servers</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">OAuth heavy</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Placeholder keys</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av L">L</div><div><span class="name">Liam</span><span class="tag">Extreme</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Hero + dashboard</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Console + logger</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Fast cards</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Surface picker</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Collection speed</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Some quotas</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Code on hero</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av DO">D+</div><div><span class="name">Diego-Ops</span><span class="tag">Extreme</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Ops visible</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Debugger</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No ops</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No ops</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Monitors</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Quotas at eval</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Model deprecations</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av MC">M+</div><div><span class="name">Maya-Curious</span><span class="tag">Extreme</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">10-sec scan</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Use-cases</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Sparse cards</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Picker fast</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Mocks ok</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">Too broad</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Hero curl</div></div></td>
+            </tr>
+            <tr>
+              <td class="row-head"><div class="h-inner"><div class="av R">R</div><div><span class="name">Reza</span><span class="tag">Extreme</span></div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">SOC2 + deprecation</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Some compliance</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No compliance docs</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No deprecation</div></div></td>
+              <td class="cell weak"><div class="fit"><div class="dots">●○○</div><div class="note">No compliance docs</div></div></td>
+              <td class="cell strong"><div class="fit"><div class="dots">●●●</div><div class="note">Deprecation calendar</div></div></td>
+              <td class="cell moderate"><div class="fit"><div class="dots">●●○</div><div class="note">Some docs</div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="matrix-legend">
+        <div class="lg-item"><span class="lg-swatch s"></span><span><strong>Strong fit (●●●)</strong> · pattern directly resolves the persona's break-point</span></div>
+        <div class="lg-item"><span class="lg-swatch m"></span><span><strong>Moderate (●●○)</strong> · adjacent pattern, partial resolve</span></div>
+        <div class="lg-item"><span class="lg-swatch w"></span><span><strong>Weak (●○○)</strong> · no useful pattern</span></div>
+      </div>
+    </section>
+
+    <!-- 05 WALKTHROUGHS -->
+    <section class="section" id="walks">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Evidence</span>
+          <span class="section-num">05 / 08</span>
+        </div>
+        <h2 class="section-title">Persona walkthroughs.</h2>
+        <p class="section-frame">For each persona, the trace runs from documented need to the two competitor portals that inspired the solution, ending at the specific node in the D3 IA that serves them.</p>
+      </header>
+
+      <div class="walk-grid">
+
+        <!-- MAYA -->
+        <div class="walk-card M">
+          <div class="walk-side">
+            <div class="av">M</div>
+            <h4>Maya</h4>
+            <div class="role">Mode 1 · Trial &amp; Trust</div>
+            <div class="breaks"><span class="label">Break-point</span>L1 · no working code on hero</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Working code visible immediately. No auth friction. Verb-led entry that lets her declare intent in seconds.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#D97706"><div class="by">Claude docs</div><div class="ptn">Curl block on the hero with <code style="background:#FEF3C7;padding:0 4px;border-radius:3px">$ANTHROPIC_API_KEY</code> placeholder. The shape of the response is visible before any action.</div></div>
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Verb-led capability tiles ("Accept payments", "Send invoices") force intent declaration before reference content is shown.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Working curl on <code>Quick Start › Overview</code>. Capability-hint strip above the endpoint left rail.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIEGO -->
+        <div class="walk-card D">
+          <div class="walk-side">
+            <div class="av">D</div>
+            <h4>Diego</h4>
+            <div class="role">Mode 2 · Implementation</div>
+            <div class="breaks"><span class="label">Break-point</span>L2 → L4 · response empty until Try-It</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Read response shapes before authenticating. Walkthroughs that deep-link to endpoint reference inline at every step.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Every endpoint page ships a pre-populated response example. The contract is readable before any request is run.</div></div>
+              <div class="insp" style="border-color:#F44C60"><div class="by">Twilio</div><div class="ptn">Quickstart steps deep-link inline to the API reference for each endpoint they call. URL hash preserves walkthrough state on return.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Pre-populated response in <code>Reference › Endpoints</code>. Two-way deep-links between <code>Build › Walkthroughs</code> and <code>Reference › Endpoints</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SARA -->
+        <div class="walk-card S">
+          <div class="walk-side">
+            <div class="av">S</div>
+            <h4>Sara</h4>
+            <div class="role">Mode 3 · Operations</div>
+            <div class="breaks"><span class="label">Break-point</span>L5 · does not exist</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Status, deprecation calendar, rate limits, logs, runbook reachable from anywhere. The portal does not end at Reference.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Full L5 surface: status page, deprecation calendar, request logs, webhook events explorer all reachable from the dashboard.</div></div>
+              <div class="insp" style="border-color:#4285F4"><div class="by">Google Workspace</div><div class="ptn">Per-app quotas dashboard plus an explicit deprecation calendar with date horizons. Status surfaces as primary.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Entire <code>Operate</code> group, six surfaces: Status, Deprecations, Rate limits, Webhook events, Logs, Runbook.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARIA -->
+        <div class="walk-card A">
+          <div class="walk-side">
+            <div class="av">A</div>
+            <h4>Aria</h4>
+            <div class="role">Extreme · Curious &amp; Code-shy</div>
+            <div class="breaks"><span class="label">Break-point</span>L2 · OAuth wall</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Anonymous path to see real responses. Placeholder keys in code samples so the curl is readable without doing OAuth.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#FF6C37"><div class="by">Postman</div><div class="ptn">Mock-first auth model. Collections and Mock Servers let her run requests with no real auth at all. Auth deferred until production data is actually needed.</div></div>
+              <div class="insp" style="border-color:#D97706"><div class="by">Claude docs</div><div class="ptn">Placeholder API key pattern in every code sample. The request shape is readable end-to-end without doing OAuth.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Anonymous tier as the first card in <code>Quick Start › Authentication</code>. Placeholder keys in all code samples across every group.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIAM -->
+        <div class="walk-card L">
+          <div class="walk-side">
+            <div class="av">L</div>
+            <h4>Liam</h4>
+            <div class="role">Extreme · Code-Fluent Speed-runner</div>
+            <div class="breaks"><span class="label">Break-point</span>L5 · prod errors with no docs</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Hero code visible in seconds. Sticky language picker across pages. Once shipped, ops surface for when things break.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Hero code + a dashboard with request logs, rate-limit usage, and error rate. Ops is one click from docs.</div></div>
+              <div class="insp" style="border-color:#D97706"><div class="by">Claude docs</div><div class="ptn">Code-on-hero pattern with the user's language pre-selected. The integration speed-runner gets everything above the fold.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Hero code on <code>Quick Start › Overview</code>. Sticky language in <code>Reference</code>. <code>Operate › Logs</code> and <code>Operate › Rate limits</code> for production debugging.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIEGO-OPS -->
+        <div class="walk-card DO">
+          <div class="walk-side">
+            <div class="av">D+</div>
+            <h4>Diego (Ops-aware)</h4>
+            <div class="role">Extreme · Ops-aware Builder</div>
+            <div class="breaks"><span class="label">Break-point</span>Evaluation · L5 not visible</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">L5 readable during evaluation, not just after deployment. Wants to see the ops story before committing to integrate.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#F44C60"><div class="by">Twilio</div><div class="ptn">Status, console, and error logger all reachable from the docs nav. Ops visibility at evaluation time, not gated behind sign-up.</div></div>
+              <div class="insp" style="border-color:#FF6C37"><div class="by">Postman</div><div class="ptn">Monitors as a first-class primitive. Ops is part of the product surface, not an afterthought.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where"><code>Operate</code> reachable from the rail at all times. Every endpoint page links to <code>Operate › Status</code> and <code>Operate › Rate limits</code> as "Production behavior".</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAYA-CURIOUS -->
+        <div class="walk-card MC">
+          <div class="walk-side">
+            <div class="av">M+</div>
+            <h4>Maya (Curious)</h4>
+            <div class="role">Extreme · Time-pressured variant</div>
+            <div class="breaks"><span class="label">Break-point</span>L1 · faster bounce than Mode Maya</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Sub-10-second comprehension. Working code visible without scrolling. Lower patience than Mode Maya.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#D97706"><div class="by">Claude docs</div><div class="ptn">Code-on-hero with minimal nav. Visitor reads the request and response without doing anything.</div></div>
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Capability tiles for fast intent declaration. Three seconds to know if this product is for you.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where">Hero code immediately visible on <code>Quick Start › Overview</code>. Breadcrumb across all pages so she never gets lost during her short window.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REZA -->
+        <div class="walk-card R">
+          <div class="walk-side">
+            <div class="av">R</div>
+            <h4>Reza</h4>
+            <div class="role">Extreme · Compliance-First Enterprise</div>
+            <div class="breaks"><span class="label">Break-point</span>Evaluation cannot start</div>
+          </div>
+          <div class="walk-body">
+            <h5>Need</h5>
+            <div class="need">Scope policy, audit log format, deprecation horizons all visible before any code runs. Operational maturity signaled at the nav level.</div>
+            <h5>Inspired by</h5>
+            <div class="inspirations">
+              <div class="insp" style="border-color:#4285F4"><div class="by">Google Workspace</div><div class="ptn">Explicit deprecation calendar with sub-30-day, 90-day, 180-day horizons. Each deprecation links to a migration guide.</div></div>
+              <div class="insp" style="border-color:#807AFF"><div class="by">Stripe</div><div class="ptn">Dedicated compliance content accessible from the docs nav (SOC 2, data residency, audit log format). Procurement-friendly surfaces.</div></div>
+            </div>
+            <h5>Served in D3 by</h5>
+            <div class="served">
+              <div class="label">D3 home</div>
+              <div class="where"><code>Operate › Deprecations</code> as a calendar. <code>Quick Start › Authentication</code> covers scopes and tier ladder. Compliance node planned as <code>Operate › Runbook</code> sibling.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 06 PATTERNS -->
+    <section class="section" id="patterns">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Synthesis</span>
+          <span class="section-num">06 / 08</span>
+        </div>
+        <h2 class="section-title">Patterns that earned their place in D3.</h2>
+        <p class="section-frame">A pattern earns inclusion in the D3 IA when it shows up in the matrix for more than one persona and is validated by more than one competitor. Eight patterns met both bars. Each is shown with the persona group it serves and the D3 surface where it lives.</p>
+      </header>
+
+      <div class="patterns-grid">
+        <div class="pattern-row">
+          <div class="pn">01</div>
+          <div class="pdesc"><h4>Working code on hero</h4><p>A curl block visible above the fold with a placeholder key. The shape of the response is readable before any action.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Maya, Liam, Maya-Curious</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Claude · Stripe</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">02</div>
+          <div class="pdesc"><h4>Tiered auth ladder</h4><p>Anonymous mock first, then sandbox key, then live OAuth. Each tier returns real data. Users earn the next tier by working at the current one.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Aria, Diego, Maya</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Postman · Claude</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">03</div>
+          <div class="pdesc"><h4>Pre-populated response shapes</h4><p>Every endpoint page ships with a realistic example response. The contract is readable before Try-It is ever clicked.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Diego, Liam, Aria</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Stripe · Twilio</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">04</div>
+          <div class="pdesc"><h4>Walkthroughs cross-linked to Reference</h4><p>Every walkthrough step deep-links to the endpoint reference inline. Every endpoint page shows "Used in walkthrough" link back.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Diego, Liam, Aria</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Twilio · Figma</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">05</div>
+          <div class="pdesc"><h4>L5 Operations surface</h4><p>Status, Deprecations, Rate limits, Webhook events, Logs, Runbook. The portal does not end at Reference.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Sara, Diego-Ops, Reza, Liam</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Stripe · Twilio · Postman · Google · Claude</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">06</div>
+          <div class="pdesc"><h4>Explicit deprecation calendar</h4><p>Sorted by horizon. Sub-30-day items flagged urgent. Each deprecation linked to migration walkthrough.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Reza, Sara, Diego-Ops</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Google · Claude · Stripe</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">07</div>
+          <div class="pdesc"><h4>Sticky language tabs</h4><p>Language selection persists across every page in the portal. cURL, Python, Node, Ruby, Go, Java, .NET all first-class.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">Diego, Liam</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Stripe · Claude</span></div>
+        </div>
+        <div class="pattern-row">
+          <div class="pn">08</div>
+          <div class="pdesc"><h4>Breadcrumb across all pages</h4><p>SDK › Group › Page. Click any crumb to fast-travel. Replaces the flat-depth confusion the current rail creates.</p></div>
+          <div class="pgroup serves"><span class="label">Serves</span><span class="val">All personas needing fast-travel</span></div>
+          <div class="pgroup"><span class="label">From</span><span class="val">Stripe · Twilio · Google</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 MOAT -->
+    <section class="section" id="moat">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Synthesis</span>
+          <span class="section-num">07 / 08</span>
+        </div>
+        <h2 class="section-title">The one move no competitor inspired.</h2>
+        <p class="section-frame">Every pattern in section 06 was borrowed. One pattern in the D3 IA is not borrowed. It is the only move Beacon makes without precedent from the seven portals we audited.</p>
+      </header>
+
+      <div class="moat">
+        <div class="badge">✨ THE UNBORROWED MOVE</div>
+        <h3>Copilot as Navigation Spine.</h3>
+        <p>None of the seven competitor portals has shipped a docs-native conversational assistant positioned as a cross-layer navigation primitive. Stripe has a chat assistant in the dashboard, not in the docs. Claude has an "Ask Docs" affordance, but it is a search-and-summarize surface, not a navigation primitive.</p>
+
+        <div class="seven-grid">
+          <div class="seven-cell"><span class="x">✗</span>Stripe</div>
+          <div class="seven-cell"><span class="x">✗</span>Twilio</div>
+          <div class="seven-cell"><span class="x">✗</span>ClickUp</div>
+          <div class="seven-cell"><span class="x">✗</span>Figma</div>
+          <div class="seven-cell"><span class="x">✗</span>Postman</div>
+          <div class="seven-cell"><span class="x">✗</span>Google</div>
+          <div class="seven-cell"><span class="x">✗</span>Claude</div>
+        </div>
+
+        <p>Beacon's Copilot is the only place where the IA innovates, not iterates. Anchored to the current SDK, group, and page. Seeded prompts scoped to the surface. Output renders into the surface, not into a chat thread. Deep-links to other groups when the answer references them.</p>
+
+        <div class="served">
+          <div class="label">Served in D3 as</div>
+          <div class="where">A persistent right-side affordance on every page. v1 ships as the anchored drawer. v2 collapses into a vertical spine across <code>Quick Start</code>, <code>Build</code>, <code>Reference</code>, <code>Operate</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 CLOSING -->
+    <section class="section" id="close">
+      <header class="section-head">
+        <div class="meta">
+          <span class="chip chip-D">Closing</span>
+          <span class="section-num">08 / 08</span>
+        </div>
+        <h2 class="section-title">Where everything lands.</h2>
+        <p class="section-frame">This file is the evidence. The IA improvement file is where the evidence becomes structure.</p>
+      </header>
+
+      <div class="closing">
+        <h3>The single IA serves all eight personas.</h3>
+        <p>Quick Start serves Maya, Aria, and Maya-Curious. Build serves Diego and Liam. Reference serves everyone. Operate serves Sara, Diego-Ops, Reza, and Liam. The Copilot spine cuts through all four. No persona is dead-ended. No surface is uninspired.</p>
+        <div class="links">
+          <a href="Deliverable-3-IA-Current-Portal-Improvement.html">→ See where each pattern lands in the IA</a>
+          <a href="Deliverable-1-UX-UI-Audit-Research.pdf">→ Original audit</a>
+          <a href="Deliverable-2-Wireframes-Interaction-Architecture.html">→ Wireframes</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sidebar a');
+function updateActive(){
+  let current = '';
+  sections.forEach(s => {
+    const r = s.getBoundingClientRect();
+    if(r.top <= 120 && r.bottom > 120) current = s.id;
+  });
+  navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+}
+document.addEventListener('scroll', updateActive, {passive:true});
+window.addEventListener('load', updateActive);
+</script>
+</body>
+</html>

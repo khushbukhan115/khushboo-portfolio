@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deliverable 5 - Beacon / Resonance Web API Wireframes</title>
+<style>
+:root{
+  --blue:#5B8DEF;--green:#34E29B;--amber:#E8A23D;--red:#E0625F;
+  --light-blue:rgba(91,141,239,.16);--light-green:rgba(52,226,155,.16);--light-amber:rgba(232,162,61,.16);--light-red:rgba(224,98,95,.16);
+  --ink:#F4F7F5;--body:#C9D1CC;--muted:#A4AFA9;--subtle:#8E978F;
+  --border:rgba(255,255,255,.10);--surface:#0d110f;--white:#0d110f;
+  --rail-w:240px;--hdr:56px;--font:-apple-system,'Inter','Segoe UI',sans-serif;
+  --mono:"IBM Plex Mono","IBM Plex Mono",monospace;--r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);font-size:14px;color:var(--ink);background:#171f1b;line-height:1.5}
+#ctrl{position:fixed;top:0;left:0;right:0;z-index:999;background:#111827;height:44px;display:flex;align-items:center;padding:0 12px;gap:6px;overflow-x:auto}
+.clabel{color:#F4F7F5;font-size:10px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.stab{padding:5px 9px;border-radius:4px;font-size:11px;color:#C9D1CC;cursor:pointer;white-space:nowrap;border:none;background:none}
+.stab:hover{color:#F4F7F5;background:rgba(255,255,255,.08)}
+.stab.on{background:var(--blue);color:#F4F7F5}
+.cdiv{width:1px;height:18px;background:#374151;margin:0 4px;flex-shrink:0}
+.tgrp{display:flex;background:#1F2937;border-radius:4px;padding:2px;flex-shrink:0}
+.tbtn{padding:4px 9px;font-size:11px;border:none;background:none;color:#C9D1CC;border-radius:3px;cursor:pointer}
+.tbtn.on{background:#374151;color:#F4F7F5}
+#wrap{margin-top:44px;display:flex;flex-direction:column;align-items:center;padding:20px;min-height:calc(100vh - 44px)}
+.wlabel{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;align-self:flex-start;padding-left:4px}
+.frame{background:#0d110f;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,.14);overflow:hidden;border:1px solid var(--border);width:1200px;max-width:100%}
+body.mob .frame{width:375px}
+.phdr{height:var(--hdr);background:#0d110f;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:10}
+body.mob .phdr{display:none}
+.logo{display:flex;align-items:center;gap:8px;min-width:0}
+.logo-icon{width:22px;height:22px;background:#34E29B;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#F4F7F5;flex-shrink:0}
+.logo-name{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+.logo-sep{color:var(--border);margin:0 3px}
+.logo-sub{font-size:12px;color:var(--muted)}
+.hsp{flex:1}
+.sdkpick{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:5px 9px;font-size:12px;cursor:pointer;gap:4px;white-space:nowrap}
+.sdkpick .pl{color:var(--muted);font-size:11px}
+.sdkpick .pv{font-weight:600}
+.sdkpick .ps{width:1px;height:11px;background:var(--border);margin:0 5px}
+.srch{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:5px 10px;width:190px;font-size:12px;color:var(--muted);cursor:text}
+.srch kbd{margin-left:auto;background:#0d110f;border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-size:10px;color:var(--subtle)}
+.copbtn{display:flex;align-items:center;gap:5px;background:var(--blue);color:#F4F7F5;border:none;border-radius:var(--r);padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.hutil{font-size:12px;color:var(--muted);cursor:pointer}
+.mhdr{height:var(--hdr);background:#0d110f;border-bottom:1px solid var(--border);display:none;align-items:center;padding:0 16px;gap:12px}
+body.mob .mhdr{display:flex}
+.hamb{display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.hamb span{width:18px;height:2px;background:var(--ink);border-radius:1px;display:block}
+.mlogo{flex:1;font-size:13px;font-weight:700}
+.pbody{display:flex}
+.rail{width:var(--rail-w);border-right:1px solid var(--border);background:#0d110f;padding:12px 0;flex-shrink:0;min-height:600px}
+body.mob .rail{display:none}
+.rgl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 16px 3px}
+.ri{display:flex;align-items:center;gap:7px;padding:6px 16px;font-size:13px;color:var(--body);cursor:pointer;border-left:2px solid transparent;text-decoration:none}
+.ri:hover{background:var(--surface);color:var(--ink)}
+.ri.on{background:var(--light-blue);color:var(--blue);border-left-color:var(--blue);font-weight:600}
+.ri .nb{margin-left:auto;font-size:9px;font-weight:700;background:var(--green);color:#F4F7F5;border-radius:3px;padding:1px 4px}
+.rdiv{height:1px;background:var(--border);margin:8px 16px}
+.ca{flex:1;min-width:0;background:var(--surface)}
+.ci{max-width:900px;margin:0 auto;padding:28px 36px}
+body.mob .ci{padding:16px}
+.bc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);margin-bottom:20px;flex-wrap:wrap}
+.bc a{color:var(--muted);text-decoration:none}
+.bc a:hover{color:var(--blue)}
+.bc .cur{color:var(--ink)}
+.ptitle{font-size:26px;font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.2}
+.psub{font-size:14px;color:var(--body);margin-bottom:24px;max-width:600px;line-height:1.6}
+h2.sh{font-size:17px;font-weight:700;color:var(--ink);margin:28px 0 10px}
+h3.ssh{font-size:14px;font-weight:600;color:var(--ink);margin:20px 0 7px}
+p.bt{font-size:13px;color:var(--body);line-height:1.6;margin-bottom:10px}
+.cg{display:grid;gap:10px}
+.cg2{grid-template-columns:repeat(2,1fr)}
+.cg3{grid-template-columns:repeat(3,1fr)}
+.cg4{grid-template-columns:repeat(4,1fr)}
+body.mob .cg4{grid-template-columns:repeat(2,1fr)}
+body.mob .cg3{grid-template-columns:repeat(2,1fr)}
+body.mob .cg2{grid-template-columns:1fr}
+.card{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer}
+.card:hover{border-color:var(--blue)}
+.cicon{width:30px;height:30px;background:var(--light-blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:8px}
+.ctit{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.cdesc{font-size:12px;color:var(--muted);line-height:1.4}
+.carrow{font-size:12px;color:var(--blue);margin-top:8px}
+.cb{background:#1E2A3A;border-radius:var(--r);overflow:hidden;margin:14px 0}
+.ctabs{display:flex;background:#162030;padding:0 14px}
+.ctab{padding:8px 11px;font-size:12px;color:#6B8DB3;cursor:pointer;border-bottom:2px solid transparent}
+.ctab.on{color:#F4F7F5;border-bottom-color:var(--blue)}
+.cpre{padding:18px;font-family:var(--mono);font-size:12px;line-height:1.7;color:#A8D0F0;overflow-x:auto}
+.cc{color:#738EAB}.ck{color:#7EC8E3}.cs{color:#A8D08D}.cm{color:#DCDCAA}.curl{color:#CE9178}
+.dt{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.dt th{background:var(--surface);text-align:left;padding:7px 11px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--border)}
+.dt td{padding:9px 11px;border-bottom:1px solid var(--border);color:var(--body);vertical-align:top}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:var(--surface)}
+.pn{font-family:var(--mono);font-size:12px;color:var(--blue)}
+.preq{font-size:10px;font-weight:700;background:var(--light-red);color:#E55B5B;border-radius:3px;padding:1px 5px}
+.popt{font-size:10px;background:var(--surface);color:var(--muted);border-radius:3px;padding:1px 5px}
+.clo{border-radius:var(--r);padding:12px 14px;margin:10px 0;font-size:13px;display:flex;gap:9px;line-height:1.5;border-left:3px solid}
+.clo-info{background:var(--light-blue);border-color:var(--blue)}
+.clo-ok{background:var(--light-green);border-color:var(--green)}
+.clo-warn{background:var(--light-amber);border-color:var(--amber)}
+.clo-icon{font-size:15px;flex-shrink:0}
+.atier{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);margin:10px 0;overflow:hidden}
+.ath{display:flex;align-items:center;gap:10px;padding:13px 15px;background:var(--surface);border-bottom:1px solid var(--border)}
+.atnum{width:22px;height:22px;background:var(--blue);color:#F4F7F5;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.atitle{font-size:14px;font-weight:600;color:var(--ink);flex:1}
+.badge{font-size:10px;border-radius:10px;padding:2px 8px;font-weight:600}
+.b-easy{background:#121714;color:#0AA277}
+.b-user{background:#121714;color:#6C88E6}
+.b-sec{background:#121714;color:#A176E6}
+.ab{padding:13px 15px}
+.sdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+.ok{background:var(--green)}.deg{background:var(--amber)}.out{background:var(--red)}
+.ephdr{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:18px;display:flex;align-items:flex-start;gap:11px}
+.mbadge{font-size:12px;font-weight:700;border-radius:4px;padding:3px 8px;flex-shrink:0}
+.mget{background:#121714;color:#0AA277}
+.epath{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink)}
+.edesc{font-size:13px;color:var(--muted);margin-top:4px}
+.tryp{background:#121714;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:18px 0}
+.trytitle{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.irow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ilbl{font-size:12px;color:var(--muted);width:90px;flex-shrink:0}
+.ifield{flex:1;background:#0d110f;border:1px solid var(--border);border-radius:4px;padding:6px 9px;font-size:12px;font-family:var(--mono);color:var(--ink)}
+.trybtn{background:var(--blue);color:#F4F7F5;border:none;border-radius:var(--r);padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer}
+.resp{background:#1A2332;border-radius:var(--r);padding:14px;font-family:var(--mono);font-size:12px;color:#9CDCFE;line-height:1.7;max-height:260px;overflow-y:auto;margin:10px 0}
+.jk{color:#9CDCFE}.js{color:#CE9178}.jn{color:#B5CEA8}
+.nxt{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin:20px 0}
+.nxttit{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.nlink{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.nlink:last-child{border-bottom:none}
+.nlicon{width:30px;height:30px;background:var(--light-blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.nltxt{flex:1}
+.nlt{font-size:13px;font-weight:500;color:var(--ink)}
+.nls{font-size:12px;color:var(--muted)}
+.hero{background:linear-gradient(135deg,#0F2040 0%,#1B3A6B 100%);padding:56px 36px;color:#F4F7F5}
+body.mob .hero{padding:30px 18px}
+.heyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:12px}
+.htitle{font-size:34px;font-weight:800;line-height:1.15;max-width:580px;margin-bottom:14px}
+body.mob .htitle{font-size:22px}
+.hsub{font-size:15px;color:rgba(255,255,255,.75);max-width:520px;line-height:1.6;margin-bottom:24px}
+.hctas{display:flex;gap:10px;flex-wrap:wrap}
+.ctap{background:var(--green);color:#F4F7F5;border:none;border-radius:var(--r);padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer}
+.ctas{background:rgba(255,255,255,.1);color:#F4F7F5;border:1px solid rgba(255,255,255,.25);border-radius:var(--r);padding:11px 22px;font-size:14px;cursor:pointer}
+.rc{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:18px;cursor:pointer}
+.rc:hover{border-color:var(--blue)}
+.rcq{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.rcd{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4}
+.rcu{font-size:12px;color:var(--blue);font-family:var(--mono)}
+.cap{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:13px;cursor:pointer;text-align:center}
+.cap:hover{border-color:var(--blue);background:var(--light-blue)}
+.capico{font-size:22px;margin-bottom:6px}
+.capn{font-size:13px;font-weight:600;color:var(--ink)}
+.capc{font-size:11px;color:var(--muted);margin-top:2px}
+.sdkc{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.sdkc:hover{border-color:var(--blue)}
+.sdkl{font-size:13px;font-weight:600;color:var(--ink)}
+.sdki{font-size:11px;font-family:var(--mono);color:var(--muted);background:var(--surface);border-radius:3px;padding:3px 6px}
+.cli{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.cld{font-size:11px;color:var(--muted);white-space:nowrap;min-width:68px}
+.cltag{font-size:10px;font-weight:700;border-radius:3px;padding:1px 5px}
+.tnew{background:#121714;color:#0AA277}.tfix{background:#121714;color:#6C88E6}.tdep{background:#FEF3C7;color:#E66516}
+.ubars{flex:1;display:flex;gap:2px}
+.ubar{flex:1;height:14px;background:var(--green);border-radius:2px}
+.ubar.i{background:var(--amber)}.ubar.o{background:var(--red)}
+.urow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ulbl{font-size:12px;color:var(--body);width:150px;flex-shrink:0}
+.upct{font-size:12px;font-weight:600;color:var(--ink);width:40px;text-align:right}
+.wi{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:7px;cursor:pointer}
+.wi:hover{border-color:var(--blue)}
+.wico{width:38px;height:38px;background:var(--light-blue);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.wt{font-size:14px;font-weight:600;color:var(--ink)}
+.wm{font-size:12px;color:var(--muted);margin-top:2px}
+.dbadge{font-size:10px;font-weight:600;border-radius:10px;padding:2px 8px}
+.db-b{background:#121714;color:#0AA277}.db-i{background:#121714;color:#A176E6}.db-a{background:var(--light-red);color:#E55B5B}
+.sov{background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.sbig{width:14px;height:14px;background:var(--green);border-radius:50%;flex-shrink:0}
+.stxt{flex:1}
+.sh2{font-size:16px;font-weight:700;color:var(--ink)}
+.ssub{font-size:13px;color:var(--muted)}
+.supd{font-size:11px;color:var(--subtle)}
+.slist{display:flex;flex-direction:column;gap:14px;margin:14px 0}
+.si{display:flex;gap:14px}
+.snum{width:26px;height:26px;background:var(--blue);color:#F4F7F5;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.stit{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.sbod{font-size:13px;color:var(--body);line-height:1.5}
+.ann-panel{width:260px;background:#0d110f;border-left:1px solid var(--border);padding:14px;flex-shrink:0}
+.ann-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.ann-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.ann-item:last-child{border-bottom:none}
+.ann-num{width:18px;height:18px;background:var(--amber);color:#F4F7F5;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ann-txt{font-size:11px;color:var(--body);line-height:1.5}
+.ann-ref{font-size:10px;color:var(--muted);margin-top:2px}
+.abadge{display:inline-flex;width:18px;height:18px;background:var(--amber);color:#F4F7F5;border-radius:50%;font-size:10px;font-weight:700;align-items:center;justify-content:center;vertical-align:middle;margin:-1px 3px;cursor:help;flex-shrink:0}
+.sp{display:none}.sp.on{display:block}
+body.clean .ann-panel{display:none}
+body.clean .abadge{display:none}
+.tag{font-size:11px;border-radius:3px;padding:2px 7px;font-weight:600}
+.inline-link{color:var(--blue);text-decoration:none;cursor:pointer;font-size:inherit}
+.inline-link:hover{text-decoration:underline}
+
+/* brand override */
+html{background:#050706}body{background:#050706;color:#F4F7F5}
+h1,h2,h3,h4,h5{font-family:"Space Grotesk","Inter",sans-serif}
+code,pre,kbd,samp{font-family:"IBM Plex Mono",ui-monospace,monospace}
+::selection{background:rgba(52,226,155,.26);color:#F4F7F5}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="ctrl">
+  <span class="clabel">Screens</span>
+  <button class="stab" data-s="l0">L0 · Landing</button><button class="stab" data-s="qs-overview">QS · Overview</button><button class="stab" data-s="qs-auth">QS · Authentication</button><button class="stab" data-s="qs-compliance">QS · Compliance</button><button class="stab" data-s="build-wt">Build · Walkthroughs</button><button class="stab" data-s="ref-ep">Ref · GET /tracks/{id}</button><button class="stab" data-s="op-status">Operate · Status</button>
+  <div class="cdiv"></div>
+  <div class="tgrp">
+    <button class="tbtn on" id="btn-desk" onclick="setView('desk')">Desktop</button>
+    <button class="tbtn" id="btn-mob" onclick="setView('mob')">Mobile</button>
+  </div>
+  <div class="cdiv"></div>
+  <div class="tgrp">
+    <button class="tbtn on" id="btn-ann" onclick="setMode('ann')">Annotated</button>
+    <button class="tbtn" id="btn-clean" onclick="setMode('clean')">Clean</button>
+  </div>
+</div>
+
+<div id="wrap">
+  <div class="wlabel" id="wlabel">L0 · Landing - Desktop · Annotated</div>
+  <div class="sp on" id="sp-l0"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div style="display:flex">
+    <div style="flex:1;min-width:0"><div class="hero">
+  <div class="heyebrow">Resonance Web API</div>
+  <div class="htitle">Build music experiences<br>that move people.</div>
+  <div class="hsub">Full access to Resonance's music catalog, streaming data, playlist management, and real-time player controls - across 7 SDKs.</div>
+  <div class="hctas">
+    <button class="ctap">Get started →</button>
+    <button class="ctas">Explore the API</button>
+  </div>
+  <span class="abadge" title="Annotation 1">1</span>
+</div>
+<div style="padding:28px 36px;background:var(--surface)">
+  <div style="max-width:960px;margin:0 auto">
+
+    <h2 class="sh">Where do you want to start? <span class="abadge" title="Annotation 2">2</span></h2>
+    <div class="cg cg4" style="margin-bottom:28px">
+      <div class="rc"><div class="rcq">New here?</div><div class="rcd">Set up your app, get credentials, and make your first API call in under 10 minutes.</div><div class="rcu">→ /quick-start/overview</div></div>
+      <div class="rc"><div class="rcq">Building something?</div><div class="rcd">Task-based walkthroughs for common Resonance integrations - search, playlists, player.</div><div class="rcu">→ /build/walkthroughs</div></div>
+      <div class="rc"><div class="rcq">Looking up an endpoint?</div><div class="rcd">Full endpoint reference, Try It Out inline, and pre-populated example responses.</div><div class="rcu">→ /reference/endpoints</div></div>
+      <div class="rc"><div class="rcq">Running in production?</div><div class="rcd">API status, rate limits, deprecation calendar, logs, and runbook for on-call developers.</div><div class="rcu">→ /operate/status</div></div>
+    </div>
+
+    <h2 class="sh">What can you build? <span class="abadge" title="Annotation 3">3</span></h2>
+    <div class="cg cg4" style="margin-bottom:28px">
+      <div class="cap"><div class="capico">🔍</div><div class="capn">Search</div><div class="capc">4 endpoints</div></div>
+      <div class="cap"><div class="capico">🎵</div><div class="capn">Tracks</div><div class="capc">12 endpoints</div></div>
+      <div class="cap"><div class="capico">📋</div><div class="capn">Playlists</div><div class="capc">10 endpoints</div></div>
+      <div class="cap"><div class="capico">▶️</div><div class="capn">Player</div><div class="capc">14 endpoints</div></div>
+      <div class="cap"><div class="capico">🎤</div><div class="capn">Artists</div><div class="capc">6 endpoints</div></div>
+      <div class="cap"><div class="capico">💿</div><div class="capn">Albums</div><div class="capc">7 endpoints</div></div>
+      <div class="cap"><div class="capico">📊</div><div class="capn">Personalization</div><div class="capc">3 endpoints</div></div>
+      <div class="cap"><div class="capico">👤</div><div class="capn">Users</div><div class="capc">5 endpoints</div></div>
+    </div>
+
+    <h2 class="sh">Choose your SDK <span class="abadge" title="Annotation 4">4</span></h2>
+    <div class="cg cg4" style="margin-bottom:10px">
+      <div class="sdkc"><div class="sdkl">🐍 Python</div><div class="sdki">pip install spotipy</div></div>
+      <div class="sdkc"><div class="sdkl">🟨 JavaScript / TS</div><div class="sdki">npm i resonance-web-api-node</div></div>
+      <div class="sdkc"><div class="sdkl">☕ Java</div><div class="sdki">maven: resonance-web-api-java</div></div>
+      <div class="sdkc"><div class="sdkl">⚙️ C#</div><div class="sdki">NuGet: ResonanceAPI-NET</div></div>
+      <div class="sdkc"><div class="sdkl">🐘 PHP</div><div class="sdki">composer req jwilsson/resonance</div></div>
+      <div class="sdkc"><div class="sdkl">💎 Ruby</div><div class="sdki">gem install rresonance</div></div>
+      <div class="sdkc"><div class="sdkl">🐹 Go</div><div class="sdki">go get github.com/zmb3/resonance</div></div>
+    </div>
+
+    <div style="margin:28px 0;background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span style="font-size:14px;font-weight:700;color:var(--ink)">✦ Ask Copilot <span class="abadge" title="Annotation 5">5</span></span>
+        <span style="font-size:12px;color:var(--muted)">AI-powered navigation and code help</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--muted)">Ask something like "How do I get a user's top tracks?"…</div>
+        <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:var(--r);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer">Ask →</button>
+      </div>
+    </div>
+
+    <div style="background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:28px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span class="sdot ok"></span>
+        <span style="font-size:13px;font-weight:600;color:var(--ink)">All systems operational <span class="abadge" title="Annotation 6">6</span></span>
+        <a class="inline-link" style="margin-left:auto">View status →</a>
+      </div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">What's new</div>
+      <div class="cli"><span class="cld">May 14 2026</span><span class="cltag tnew">NEW</span><span style="font-size:12px;color:var(--body);margin-left:6px">Operate group launched: Status, Rate Limits, Deprecations, Logs, Runbook now live</span></div>
+      <div class="cli"><span class="cld">May 1 2026</span><span class="cltag tnew">NEW</span><span style="font-size:12px;color:var(--body);margin-left:6px">Compliance page added to Quick Start - data residency, OAuth scope catalog</span></div>
+      <div class="cli"><span class="cld">Apr 22 2026</span><span class="cltag tdep">DEPRECATION</span><span style="font-size:12px;color:var(--body);margin-left:6px">Audio Features endpoint deprecated - sunset date: Nov 1 2026</span></div>
+    </div>
+
+  </div>
+</div></div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Hero routes Maya (Get started) and Maya-Curious (Explore API). Sub-10s comprehension window - headline, value prop, and dual CTA visible without scroll.</div><div class="ann-ref">Gate A7.0 · Persona: Maya, Maya-Curious</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Four routing cards map directly to developer intent, not content type. Each routes to a specific IA group. Language: "Building something?" vs "Endpoints".</div><div class="ann-ref">Competitive pattern: Claude, Stripe, Postman</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">8 capability tiles cover all Resonance API clusters. Each deep-links to Reference > Endpoints filtered by cluster. Helps Liam assess scope without reading prose.</div><div class="ann-ref">Persona: Liam (build/buy decision)</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">SDK cards show install command inline. Language selection here pre-fills the SDK picker in the header, persisting across the full portal session.</div><div class="ann-ref">Gate A6.1 · SDK × Version persistent selector</div></div></div><div class="ann-item"><div class="ann-num">5</div><div><div class="ann-txt">Copilot entry point at L0 - highest-value AI assist moment. Developer has not yet self-selected a path; Copilot can provide personalised routing guidance.</div><div class="ann-ref">Cross-cutting affordance: Copilot drawer</div></div></div><div class="ann-item"><div class="ann-num">6</div><div><div class="ann-txt">Live status badge surfaces L5 signal at L0. Diego-Ops can confirm API health during evaluation without navigating to Operate.</div><div class="ann-ref">Persona: Diego-Ops · Operate group</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-qs-overview"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri on">Overview</a><a class="ri">Authentication</a><a class="ri">First call</a><a class="ri">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Quick Start</a><span class="sep">›</span><span class="cur">Overview</span></div>
+        <div class="ptitle">Get started with the Resonance Web API</div>
+<div class="psub">Make your first authenticated API call and start building in under 10 minutes. No prior Resonance API experience required.</div>
+
+<h2 class="sh">Make your first call <span class="abadge" title="Annotation 1">1</span></h2>
+<div class="cb">
+  <div class="ctabs">
+    <span class="ctab on">curl</span>
+    <span class="ctab">Python</span>
+    <span class="ctab">JavaScript</span>
+    <span class="ctab">Java</span>
+  </div>
+  <div class="cpre"><span class="cc"># Get a track by Resonance ID</span>
+<span class="cm">curl</span> -X GET <span class="curl">"https://api.resonance.dev/v1/tracks/7qiZfU4dY1lWllzX7mPBI3"</span>      -H <span class="cs">"Authorization: Bearer YOUR_ACCESS_TOKEN"</span>
+
+<span class="cc"># Response (200 OK)</span>
+{"name": <span class="cs">"Shape of You"</span>, "artists": [{"name": <span class="cs">"Ed Sheeran"</span>}],
+ "album": {"name": <span class="cs">"÷ (Divide)"</span>}, "duration_ms": <span class="ck">233712</span>,
+ "popularity": <span class="ck">89</span>, "preview_url": <span class="cs">"https://p.scdn.co/..."</span>}</div>
+</div>
+
+<div class="clo clo-warn"><span class="clo-icon">🔒</span><div>
+  <strong>Enterprise or regulated environment?</strong> Review our
+  <a class="inline-link">Compliance page</a> - data residency, OAuth scope catalog, and rate limit policy - before proceeding with authentication. <span class="abadge" title="Annotation 2">2</span>
+</div></div>
+
+<h2 class="sh">Step-by-step setup <span class="abadge" title="Annotation 3">3</span></h2>
+<div class="slist">
+  <div class="si"><div class="snum">1</div><div><div class="stit">Create a Resonance Developer app</div><div class="sbod">Go to the <a class="inline-link">Resonance Developer Dashboard</a> and create a new app. Note your Client ID and Client Secret - you'll need these to request access tokens.</div></div></div>
+  <div class="si"><div class="snum">2</div><div><div class="stit">Choose your authentication flow</div><div class="sbod">Select the flow that matches your use case: <strong>Client Credentials</strong> for server-side app data, <strong>Authorization Code</strong> for user-specific data, or <strong>PKCE</strong> for mobile and single-page apps. <a class="inline-link">See Authentication →</a></div></div></div>
+  <div class="si"><div class="snum">3</div><div><div class="stit">Request an access token</div><div class="sbod">Exchange your credentials for a Bearer token. Tokens expire after 3600 seconds - your SDK handles refresh automatically.</div>
+<div class="cb" style="margin-top:10px">
+  <div class="ctabs"><span class="ctab on">curl</span><span class="ctab">Python</span></div>
+  <div class="cpre"><span class="cm">curl</span> -X POST <span class="curl">"https://accounts.resonance.com/api/token"</span>      -H <span class="cs">"Content-Type: application/x-www-form-urlencoded"</span>      -d <span class="cs">"grant_type=client_credentials&client_id=YOUR_ID&client_secret=YOUR_SECRET"</span></div>
+</div>
+  </div></div>
+  <div class="si"><div class="snum">4</div><div><div class="stit">Make your first API call</div><div class="sbod">Use the Bearer token in the Authorization header. The example at the top of this page uses a track ID from Resonance's catalog.</div></div></div>
+</div>
+
+<div class="nxt">
+  <div class="nxttit">What's next? <span class="abadge" title="Annotation 4">4</span></div>
+  <a class="nlink"><div class="nlicon">🔑</div><div class="nltxt"><div class="nlt">Explore authentication options</div><div class="nls">Client Credentials, Authorization Code, PKCE - choose the right flow for your app</div></div><span style="color:var(--muted)">›</span></a>
+  <a class="nlink"><div class="nlicon">📋</div><div class="nltxt"><div class="nlt">Browse walkthroughs</div><div class="nls">Step-by-step task guides: build a player, manage playlists, fetch listening history</div></div><span style="color:var(--muted)">›</span></a>
+  <a class="nlink"><div class="nlicon">📖</div><div class="nltxt"><div class="nlt">Explore the API reference</div><div class="nls">All endpoints, parameters, response schemas, and Try It Out inline</div></div><span style="color:var(--muted)">›</span></a>
+</div>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Hero code block is the sub-10-second comprehension test. Maya-Curious must see working code without scrolling. Language tabs sticky - selection persists across all code blocks in the portal.</div><div class="ann-ref">Persona: Maya, Maya-Curious · Gate A6.1</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Prerequisite callout surfaces the Compliance path. Reza must be able to navigate to compliance information from any Quick Start page, not just from the landing page.</div><div class="ann-ref">Persona: Reza · Gate A4.1</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Step-by-step numbered flow maps to the Mode 1 (Trial) journey. Each step links to its detail page. Step 3 deep-links to Quick Start › Authentication.</div><div class="ann-ref">Persona: Maya · Cognitive Layer L1-L2</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">Next steps card explicitly routes Diego from Overview to Build › Walkthroughs. This is the rescued path - Walkthroughs were previously orphaned with no entry point from Quick Start.</div><div class="ann-ref">Persona: Diego · Finding 2 fix</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-qs-auth"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri">Overview</a><a class="ri on">Authentication</a><a class="ri">First call</a><a class="ri">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Quick Start</a><span class="sep">›</span><span class="cur">Authentication</span></div>
+        <div class="ptitle">Authentication</div>
+<div class="psub">Choose the authentication flow that matches your use case. Start with the sandbox tier to explore the API without creating an account.</div>
+
+<div class="clo clo-ok"><span class="clo-icon">✓</span><div><strong>Start without an account.</strong> The sandbox tier gives you read access to public Resonance catalog data - no credentials required. Upgrade when you need user data or write access.</div></div>
+
+<h2 class="sh">Authentication tiers <span class="abadge" title="Annotation 1">1</span></h2>
+
+<div class="atier">
+  <div class="ath">
+    <div class="atnum">1</div>
+    <div class="atitle">Sandbox - No credentials required <span class="abadge" title="Annotation 2">2</span></div>
+    <span class="badge b-easy">No sign-up</span>
+  </div>
+  <div class="ab">
+    <p class="bt">Access public catalog data (tracks, albums, artists, search) using a shared read-only key. Rate-limited to 30 requests/minute. No user data.</p>
+    <div class="cb">
+      <div class="ctabs"><span class="ctab on">curl</span><span class="ctab">Python</span><span class="ctab">JavaScript</span></div>
+      <div class="cpre"><span class="cc"># Sandbox key - works immediately, no sign-up needed</span>
+<span class="cm">curl</span> -X GET <span class="curl">"https://api.resonance.dev/v1/tracks/7qiZfU4dY1lWllzX7mPBI3"</span>      -H <span class="cs">"Authorization: Bearer BEACON_SANDBOX_KEY_2026"</span>
+
+<span class="cc"># Returns real Resonance catalog data</span></div>
+    </div>
+    <p class="bt" style="margin-top:8px"><strong>Limits:</strong> 30 req/min · Public data only · No user endpoints · No write access</p>
+  </div>
+</div>
+
+<div class="atier">
+  <div class="ath">
+    <div class="atnum">2</div>
+    <div class="atitle">Client Credentials - App-level access <span class="abadge" title="Annotation 3">3</span></div>
+    <span class="badge b-user">App required</span>
+  </div>
+  <div class="ab">
+    <p class="bt">Server-to-server auth. Access public catalog data and app-owned resources. No user authorization required. Best for background services, batch processing, and catalog queries.</p>
+    <div class="cb">
+      <div class="ctabs"><span class="ctab on">curl</span><span class="ctab">Python</span></div>
+      <div class="cpre"><span class="cc"># Step 1: Get access token</span>
+<span class="cm">curl</span> -X POST <span class="curl">"https://accounts.resonance.com/api/token"</span>      -d <span class="cs">"grant_type=client_credentials&client_id=YOUR_ID&client_secret=YOUR_SECRET"</span>
+
+<span class="cc"># Step 2: Use token (expires in 3600s - SDK auto-refreshes)</span>
+<span class="cm">curl</span> -H <span class="cs">"Authorization: Bearer &lt;token&gt;"</span> <span class="curl">"https://api.resonance.dev/v1/search?q=radiohead&type=artist"</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="atier">
+  <div class="ath">
+    <div class="atnum">3</div>
+    <div class="atitle">Authorization Code - User-level access</div>
+    <span class="badge b-sec">OAuth 2.0</span>
+  </div>
+  <div class="ab">
+    <p class="bt">Full OAuth 2.0 flow. Access user-specific data: listening history, playlists, player control. User must grant permission via Resonance's authorization page. Available in two variants:</p>
+    <div class="cg cg2" style="margin-top:10px">
+      <div class="card"><div class="ctit">Authorization Code</div><div class="cdesc">Server-side apps. Refresh tokens supported. Client secret stays on server.</div></div>
+      <div class="card"><div class="ctit">PKCE (mobile / SPA)</div><div class="cdesc">No client secret needed. Code verifier replaces secret. Safe for public clients.</div></div>
+    </div>
+    <div class="clo clo-info" style="margin-top:10px"><span class="clo-icon">ℹ️</span><div>The scopes you request determine what data your app can access. <a class="inline-link">See full scope catalog below ↓</a></div></div>
+  </div>
+</div>
+
+<h2 class="sh">OAuth scope catalog <span class="abadge" title="Annotation 4">4</span></h2>
+<p class="bt">All available scopes with the data they grant access to. Request only the scopes your app requires.</p>
+<table class="dt">
+  <tr><th>Scope</th><th>Access granted</th><th>Flow</th></tr>
+  <tr><td class="pn">user-read-playback-state</td><td>Current playback device, track, progress</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">user-modify-playback-state</td><td>Control playback: play, pause, skip, seek</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">user-read-currently-playing</td><td>Currently playing track (no full state)</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">playlist-read-private</td><td>Read private playlists of the authenticated user</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">playlist-modify-public</td><td>Create and edit public playlists</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">playlist-modify-private</td><td>Create and edit private playlists</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">user-top-read</td><td>Top artists and tracks (short/medium/long term)</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">user-library-read</td><td>Saved tracks, albums, shows, episodes</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">user-read-email</td><td>Email address of authenticated user</td><td>Auth Code / PKCE</td></tr>
+  <tr><td class="pn">streaming</td><td>Control Resonance playback via Web Playback SDK</td><td>Auth Code / PKCE</td></tr>
+</table>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Sandbox tier listed first - no credentials required. Aria's fix: she can make a test call before signing up or creating an app. Removes the OAuth wall that caused her to bounce.</div><div class="ann-ref">Persona: Aria · Finding: Auth barrier</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Pre-populated sandbox key in the code example. Developers can run the curl command as-is and get a real response before any auth decision is made.</div><div class="ann-ref">Persona: Aria · Competitive: Stripe, Twilio sandbox</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Client Credentials is Tier 2 (not Tier 1) because it requires app creation. Most tutorials lead with this - the redesign demotes it to allow anonymous exploration first.</div><div class="ann-ref">Persona: Maya · Re-ordering rationale</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">Full OAuth scope catalog with plain-language descriptions. Reza must be able to review all scopes before committing to any auth flow for compliance sign-off.</div><div class="ann-ref">Persona: Reza · Gate A4.1 (Compliance)</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-qs-compliance"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri">Overview</a><a class="ri">Authentication</a><a class="ri">First call</a><a class="ri on">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Quick Start</a><span class="sep">›</span><span class="cur">Compliance</span></div>
+        <div class="ptitle">Compliance &amp; Trust <span class="abadge" title="Annotation 1">1</span></div>
+<div class="psub">Data handling, security, rate limits, and API lifecycle policy for the Resonance Web API - reviewed this page before beginning authentication.</div>
+
+<div class="clo clo-info"><span class="clo-icon">📋</span><div>This page summarises compliance-relevant information. For legal enquiries contact <a class="inline-link">developer-legal@resonance.com</a>. For full Terms of Service see <a class="inline-link">developer.resonance.com/terms</a>.</div></div>
+
+<h2 class="sh">Data handling &amp; residency <span class="abadge" title="Annotation 2">2</span></h2>
+<table class="dt">
+  <tr><th>Topic</th><th>Detail</th></tr>
+  <tr><td><strong>Data residency</strong></td><td>API infrastructure hosted in EU (Ireland) and US (Virginia). Region selection not available for Web API; data may transit both regions.</td></tr>
+  <tr><td><strong>GDPR compliance</strong></td><td>Resonance is a GDPR data controller for user data. Developers accessing user data via OAuth act as processors. See <a class="inline-link">Data Processing Addendum</a> for details.</td></tr>
+  <tr><td><strong>Data retention</strong></td><td>Access tokens expire after 3600 seconds. Refresh tokens are long-lived and can be revoked via the Resonance Developer Dashboard at any time.</td></tr>
+  <tr><td><strong>User data deletion</strong></td><td>Developers must honour deletion requests within 30 days. No Resonance user data may be stored beyond the session without explicit user consent.</td></tr>
+  <tr><td><strong>Security transport</strong></td><td>All API calls require HTTPS. TLS 1.2 minimum. No plain-HTTP support.</td></tr>
+  <tr><td><strong>Audit logging</strong></td><td>Per-key request logs available in Operate › Logs (authenticated access). Retention: 90 days.</td></tr>
+</table>
+
+<h2 class="sh">Rate limits <span class="abadge" title="Annotation 3">3</span></h2>
+<p class="bt">Rate limits apply per access token, not per IP address. Upgrade your quota tier in the Resonance Developer Dashboard.</p>
+<table class="dt">
+  <tr><th>Tier</th><th>Rate limit</th><th>Scope</th></tr>
+  <tr><td><strong>Sandbox</strong></td><td>30 req / min</td><td>Public catalog only · no user data</td></tr>
+  <tr><td><strong>Development</strong></td><td>180 req / min</td><td>Full API access · up to 25 users</td></tr>
+  <tr><td><strong>Extended quota</strong></td><td>Custom</td><td>Production · quota extension request required</td></tr>
+</table>
+<p class="bt"><a class="inline-link">→ Detailed rate limit dashboard in Operate › Rate Limits</a></p>
+
+<h2 class="sh">Deprecation policy <span class="abadge" title="Annotation 4">4</span></h2>
+<p class="bt">Resonance provides a minimum 6-month deprecation notice for any breaking change to the Web API. Non-breaking additions may be made without notice.</p>
+<table class="dt">
+  <tr><th>Endpoint</th><th>Status</th><th>Sunset date</th><th>Replacement</th></tr>
+  <tr><td class="pn">GET /audio-features</td><td><span class="tag tdep">Deprecated</span></td><td>Nov 1 2026</td><td>No direct replacement</td></tr>
+  <tr><td class="pn">GET /audio-analysis</td><td><span class="tag tdep">Deprecated</span></td><td>Nov 1 2026</td><td>No direct replacement</td></tr>
+  <tr><td class="pn">GET /recommendations</td><td><span class="tag" style="background:var(--light-blue);color:#6C88E6">Under review</span></td><td>TBD</td><td>TBD</td></tr>
+</table>
+<p class="bt"><a class="inline-link">→ Full deprecation calendar in Operate › Deprecations</a></p>
+
+<h2 class="sh">Terms of Service</h2>
+<div class="cg cg2">
+  <a class="card"><div class="ctit">Developer Terms of Service</div><div class="cdesc">Usage rights, prohibited uses, rate limit policies, and app review requirements.</div><div class="carrow">Read →</div></a>
+  <a class="card"><div class="ctit">Commercial Use Guidelines</div><div class="cdesc">Requirements for apps with over 25 users, commercial integrations, and monetised products.</div><div class="carrow">Read →</div></a>
+</div>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Compliance placement in Quick Start (not Operate, not footer) is Gate A4.1. Reza must see trust signals before any OAuth ask. Placement here means it is visible at step 0 of the developer journey.</div><div class="ann-ref">Gate A4.1 · Persona: Reza</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Data residency table answers the first enterprise procurement question. GDPR compliance statement prevents legal from blocking the integration before technical evaluation begins.</div><div class="ann-ref">Persona: Reza · Enterprise pattern: Stripe, Twilio</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Rate limits preview on Compliance page links to Operate › Rate Limits for detail. Shows the rate limit tiers exist and are documented before the developer commits to auth.</div><div class="ann-ref">Persona: Reza, Diego-Ops · Operate group</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">Deprecation policy section links to Operate › Deprecations. The calendar and sunset dates are the minimum Reza needs to pass compliance review for integrations in regulated environments.</div><div class="ann-ref">Persona: Reza · Operate › Deprecations</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-build-wt"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri">Overview</a><a class="ri">Authentication</a><a class="ri">First call</a><a class="ri">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri on">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Build</a><span class="sep">›</span><span class="cur">Walkthroughs</span></div>
+        <div class="ptitle">Walkthroughs <span class="abadge" title="Annotation 1">1</span></div>
+<div class="psub">Task-based integration guides for common Resonance use cases. Each walkthrough takes you from zero to working code, with links to the relevant endpoint reference.</div>
+
+<div class="clo clo-info"><span class="clo-icon">💡</span><div>New to the API? Start with <strong>Play a track</strong> (Beginner, ~10 min). It covers authentication, a catalog request, and playback control in one guide.</div></div>
+
+<h2 class="sh">Beginner <span class="abadge" title="Annotation 2">2</span></h2>
+<div class="wi"><div class="wico">▶️</div><div style="flex:1"><div class="wt">Play a track</div><div class="wm">Start playback on an active Resonance device · <span class="dbadge db-b">Beginner</span> · ~10 min · <a class="inline-link">GET /me/player/play</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">🔍</div><div style="flex:1"><div class="wt">Search for songs, artists, and albums</div><div class="wm">Use the Search endpoint to build a query UI · <span class="dbadge db-b">Beginner</span> · ~15 min · <a class="inline-link">GET /search</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">🎵</div><div style="flex:1"><div class="wt">Display now playing</div><div class="wm">Show the currently playing track in your app · <span class="dbadge db-b">Beginner</span> · ~20 min · <a class="inline-link">GET /me/player/currently-playing</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">💿</div><div style="flex:1"><div class="wt">Fetch album art and track metadata</div><div class="wm">Display rich track cards with artwork · <span class="dbadge db-b">Beginner</span> · ~15 min · <a class="inline-link">GET /tracks/{id}</a></div></div><span style="color:var(--muted)">›</span></div>
+
+<h2 class="sh">Intermediate <span class="abadge" title="Annotation 3">3</span></h2>
+<div class="wi"><div class="wico">📋</div><div style="flex:1"><div class="wt">Build a playlist manager</div><div class="wm">Create, edit, and populate playlists programmatically · <span class="dbadge db-i">Intermediate</span> · ~45 min · <a class="inline-link">POST /playlists, POST /playlists/{id}/tracks</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">📊</div><div style="flex:1"><div class="wt">Get a user's top artists and tracks</div><div class="wm">Fetch personalisation data for short, medium, and long-term periods · <span class="dbadge db-i">Intermediate</span> · ~30 min · <a class="inline-link">GET /me/top/{type}</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">❤️</div><div style="flex:1"><div class="wt">Sync a user's saved library</div><div class="wm">Paginate through saved tracks, albums, and shows · <span class="dbadge db-i">Intermediate</span> · ~40 min · <a class="inline-link">GET /me/tracks</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">🔔</div><div style="flex:1"><div class="wt">Handle token refresh automatically</div><div class="wm">Implement refresh token rotation without user re-auth · <span class="dbadge db-i">Intermediate</span> · ~25 min · Auth Code flow</div></div><span style="color:var(--muted)">›</span></div>
+
+<h2 class="sh">Advanced</h2>
+<div class="wi"><div class="wico">🎛️</div><div style="flex:1"><div class="wt">Real-time player sync with Web Playback SDK</div><div class="wm">Mirror Resonance client state in a browser app · <span class="dbadge db-a">Advanced</span> · ~90 min · Streaming scope + Web Playback SDK</div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">🔗</div><div style="flex:1"><div class="wt">Webhook integration for playback events</div><div class="wm">Receive push notifications when track changes · <span class="dbadge db-a">Advanced</span> · ~60 min · <a class="inline-link">Operate › Webhook events</a></div></div><span style="color:var(--muted)">›</span></div>
+<div class="wi"><div class="wico">🏭</div><div style="flex:1"><div class="wt">Production-ready rate limit handling</div><div class="wm">Implement retry logic, backoff, and 429 response handling · <span class="dbadge db-a">Advanced</span> · ~45 min · <a class="inline-link">Operate › Rate Limits</a></div></div><span style="color:var(--muted)">›</span></div>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Walkthroughs are now a first-class group item under Build. Previously orphaned with no nav entry point - this is the core rescue from Finding 2. Diego lands here from Quick Start › Next Steps card.</div><div class="ann-ref">Finding 2 fix · Persona: Diego · L3 group</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Difficulty tiers route different personas to the right starting point. Aria (code-shy) starts with Beginner. Liam (speed-runner) skips to Advanced. Time estimate removes ambiguity about effort.</div><div class="ann-ref">Persona: Aria, Liam · Difficulty routing</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Each walkthrough card shows a related endpoint reference link. This cross-link rescues Reference content into the Build context - Diego sees which endpoints each task requires before starting.</div><div class="ann-ref">Persona: Diego · Cross-linking pattern: Stripe, Postman</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-ref-ep"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri">Overview</a><a class="ri">Authentication</a><a class="ri">First call</a><a class="ri">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri on">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Reference</a><span class="sep">›</span><a>Endpoints</a><span class="sep">›</span><span class="cur">GET /tracks/{id}</span></div>
+        <div class="ephdr">
+  <span class="mbadge mget">GET</span>
+  <div>
+    <div class="epath">/tracks/{id} <span class="abadge" title="Annotation 1">1</span></div>
+    <div class="edesc">Get Resonance catalog information for a single track. Requires a valid access token. Public tracks are accessible via Client Credentials or sandbox key.</div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <span class="tag" style="background:var(--light-blue);color:#6C88E6;font-size:11px">🔑 Bearer token required</span>
+      <span class="tag" style="background:var(--surface);color:var(--muted);font-size:11px">✓ Client Credentials</span>
+      <span class="tag" style="background:var(--surface);color:var(--muted);font-size:11px">✓ Authorization Code</span>
+      <span class="tag" style="background:var(--surface);color:var(--muted);font-size:11px">✓ Sandbox key</span>
+    </div>
+  </div>
+</div>
+
+<h2 class="sh">Path parameters</h2>
+<table class="dt">
+  <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+  <tr><td class="pn">id</td><td>string</td><td><span class="preq">Required</span></td><td>The Resonance ID of the track. Example: <code style="font-family:var(--mono);font-size:12px;color:var(--blue)">7qiZfU4dY1lWllzX7mPBI3</code></td></tr>
+</table>
+
+<h2 class="sh">Query parameters</h2>
+<table class="dt">
+  <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+  <tr><td class="pn">market</td><td>string</td><td><span class="popt">Optional</span></td><td>ISO 3166-1 alpha-2 country code. Filters tracks available in that market. Example: <code style="font-family:var(--mono);font-size:12px">GB</code></td></tr>
+</table>
+
+<div class="tryp">
+  <div class="trytitle">⚡ Try it out <span class="abadge" title="Annotation 2">2</span></div>
+  <div class="irow"><span class="ilbl">Track ID</span><input class="ifield" value="7qiZfU4dY1lWllzX7mPBI3" style="font-size:12px"></div>
+  <div class="irow"><span class="ilbl">market</span><input class="ifield" placeholder="e.g. GB (optional)" style="font-size:12px"></div>
+  <div class="irow"><span class="ilbl">Auth token</span><input class="ifield" value="BEACON_SANDBOX_KEY_2026" style="font-size:12px"></div>
+  <button class="trybtn">Send request →</button>
+</div>
+
+<h2 class="sh">Example response <span class="abadge" title="Annotation 3">3</span></h2>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+  <span style="font-size:12px;font-weight:700;background:#121714;color:#0AA277;border-radius:4px;padding:2px 8px">200 OK</span>
+  <span style="font-size:12px;color:var(--muted)">Track: Shape of You · Ed Sheeran</span>
+</div>
+<div class="resp"><span class="jk">"id"</span>: <span class="js">"7qiZfU4dY1lWllzX7mPBI3"</span>,
+<span class="jk">"name"</span>: <span class="js">"Shape of You"</span>,
+<span class="jk">"artists"</span>: [{ <span class="jk">"id"</span>: <span class="js">"6eUKZXaKkcviH0Ku9w2n3V"</span>, <span class="jk">"name"</span>: <span class="js">"Ed Sheeran"</span> }],
+<span class="jk">"album"</span>: {
+  <span class="jk">"id"</span>: <span class="js">"3T4tUhGYeRNVUGevb0wThu"</span>,
+  <span class="jk">"name"</span>: <span class="js">"÷ (Divide)"</span>,
+  <span class="jk">"release_date"</span>: <span class="js">"2017-03-03"</span>,
+  <span class="jk">"images"</span>: [{ <span class="jk">"url"</span>: <span class="js">"https://i.scdn.co/image/..."</span>, <span class="jk">"width"</span>: <span class="jn">640</span> }]
+},
+<span class="jk">"duration_ms"</span>: <span class="jn">233712</span>,
+<span class="jk">"popularity"</span>: <span class="jn">89</span>,
+<span class="jk">"explicit"</span>: <span class="jn">false</span>,
+<span class="jk">"preview_url"</span>: <span class="js">"https://p.scdn.co/mp3-preview/..."</span>,
+<span class="jk">"external_urls"</span>: { <span class="jk">"resonance"</span>: <span class="js">"https://open.resonance.com/track/7qiZfU4dY1lWllzX7mPBI3"</span> }</div>
+
+<div class="cb">
+  <div class="ctabs"><span class="ctab on">curl</span><span class="ctab">Python</span><span class="ctab">JavaScript</span></div>
+  <div class="cpre"><span class="cm">curl</span> -X GET <span class="curl">"https://api.resonance.dev/v1/tracks/7qiZfU4dY1lWllzX7mPBI3"</span>      -H <span class="cs">"Authorization: Bearer YOUR_ACCESS_TOKEN"</span></div>
+</div>
+
+<div class="clo clo-ok" style="margin-top:20px"><span class="clo-icon">📋</span><div>
+  <strong>Related walkthrough:</strong> <a class="inline-link">Build a track info widget <span class="abadge" title="Annotation 4">4</span></a> - step-by-step guide using this endpoint to display rich track cards with artwork, metadata, and preview audio.
+</div></div>
+
+<h2 class="sh">Error codes</h2>
+<table class="dt">
+  <tr><th>Status</th><th>Error</th><th>Common cause</th></tr>
+  <tr><td><code style="font-family:var(--mono);font-size:12px">400</code></td><td>Bad Request</td><td>Invalid track ID format</td></tr>
+  <tr><td><code style="font-family:var(--mono);font-size:12px">401</code></td><td>Unauthorized</td><td>Missing or expired access token</td></tr>
+  <tr><td><code style="font-family:var(--mono);font-size:12px">403</code></td><td>Forbidden</td><td>Token does not have required scope</td></tr>
+  <tr><td><code style="font-family:var(--mono);font-size:12px">404</code></td><td>Not Found</td><td>Track ID does not exist or is not available in market</td></tr>
+  <tr><td><code style="font-family:var(--mono);font-size:12px">429</code></td><td>Too Many Requests</td><td>Rate limit exceeded - check Retry-After header</td></tr>
+</table>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Endpoint header strip shows method badge, full path, auth requirement, and brief description. All metadata above the fold - Liam can confirm he has the right endpoint before reading parameters.</div><div class="ann-ref">Persona: Liam · Reference L4</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Inline Try It Out (not a separate playground page). Diego's fix: the "empty response" break point is resolved by pre-populating the track ID field and running the call in-page.</div><div class="ann-ref">Persona: Diego · Finding: Inline vs standalone TIO</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Pre-populated JSON response visible before the developer authenticates. Shows real Resonance catalog data. Diego sees a non-empty response without needing to configure auth first.</div><div class="ann-ref">Persona: Diego · Pre-populated response pattern</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">Related walkthrough cross-link surfaces Build content in Reference context. "Build a track info widget" is the rescued Walkthroughs content - Diego sees it while looking up the endpoint.</div><div class="ann-ref">Finding 2 fix · Persona: Diego · Cross-linking</div></div></div></div>
+  </div>
+</div></div><div class="sp" id="sp-op-status"><div class="frame">
+  <header class="phdr">
+  <div class="logo">
+    <div class="logo-icon">♪</div>
+    <span class="logo-name">Resonance for Developers</span>
+    <span class="logo-sep">·</span>
+    <span class="logo-sub">Web API</span>
+  </div>
+  <div class="hsp"></div>
+  <div class="sdkpick">
+    <span class="pl">SDK</span>
+    <span class="pv">Python</span>
+    <span class="ps"></span>
+    <span class="pl">Ver</span>
+    <span class="pv">v1</span>
+    <span style="color:var(--muted);margin-left:3px">▾</span>
+  </div>
+  <div class="srch">🔍 Search docs <kbd>⌘K</kbd></div>
+  <button class="copbtn">✦ Copilot</button>
+  <span class="hutil">Sign in</span>
+  <span class="hutil">Pricing</span>
+</header>
+<header class="mhdr">
+  <div class="hamb"><span></span><span></span><span></span></div>
+  <span class="mlogo">Resonance Web API</span>
+  <span style="font-size:18px;color:var(--muted)">🔍</span>
+  <button style="background:var(--blue);color:#F4F7F5;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700">✦</button>
+</header>
+  <div class="pbody">
+    <nav class="rail"><div class="rgl">QUICK START</div><a class="ri">Overview</a><a class="ri">Authentication</a><a class="ri">First call</a><a class="ri">Compliance<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">BUILD</div><a class="ri">Walkthroughs</a><a class="ri">Recipes<span class="nb">NEW</span></a><a class="ri">Migrations<span class="nb">NEW</span></a><div class="rdiv"></div><div class="rgl">REFERENCE</div><a class="ri">Endpoints</a><a class="ri">Try It Out</a><a class="ri">SDKs</a><a class="ri">OpenAPI Spec</a><a class="ri">Error codes</a><a class="ri">Changelog<span class="nb">NEW</span></a><a class="ri">Models</a><div class="rdiv"></div><div class="rgl">OPERATE</div><a class="ri on">Status<span class="nb">NEW</span></a><a class="ri">Deprecations<span class="nb">NEW</span></a><a class="ri">Rate limits<span class="nb">NEW</span></a><a class="ri">Webhook events<span class="nb">NEW</span></a><a class="ri">Logs<span class="nb">NEW</span></a><a class="ri">Runbook<span class="nb">NEW</span></a><div class="rdiv"></div></nav>
+    <div class="ca">
+      <div class="ci">
+        <div class="bc"><a>Resonance Web API</a><span class="sep">›</span><a>Operate</a><span class="sep">›</span><span class="cur">Status</span></div>
+        <div class="ptitle">API Status <span class="abadge" title="Annotation 1">1</span></div>
+<div class="psub">Real-time and historical status for all Resonance Web API services. Updated automatically - no page refresh needed.</div>
+
+<div class="sov">
+  <div class="sbig"></div>
+  <div class="stxt">
+    <div class="sh2">All systems operational</div>
+    <div class="ssub">No active incidents · Web API, Accounts, Player, Search all normal</div>
+  </div>
+  <div class="supd">Last updated: 14 May 2026, 11:42 UTC</div>
+</div>
+
+<h2 class="sh">Service status <span class="abadge" title="Annotation 2">2</span></h2>
+<table class="dt">
+  <tr><th>Service</th><th>Status</th><th>P50 latency</th><th>P99 latency</th><th>Error rate</th></tr>
+  <tr><td><strong>Web API</strong></td><td><span class="sdot ok"></span>Operational</td><td>82 ms</td><td>340 ms</td><td>0.02%</td></tr>
+  <tr><td><strong>Accounts Service</strong> (auth)</td><td><span class="sdot ok"></span>Operational</td><td>120 ms</td><td>480 ms</td><td>0.01%</td></tr>
+  <tr><td><strong>Player API</strong></td><td><span class="sdot ok"></span>Operational</td><td>65 ms</td><td>280 ms</td><td>0.03%</td></tr>
+  <tr><td><strong>Search</strong></td><td><span class="sdot ok"></span>Operational</td><td>95 ms</td><td>410 ms</td><td>0.02%</td></tr>
+  <tr><td><strong>Catalog API</strong></td><td><span class="sdot ok"></span>Operational</td><td>55 ms</td><td>210 ms</td><td>0.01%</td></tr>
+  <tr><td><strong>Personalization API</strong></td><td><span class="sdot ok"></span>Operational</td><td>110 ms</td><td>520 ms</td><td>0.04%</td></tr>
+</table>
+
+<h2 class="sh">90-day uptime <span class="abadge" title="Annotation 3">3</span></h2>
+<div style="background:#0d110f;border:1px solid var(--border);border-radius:var(--r);padding:16px">
+  <div class="urow"><span class="ulbl">Web API</span><div class="ubars"><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar i"></div><div class="ubar i"></div></div><span class="upct">99.8%</span></div>
+  <div class="urow"><span class="ulbl">Accounts Service</span><div class="ubars"><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar i"></div></div><span class="upct">99.9%</span></div>
+  <div class="urow"><span class="ulbl">Player API</span><div class="ubars"><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar i"></div><div class="ubar i"></div><div class="ubar"></div></div><span class="upct">99.7%</span></div>
+  <div class="urow"><span class="ulbl">Search</span><div class="ubars"><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div><div class="ubar"></div></div><span class="upct">100%</span></div>
+  <div style="font-size:11px;color:var(--muted);margin-top:8px;display:flex;gap:12px"><span>🟩 Operational</span><span>🟨 Degraded</span><span>🟥 Outage</span></div>
+</div>
+
+<h2 class="sh">Rate limits (current) <span class="abadge" title="Annotation 4">4</span></h2>
+<table class="dt">
+  <tr><th>Tier</th><th>Limit</th><th>Window</th><th>Headers</th></tr>
+  <tr><td>Sandbox</td><td>30 requests</td><td>Per minute</td><td>X-RateLimit-Remaining, Retry-After</td></tr>
+  <tr><td>Development</td><td>180 requests</td><td>Per minute</td><td>X-RateLimit-Remaining, X-RateLimit-Reset</td></tr>
+  <tr><td>Extended quota</td><td>Custom (SLA)</td><td>Configured per app</td><td>Per-SLA headers</td></tr>
+</table>
+<p class="bt"><a class="inline-link">→ Real-time per-key usage in Operate › Rate Limits</a></p>
+
+<h2 class="sh">Recent incidents</h2>
+<div style="background:#0d110f;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+  <div style="padding:14px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+      <span class="tag" style="background:#121714;color:#0AA277;font-size:11px">Resolved</span>
+      <span style="font-size:13px;font-weight:600;color:var(--ink)">Player API elevated latency</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">May 3 2026 · 14:22–16:05 UTC</span>
+    </div>
+    <p class="bt" style="margin:0">P99 latency on /me/player endpoints elevated to 2.4s. Root cause: cache eviction cascade in EU region. Resolved by rollback. No data loss.</p>
+  </div>
+  <div style="padding:14px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+      <span class="tag" style="background:#121714;color:#0AA277;font-size:11px">Resolved</span>
+      <span style="font-size:13px;font-weight:600;color:var(--ink)">Accounts Service token refresh delays</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">Apr 19 2026 · 08:11–08:47 UTC</span>
+    </div>
+    <p class="bt" style="margin:0">Refresh token endpoint returning 503 intermittently. Affected ~4% of refresh requests. Resolved by capacity increase.</p>
+  </div>
+  <div style="padding:14px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+      <span class="tag" style="background:#121714;color:#0AA277;font-size:11px">Resolved</span>
+      <span style="font-size:13px;font-weight:600;color:var(--ink)">Search results inconsistency</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">Apr 7 2026 · 19:30–21:15 UTC</span>
+    </div>
+    <p class="bt" style="margin:0">Search index propagation lag caused stale results for newly-released tracks. No API errors returned (200 with incomplete results). Fixed by forcing reindex.</p>
+  </div>
+</div>
+
+<div style="margin-top:20px;display:flex;gap:10px">
+  <a class="card" style="flex:1;text-decoration:none"><div class="ctit">Operate › Deprecations</div><div class="cdesc">Audio Features sunset: Nov 1 2026. View full deprecation calendar.</div><div class="carrow">View →</div></a>
+  <a class="card" style="flex:1;text-decoration:none"><div class="ctit">Operate › Runbook</div><div class="cdesc">Incident response procedures, escalation contacts, and integration recovery guides.</div><div class="carrow">View →</div></a>
+</div>
+      </div>
+    </div>
+    <div class="ann-panel"><div class="ann-title">Design annotations</div><div class="ann-item"><div class="ann-num">1</div><div><div class="ann-txt">Overall status banner is the first element above the fold. Sara arrives here during an incident and must see system health within 1 second. No scroll required. Reachable from top nav in one click from any page.</div><div class="ann-ref">Persona: Sara · L5 group · Competitive: Stripe Status</div></div></div><div class="ann-item"><div class="ann-num">2</div><div><div class="ann-txt">Per-service status rows give Sara the granularity she needs. A degraded Accounts Service (auth) is different from a degraded Player API - she needs to know which is affecting her integration.</div><div class="ann-ref">Persona: Sara · SRE on-call pattern</div></div></div><div class="ann-item"><div class="ann-num">3</div><div><div class="ann-txt">Uptime chart covers 90 days. Diego-Ops uses this during evaluation to assess API reliability before committing to integration. Public - no auth required.</div><div class="ann-ref">Persona: Diego-Ops · Pre-auth evaluation requirement</div></div></div><div class="ann-item"><div class="ann-num">4</div><div><div class="ann-txt">Rate limit table on the Status page (not just Compliance). Sara needs current rate limit state during incidents - is the 429 she's seeing a policy limit or a degradation event?</div><div class="ann-ref">Persona: Sara, Diego-Ops · Cross-reference Compliance</div></div></div></div>
+  </div>
+</div></div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.stab');
+let cur = 'l0', view = 'desk', mode = 'ann';
+
+function show(sid) {
+  document.querySelectorAll('.sp').forEach(p => p.classList.remove('on'));
+  const el = document.getElementById('sp-' + sid);
+  if (el) el.classList.add('on');
+  tabs.forEach(t => t.classList.toggle('on', t.dataset.s === sid));
+  cur = sid;
+  updateLabel();
+}
+
+function setView(v) {
+  view = v;
+  document.body.classList.toggle('mob', v === 'mob');
+  document.getElementById('btn-desk').classList.toggle('on', v === 'desk');
+  document.getElementById('btn-mob').classList.toggle('on', v === 'mob');
+  updateLabel();
+}
+
+function setMode(m) {
+  mode = m;
+  document.body.classList.toggle('clean', m === 'clean');
+  document.getElementById('btn-ann').classList.toggle('on', m === 'ann');
+  document.getElementById('btn-clean').classList.toggle('on', m === 'clean');
+  updateLabel();
+}
+
+function updateLabel() {
+  const tab = document.querySelector('.stab.on');
+  const label = tab ? tab.textContent : cur;
+  document.getElementById('wlabel').textContent =
+    label + ' - ' + (view === 'mob' ? 'Mobile' : 'Desktop') + ' · ' + (mode === 'clean' ? 'Clean' : 'Annotated');
+}
+
+tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.s)));
+show('l0');
+</script>
+</body>
+</html>
