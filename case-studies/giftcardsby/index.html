@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GiftCardsby.com — Case Study | Khushboo Khan</title>
+<meta name="description" content="Productising Merit Incentives' enterprise gift-card capability into a self-serve SaaS product. Lead UX/UI Designer, MVP phase — onboarding, workspace, card creator, storefront and redemption." />
+<meta property="og:title" content="GiftCardsby.com — Case Study | Khushboo Khan" />
+<meta property="og:description" content="From enterprise-only, high-touch gifting to a self-serve SaaS product any business could run. MVP experience design case study." />
+<meta property="og:type" content="article" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>
+/* ============================================================
+   GiftCardsby.com case study — built on the same design-system
+   tokens/components as the Shufti Self-Service case study
+   (case-studies/self-service/index.html). Accent recoloured for
+   product identity; unused Shufti-only components (gaps-nav,
+   jm-curve svg chart, echarts) intentionally not carried over —
+   this case study's structure doesn't need them.
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* ---- shared portfolio tokens (verbatim from Shufti) ---- */
+  --bg:#050706; --bg-soft:#080b0a; --surface:#0d110f; --surface-2:#121714;
+  --ink:#F4F7F5; --muted:#A4AFA9; --faint:#79827C; --line:rgba(255,255,255,.11); --line-2:rgba(255,255,255,.06);
+  --good:#34E29B; --bad:#E0625F; --warn:#E8A23D;
+  --l1:#5B8DEF; --l2:#3FD0C9; --l3:#34E29B; --l4:#B57EDC; --l5:#E8A23D;
+  --disp:"Space Grotesk",sans-serif; --sans:"Inter",sans-serif; --mono:"IBM Plex Mono",monospace;
+  --max:1180px; --measure:760px; --ease:cubic-bezier(.2,.7,.2,1);
+  --header-h:48px;
+  /* ---- GiftCardsby-specific accent (warm/gifting, distinct from Shufti's green) ---- */
+  --accent:#E2703A; --accent-2:#F2B98A;
+}
+
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(1200px 600px at 15% -8%,rgba(226,112,58,.10),transparent 60%),radial-gradient(900px 500px at 100% 10%,rgba(91,141,239,.06),transparent 55%)}
+p{max-width:var(--measure);font-size:22px;font-weight:300;line-height:1.72;color:var(--muted)}
+p strong{color:var(--ink);font-weight:600}
+em{font-style:normal}
+a{color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-9999px;top:auto;background:var(--surface);color:var(--ink);padding:12px 18px;border-radius:8px;z-index:200;font-family:var(--mono);font-size:13px}
+.skip:focus{left:16px;top:16px}
+
+/* ---- containers ---- */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+.measure{max-width:var(--measure)}
+.measure--full{max-width:none}
+.measure--full p{max-width:none}
+/* All in-page sections and the hero now run full-width (no reading-measure cap) */
+:is(main, header#main) :is(p, .lead, h1, h2, h3.sub-h, blockquote.pull){max-width:none}
+
+/* ---- bands ---- */
+.band{padding:clamp(64px,10vw,120px) 0}
+.band--light{
+  --ink:#141810; --muted:#4c5a52; --faint:#78847b;
+  --line:rgba(8,14,10,.14); --line-2:rgba(8,14,10,.07);
+  --surface:#ffffff; --surface-2:#f5f1ec;
+  --accent:#9A3412; --accent-2:#c2571f;
+  background:#f2ede6;color:var(--ink);border-top:1px solid var(--line-2);position:relative;overflow:hidden
+}
+.band--light::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 380px at 90% -10%,rgba(154,52,18,.06),transparent 60%);pointer-events:none}
+.band--light>*{position:relative;z-index:1}
+
+/* ---- typography ---- */
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block}
+h1{font-family:var(--disp);font-weight:600;font-size:clamp(2.4rem,5.6vw,4.7rem);line-height:1.04;letter-spacing:-.04em;max-width:16ch}
+h1 em{color:var(--accent);text-shadow:0 0 40px rgba(226,112,58,.35)}
+h2{font-family:var(--disp);font-weight:500;font-size:clamp(1.9rem,4.2vw,3.2rem);line-height:1.08;letter-spacing:-.03em;max-width:18ch}
+h2 em{color:var(--accent)}
+h3.sub-h{font-family:var(--disp);font-weight:500;font-size:clamp(1.4rem,2.8vw,2rem);line-height:1.15;letter-spacing:-.02em;margin-top:6px}
+h3.sub-h em{color:var(--accent)}
+.hero-sub{font-family:var(--disp);font-size:clamp(22px,3.4vw,34px);font-weight:500;color:var(--muted);margin-top:18px}
+.hero-sub em{color:var(--accent)}
+.lead{font-family:var(--disp);font-size:clamp(19px,2.2vw,25px);font-weight:400;color:var(--ink);max-width:var(--measure)}
+
+/* ---- scroll reveal ---- */
+html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}
+[data-rev]{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+[data-rev].in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html.js [data-rev]:not(.in){opacity:1;transform:none}[data-rev]{transition:none}}
+
+/* ---- chrome (breadcrumb bar) ---- */
+.chrome{border-bottom:1px solid var(--line-2);position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(5,7,6,.9),rgba(5,7,6,.5))}
+.chrome-in{max-width:var(--max);margin:0 auto;padding:13px 32px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--faint)}
+.chrome-in a.back{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--faint);transition:color .2s}
+.chrome-in a.back:hover{color:var(--ink)}
+.ident .caret{color:var(--accent);margin:0 4px}
+
+/* ---- hero ---- */
+.hero{padding:64px 0 clamp(56px,8vw,96px)}
+.spectrum{display:flex;gap:4px;width:64px;height:6px;margin-bottom:28px;border-radius:3px;overflow:hidden}
+.spectrum span{flex:1;display:block}
+.impact-status{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0}
+.hero-visual{margin:34px 0}
+.hero-visual img{width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:0 30px 80px -54px rgba(0,0,0,.88)}
+.hero-visual figcaption{margin-top:12px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint)}
+.hero-lead{margin:30px 0;display:flex;flex-direction:column;gap:16px}
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;margin-top:34px}
+.meta-grid .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.meta-grid .v{font-size:15.5px;color:var(--ink);line-height:1.4}
+@media(max-width:720px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.meta-grid{grid-template-columns:1fr}}
+
+/* ---- provenance pills ---- */
+.prov{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;padding:.4rem .72rem;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.prov::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.prov--public{color:var(--l1);border-color:rgba(91,141,239,.4);background:rgba(91,141,239,.08)}
+.prov--qual{color:var(--accent);border-color:rgba(226,112,58,.4);background:rgba(226,112,58,.08)}
+.prov--inf{color:var(--l4);border-color:rgba(181,126,220,.4);background:rgba(181,126,220,.08)}
+.prov--owed{color:var(--bad);border-color:rgba(224,98,95,.4);background:rgba(224,98,95,.08)}
+.prov--context{color:var(--faint);border-color:var(--line);background:transparent}
+.band--light .prov--public{color:#1d4ed8}
+.band--light .prov--qual{color:#9A3412}
+.band--light .prov--inf{color:#6d28d9}
+.band--light .prov--owed{color:#b91c1c}
+.band--light .prov--context{color:#6b756f}
+
+/* ---- buttons ---- */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:15px 24px;min-height:44px;text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+.btn--primary{color:var(--bg);background:var(--accent);border:1px solid var(--accent)}
+.btn--primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.btn--ghost{color:var(--accent);border:1px solid rgba(226,112,58,.4);background:transparent}
+.btn--ghost:hover{background:rgba(226,112,58,.08)}
+.band--light .btn--primary{color:#fff}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px}
+
+/* ---- asset placeholders ---- */
+.pshot{margin:26px 0;border:1px dashed var(--line);border-radius:14px;background:var(--surface-2);padding:30px;text-align:center}
+.pshot .pt{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.pshot p{margin:0 auto;color:var(--muted);font-size:14.5px;max-width:52ch}
+.pshot .ratio{aspect-ratio:16/10;max-width:420px;margin:0 auto 16px;border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(255,255,255,.03) 10px,rgba(255,255,255,.03) 20px)}
+.band--light .pshot .ratio{background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.03) 10px,rgba(0,0,0,.03) 20px)}
+
+/* ---- cards ---- */
+.fcard{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--stage,var(--accent));border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.fcard--owed{border-top-color:var(--bad)}
+.fcard .fn{font-family:var(--disp);font-weight:700;font-size:clamp(15px,1.6vw,18px);color:var(--ink)}
+.fcard--owed .fn{font-family:var(--mono);font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--bad)}
+.fcard .fl{font-size:13.5px;color:var(--muted)}
+.statgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+
+.decl__card{border:1px solid var(--line);border-left:3px solid var(--stage,var(--accent));border-radius:14px;padding:26px 28px;background:var(--surface)}
+.decl__card h3{font-family:var(--mono);font-weight:500;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--stage,var(--accent));margin-bottom:10px}
+.decl__card p{font-size:16.5px;color:var(--muted);max-width:none}
+.decl3{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.decl3{grid-template-columns:1fr}}
+
+/* ---- insight / role-note / pull ---- */
+.insight{border-left:3px solid var(--accent);background:rgba(226,112,58,.08);border-radius:0 14px 14px 0;padding:26px 28px;margin:34px 0}
+.band--light .insight{background:rgba(154,52,18,.06)}
+.insight b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.insight p{max-width:none}
+
+.role-note{display:flex;align-items:flex-start;gap:clamp(20px,3vw,34px);padding:clamp(26px,4vw,40px);border:1px solid rgba(91,141,239,.4);border-radius:18px;background:linear-gradient(120deg,rgba(91,141,239,.13),rgba(91,141,239,.02) 60%,transparent);margin:34px 0}
+.role-note .rn-ico{flex:0 0 56px;display:grid;place-items:center}
+.role-note .rn-ico .material-symbols-outlined{font-size:44px;color:#5B8DEF}
+.role-note p{max-width:none}
+.role-note b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5B8DEF;margin-bottom:8px}
+@media(max-width:560px){.role-note{flex-direction:column;text-align:left}}
+
+.pull{font-family:var(--disp);font-weight:500;font-size:clamp(22px,2.8vw,29px);line-height:1.32;color:#fff;padding:16px 0 16px 32px;border-left:3px solid var(--accent);margin:48px 0;max-width:30ch}
+.band--light .pull{color:var(--ink)}
+.pull cite{display:block;font-family:var(--mono);font-size:12px;font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+
+/* ---- stacked / waterline diagrams (new: GiftCardsBy-specific) ---- */
+.stack{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:30px 0}
+.stack__tier{padding:20px 26px}
+.stack__tier--top{background:rgba(226,112,58,.1);border-bottom:1px dashed var(--line)}
+.stack__tier--bottom{background:var(--surface-2)}
+.stack__label{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.stack__tier--top .stack__label{color:var(--accent)}
+.stack__chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.03em;padding:6px 12px;border-radius:8px;border:1px solid var(--line);color:var(--ink);background:var(--surface)}
+.chip--dim{color:var(--muted);background:transparent}
+
+.waterline{border:1px solid var(--line);border-radius:18px;padding:clamp(24px,4vw,42px);margin:32px 0;background:var(--surface)}
+.wl-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.wl-row--above{margin-bottom:26px}
+.wl-line{height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:0 0 26px;position:relative}
+.wl-line::after{content:"the line a merchant sees";position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;background:var(--surface);padding:0 8px}
+.wl-row--below{margin-top:26px;opacity:.85}
+.wl-chip{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;padding:9px 16px;border-radius:10px}
+.wl-row--above .wl-chip{background:rgba(226,112,58,.12);border:1px solid rgba(226,112,58,.4);color:var(--ink)}
+.wl-row--below .wl-chip{background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.wl-cap{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:22px}
+
+/* ---- flow / ecosystem (growthflow-style boxes+arrows) ---- */
+.flow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:30px 0}
+.flow__node{flex:1 1 150px;border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--surface);text-align:center}
+.flow__node--accent{border-color:rgba(226,112,58,.5);background:rgba(226,112,58,.08)}
+.flow__node .fn-t{font-family:var(--disp);font-weight:600;font-size:15px;color:var(--ink)}
+.flow__node .fn-s{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+.flow__arrow{flex:0 0 auto;color:var(--faint);font-size:18px}
+@media(max-width:760px){.flow{flex-direction:column}.flow__arrow{transform:rotate(90deg)}}
+
+/* ---- 3-up tension / value blocks ---- */
+.beats3{display:grid;gap:20px;grid-template-columns:repeat(3,1fr);margin:30px 0}
+.beat3{border:1px solid var(--line);border-radius:12px;padding:20px 22px;background:var(--surface)}
+.beat3 .material-symbols-outlined{color:var(--accent);font-size:26px;margin-bottom:10px}
+.beat3 h3{font-family:var(--disp);font-size:16.5px;font-weight:600;margin-bottom:8px}
+.beat3 p{font-size:14.5px;max-width:none}
+@media(max-width:820px){.beats3{grid-template-columns:1fr}}
+
+/* ---- value triptych ---- */
+.value3{display:grid;gap:22px;grid-template-columns:repeat(3,1fr);margin:30px 0}
+.value3__col{border:1px solid var(--line);border-radius:14px;padding:24px 26px;background:var(--surface)}
+.value3__col h3{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.value3__col ul{list-style:none;display:flex;flex-direction:column;gap:14px}
+.value3__col li{font-size:15px;color:var(--muted);line-height:1.5}
+.value3__col li .prov{margin-top:8px}
+@media(max-width:900px){.value3{grid-template-columns:1fr}}
+
+/* ---- timeline (3 ownership bands) ---- */
+.tl3{display:grid;gap:16px;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;margin:34px 0}
+.tl3__band{border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.tl3__band--mine{border:1px solid rgba(226,112,58,.45);background:rgba(226,112,58,.08)}
+.tl3__band--company{border:1px solid rgba(91,141,239,.35);background:rgba(91,141,239,.06)}
+.tl3__band--context{border:1px dashed var(--line);background:transparent}
+.tl3__band .tb-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tl3__band .tb-t{font-family:var(--disp);font-weight:600;font-size:16.5px}
+.tl3__band .tb-d{font-size:13.5px;color:var(--muted)}
+.tl3__arrow{align-self:center;color:var(--faint)}
+@media(max-width:820px){.tl3{grid-template-columns:1fr}.tl3__arrow{display:none}}
+
+/* ---- footer / endnav ---- */
+.endnav{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line-2);margin-top:52px;padding-top:22px}
+.endnav a{text-decoration:none;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted);transition:color .2s}
+.endnav a:hover{color:var(--accent)}
+.footer{border-top:1px solid var(--line-2);padding:28px 0}
+.footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint)}
+
+@media(max-width:600px){.wrap{padding:0 20px}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <a class="back" href="../../index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Khushboo Khan</a>
+    <span class="ident">Case Study<span class="caret">/</span>GiftCardsby.com</span>
+  </div>
+</div>
+
+<header class="hero wrap" id="main">
+  <div data-rev>
+    <div class="spectrum" aria-hidden="true"><span style="background:var(--l1)"></span><span style="background:var(--l2)"></span><span style="background:var(--accent)"></span></div>
+    <span class="eyebrow">GiftCardsby.com &middot; Merit Incentives &middot; 2021&ndash;2022</span>
+    <h1>Productising enterprise gifting <em>for the self-serve market</em></h1>
+    <p class="hero-sub"><span style="color:var(--ink)">From high-touch enterprise delivery to</span> <em>self-serve SaaS</em></p>
+  </div>
+
+  <div class="impact-status" data-rev>
+    <span class="prov prov--public">Launched 9 Aug 2022</span>
+    <span class="prov prov--public">Pay-as-you-go</span>
+    <span class="prov prov--public">talabat partnership</span>
+    <span class="prov prov--qual">Still live &middot; 2026</span>
+  </div>
+
+  <div class="hero-lead" data-rev>
+    <p>Merit Incentives could already run digital gifting at scale — issuance, payments, redemption, fulfilment, and a network of thousands of partner brands. But it could only sell that capability the enterprise way: custom-built, one high-touch programme at a time. GiftCardsby.com changed the unit of delivery — turning capability Merit already owned into a product a business could run itself, from an independent shop up to a global brand.</p>
+    <p>I joined as Lead UX/UI Designer and led the MVP experience: the path a merchant takes from signing up to a live, sellable, branded gift card, and the purchase and redemption experiences around it.</p>
+    <p class="lead">The real problem was never "design a gift-card tool." It was to decide the smallest set of decisions a merchant should ever have to make, and let the platform carry the rest — a full commercial system running out of sight.</p>
+  </div>
+
+  <figure class="hero-visual" data-rev>
+    <img src="assets/img/giftcardby_landing-web.jpg" alt="GiftCardsby.com's live public landing page: 'Create &amp; Sell your own digital Gift Card' headline with a Get Started call to action, no-setup-fee badge, and a model holding two branded gift cards." width="1600" height="935" loading="lazy" />
+    <figcaption>GiftCardsby.com today <span class="prov prov--qual">Live &middot; giftcardsby.com</span></figcaption>
+  </figure>
+
+  <div class="cta-row" data-rev>
+    <a class="btn btn--primary" href="assets/giftcardsby/index.html" target="_blank" rel="noopener">View Prototype</a>
+  </div>
+
+  <div class="meta-grid" data-rev>
+    <div><div class="k">My role</div><div class="v">Lead UX/UI Designer (UX + UI), MVP phase</div></div>
+    <div><div class="k">Scope</div><div class="v">Onboarding, workspace, card creator, storefront, recipient &amp; redemption, lifecycle visibility</div></div>
+    <div><div class="k">MVP window</div><div class="v">~2021&ndash;2022 &middot; public launch 9 Aug 2022</div></div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ §2 OPPORTUNITY (light band) ============ -->
+<section class="band band--light" id="opportunity" aria-labelledby="opportunity-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">The opportunity</span>
+      <h2 id="opportunity-h">A market the enterprise model <em>couldn't reach</em></h2>
+    </div>
+    <div data-rev>
+      <p>For a small business, a gift card is not decoration. It is prepaid revenue before a product is redeemed, a way to reach a new customer through the person who receives the gift, and a reason for people to come back. Merit cites industry figures that the majority of gift-card shoppers spend beyond the value of the card, with the uplift especially pronounced in this region.</p>
+    </div>
+
+    <div class="statgrid" data-rev style="margin:28px 0">
+      <div class="fcard" style="--stage:var(--accent)">
+        <div class="fn">~60% spend beyond card value</div>
+        <div class="fl">Up to 450% of gifted value in MENA</div>
+        <span class="prov prov--public" data-fact="GC-E3">Industry-cited &middot; Gulf Business, Aug 2022</span>
+      </div>
+    </div>
+
+    <div data-rev>
+      <p>The barrier was never demand. It was infrastructure. Setting up digital gifting traditionally meant software, card generation, payment processing, redemption rules, security, customer communication, reporting, and ongoing administration. For an independent business, the cost and effort outweighed the opportunity, so most simply went without.</p>
+      <p>That is the gap GiftCardsby.com was built to close — and closing it for the long tail of small merchants, not just for enterprises, was the point. The product had to remove the infrastructure problem, not add another marketing tool.</p>
+    </div>
+
+    <div class="flow" data-rev role="img" aria-label="Value loop for a small merchant: card sold, then gifted, then redeemed, then a repeat visit, feeding back into more cards sold.">
+      <div class="flow__node flow__node--accent"><div class="fn-t">Sold</div><div class="fn-s">Prepaid revenue</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Gifted</div><div class="fn-s">New-customer reach</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Redeemed</div><div class="fn-s">Often above card value</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node flow__node--accent"><div class="fn-t">Repeat visit</div><div class="fn-s">Back to the merchant</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §3 WHY MERIT (dark band) ============ -->
+<section class="band" id="why-merit" aria-labelledby="why-merit-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">Why Merit could build it</span>
+      <h2 id="why-merit-h">Productising is only smart when you already own <em>the hard part</em></h2>
+    </div>
+    <div data-rev>
+      <p>Merit did. The issuance engine, payment logic, redemption infrastructure, fulfilment, and merchant relationships were built and paid for by the enterprise business. The self-serve product did not have to rebuild any of it; it had to expose a thin, safe slice of it to a new kind of user.</p>
+      <p>That is the economic logic of the whole project. Because the platform was reused rather than rebuilt, the marginal cost of onboarding one more small merchant was low — exactly what makes a self-serve SaaS model work where high-touch enterprise delivery does not. My job was to design the surface that made that reuse feel like a product rather than a stripped-down enterprise console.</p>
+    </div>
+
+    <div class="stack" data-rev role="img" aria-label="Diagram: a thin self-serve surface layer sits on top of Merit's existing enterprise platform, which already contains issuance, payments, redemption, fulfilment and the merchant network.">
+      <div class="stack__tier stack__tier--top">
+        <div class="stack__label">What's new &middot; thin surface</div>
+        <div class="stack__chips"><span class="chip">Self-serve onboarding</span><span class="chip">Guided card creator</span><span class="chip">Merchant workspace</span></div>
+      </div>
+      <div class="stack__tier stack__tier--bottom">
+        <div class="stack__label">Already owned &middot; Merit's enterprise platform</div>
+        <div class="stack__chips"><span class="chip chip--dim">Issuance</span><span class="chip chip--dim">Payments</span><span class="chip chip--dim">Redemption</span><span class="chip chip--dim">Fulfilment</span><span class="chip chip--dim">Merchant network</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §4 THESIS (light band, signature diagram) ============ -->
+<section class="band band--light" id="thesis" aria-labelledby="thesis-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">The design thesis</span>
+      <h2 id="thesis-h">Subtraction, <em>not shrinking</em></h2>
+    </div>
+    <div data-rev>
+      <p>The wrong way to build this would have been to take the enterprise product and cram every capability into a smaller interface. That reproduces the complexity; it just makes it harder to read.</p>
+      <p>The design problem was the opposite: identify the minimum set of decisions a merchant genuinely has to make to create a gift card that is trustworthy, sellable, and redeemable, and let the platform absorb everything else. Every screen was a question of subtraction — what can this person not have to think about, without losing what they need to trust the result?</p>
+    </div>
+
+    <blockquote class="pull" data-rev>“The problem was not to reproduce every enterprise feature inside a smaller interface. It was to identify the minimum set of merchant decisions required to create a trustworthy, sellable, and redeemable gift card — and allow the platform to manage everything else behind the scenes.”<cite>Design thesis &middot; source-grounded</cite></blockquote>
+
+    <div class="waterline" data-rev role="img" aria-label="Diagram: above the line, the few decisions a merchant makes — brand, commercial terms, customer-facing details. Below the line, the much larger set of hidden machinery — onboarding verification, payment collection, card generation, communications, redemption processing, status management, settlement and reporting.">
+      <div class="wl-row wl-row--above">
+        <span class="wl-chip">Brand</span><span class="wl-chip">Commercial terms</span><span class="wl-chip">Customer-facing details</span>
+      </div>
+      <div class="wl-line" aria-hidden="true"></div>
+      <div class="wl-row wl-row--below">
+        <span class="wl-chip">Onboarding &amp; verification</span><span class="wl-chip">Payment collection</span><span class="wl-chip">Card generation</span><span class="wl-chip">Buyer &amp; recipient comms</span><span class="wl-chip">Redemption processing</span><span class="wl-chip">Status management</span><span class="wl-chip">Settlement</span><span class="wl-chip">Reporting</span>
+      </div>
+      <div class="wl-cap">A handful of merchant decisions, above a full commercial system</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §5 EXPERIENCE (dark band) ============ -->
+<section class="band" id="experience" aria-labelledby="experience-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">The experience I designed</span>
+      <h2 id="experience-h">Onboarding that opens <em>a door, not a project</em></h2>
+    </div>
+    <div data-rev>
+      <p>A merchant creates an account with an email and essential business details, then verifies by email to activate. Onboarding asks only for what it needs to open the account; operational depth waits until it is relevant. The first impression is "I can do this," not "this is a system to learn."</p>
+    </div>
+
+    <!-- ASSET REQUIRED:
+    Onboarding + email verification screens (sanitised recreation).
+    Recommended size: 1400 × 900 px each.
+    -->
+    <div class="statgrid" data-rev style="margin:24px 0">
+      <div class="fcard fcard--owed"><div class="fn">Export pending</div><div class="fl">Onboarding &amp; email verification</div></div>
+      <div class="fcard fcard--owed"><div class="fn">Export pending</div><div class="fl">Merchant workspace / dashboard</div></div>
+    </div>
+
+    <div data-rev>
+      <p>After activation, the merchant lands in a dashboard built as the operating home of their programme: create a card, edit drafts, review what is published, watch activity, reach settings. It is where you run the thing, not just where designs are stored.</p>
+    </div>
+
+    <div data-rev style="margin-top:44px">
+      <span class="eyebrow">The hero screen</span>
+      <h3 class="sub-h">A card creator organised around <em>three real decisions</em></h3>
+      <p>Card creation is organised around three kinds of decision, and nothing else. A live preview sits alongside, so the merchant can judge the finished card — design, value, message, and terms together — before committing to publish.</p>
+    </div>
+
+    <div class="decl3" data-rev style="margin:26px 0">
+      <div class="decl__card" style="--stage:var(--l1)">
+        <h3>Brand</h3>
+        <p>Logo, identity, artwork, styling — the merchant owns presentation.</p>
+      </div>
+      <div class="decl__card" style="--stage:var(--l2)">
+        <h3>Commercial</h3>
+        <p>Value and denominations, currency, validity and expiry, where and on what the card applies.</p>
+      </div>
+      <div class="decl__card" style="--stage:var(--accent)">
+        <h3>Customer-facing</h3>
+        <p>Card name, occasion, message, recipient information, redemption instructions.</p>
+      </div>
+    </div>
+
+    <figure class="hero-visual" data-rev>
+      <img src="assets/img/design_your_card-web.jpg" alt="GiftCardsby.com card creator, step 1 of 3: 'Design your Gift Card' — brand logo upload, background, and text controls on the left, with a live gift-card preview panel on the right that updates as each field is set." width="1800" height="1013" loading="lazy" />
+      <figcaption>Card creator &middot; step 1 of 3, with live preview <span class="prov prov--qual">Live &middot; giftcardsby.com</span></figcaption>
+      <div class="cta-row" style="justify-content:center;margin-top:18px">
+        <a class="btn btn--ghost" href="assets/giftcardsby/index.html#/screens/138745e7-ccd9-4aae-8412-7e65cafa8b5d" target="_blank" rel="noopener">View interactive prototype &rarr;</a>
+      </div>
+    </figure>
+
+    <div data-rev style="margin-top:44px">
+      <h3 class="sub-h">Publish, sell, <em>deliver, redeem</em></h3>
+      <p>The card publishes to the merchant's own branded storefront. A customer picks a design and value, pays, and sends the card to a recipient, who receives it with its value, the merchant's identity, and clear instructions to redeem. The platform holds the code and the transaction state; the merchant validates redemption through the supported flow.</p>
+    </div>
+
+    <div class="flow" data-rev role="img" aria-label="Flow: publish to storefront, customer purchases, card is delivered to recipient, recipient redeems at the merchant.">
+      <div class="flow__node flow__node--accent"><div class="fn-t">Publish</div><div class="fn-s">Branded storefront</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Purchase</div><div class="fn-s">Customer pays &amp; sends</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Deliver</div><div class="fn-s">Recipient receives card</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node flow__node--accent"><div class="fn-t">Redeem</div><div class="fn-s">At the merchant</div></div>
+    </div>
+
+    <div data-rev style="margin-top:34px">
+      <p><strong>Visibility over the whole life of a card.</strong> The merchant can tell at a glance whether a card was created, published, purchased, delivered, redeemed, or expired — the oversight a real programme needs, without the operational weight of running one.</p>
+    </div>
+
+    <div class="flow" data-rev style="margin-top:18px" role="img" aria-label="Card lifecycle states: created, published, purchased, delivered, redeemed, or expired / cancelled.">
+      <div class="flow__node"><div class="fn-t">Created</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Published</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Purchased</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Delivered</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node flow__node--accent"><div class="fn-t">Redeemed</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Expired / cancelled</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §6 HIDDEN COMPLEXITY (light band) ============ -->
+<section class="band band--light" id="hidden-complexity" aria-labelledby="hidden-complexity-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">The complexity kept out of sight</span>
+      <h2 id="hidden-complexity-h">A calm surface, sitting on <em>a genuinely complex system</em></h2>
+      <p>A single gift card sale touches merchant onboarding and verification, payment collection, unique card generation, communication to both buyer and recipient, redemption processing, card-status management, merchant settlement, and reporting. The editor a merchant sees is one visible part of that wider service.</p>
+    </div>
+
+    <div class="flow" data-rev style="margin:30px 0" role="img" aria-label="Service ecosystem: merchant, purchaser, and recipient interact through the platform, which coordinates redemption, settlement and reporting behind the scenes.">
+      <div class="flow__node flow__node--accent"><div class="fn-t">Merchant</div><div class="fn-s">Visible layer</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Purchaser</div><div class="fn-s">Visible layer</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Recipient</div><div class="fn-s">Visible layer</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Redemption &amp; settlement</div><div class="fn-s">Backstage</div></div>
+      <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+      <div class="flow__node"><div class="fn-t">Reporting</div><div class="fn-s">Backstage</div></div>
+    </div>
+
+    <div data-rev>
+      <p>Three tensions defined the hard part of the work.</p>
+    </div>
+
+    <div class="beats3" data-rev>
+      <div class="beat3">
+        <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+        <h3>Simplicity vs. transparency</h3>
+        <p>Value, validity, where a card works, redemption conditions, and expiry had to stay visible and legible through purchase and redemption, even as everything operational disappeared. Hide the infrastructure, never the terms of the deal.</p>
+      </div>
+      <div class="beat3">
+        <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+        <h3>Freedom vs. control</h3>
+        <p>Merchants needed real freedom to design for Ramadan and Eid, Christmas and New Year, National Day, weddings, corporate thank-yous. The card creator gave them ownership of presentation while the platform kept the structural fields it needs to issue, price, and track the card.</p>
+      </div>
+      <div class="beat3">
+        <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+        <h3>Designing a card vs. running a programme</h3>
+        <p>Making an attractive card and operating a gift-card programme are related but different jobs. I kept them structurally separate: content in the card creator, everything commercial and operational in the workspace around it.</p>
+      </div>
+    </div>
+
+    <div class="insight" data-rev>
+      <b>The rule I held</b>
+      <p>Hide the infrastructure, never the terms of the deal. A gift card is a promise between three people, and each has to be able to act on it with confidence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §7 VALUE MODEL / ROI (dark band) ============ -->
+<section class="band" id="value-model" aria-labelledby="value-model-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">The value it created</span>
+      <h2 id="value-model-h">Aligned on <em>three sides</em></h2>
+      <p>A self-serve product only works when it pays off for everyone it touches.</p>
+    </div>
+
+    <div class="value3" data-rev>
+      <div class="value3__col">
+        <h3>Merchant</h3>
+        <ul>
+          <li>No custom software, no integration project, no upfront platform cost.<span class="prov prov--public">Public</span></li>
+          <li>Prepaid revenue before redemption; occasion and seasonal campaigns.<span class="prov prov--inf">Inference</span></li>
+          <li>New-customer acquisition through gift recipients.<span class="prov prov--inf">Inference</span></li>
+        </ul>
+      </div>
+      <div class="value3__col">
+        <h3>Customer</h3>
+        <ul>
+          <li>Gifting from smaller, personally relevant businesses, not just big retail.<span class="prov prov--qual">Qualitative</span></li>
+          <li>Convenient digital purchase and delivery.<span class="prov prov--public">Public</span></li>
+          <li>Value and redemption terms clear at every step.<span class="prov prov--qual">Qualitative</span></li>
+        </ul>
+      </div>
+      <div class="value3__col">
+        <h3>Merit</h3>
+        <ul>
+          <li>Owned enterprise capability converted into a repeatable, pay-as-you-go route to market.<span class="prov prov--public">Public</span></li>
+          <li>Reused infrastructure keeps marginal cost per merchant low.<span class="prov prov--inf">Inference</span></li>
+          <li>One platform now serves a neighbourhood salon and a global brand alike.<span class="prov prov--qual">Qualitative</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role-note" data-rev>
+      <div class="rn-ico" aria-hidden="true"><span class="material-symbols-outlined">fact_check</span></div>
+      <div>
+        <b>What's actually proven</b>
+        <p>What is verifiable is the design and the proposition: the product shipped, priced pay-as-you-go, launched with a named regional partner (talabat), and still runs on that model today. What I cannot show is adoption or revenue for the product — that data is not mine to present, and Merit's company-level growth reflects its whole business, not this MVP. The honest claim is that the model created the potential for returns on all three sides, and that the proposition has remained commercially relevant for years.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §8 TIMELINE & ATTRIBUTION (light band) ============ -->
+<section class="band band--light" id="timeline" aria-labelledby="timeline-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">What I built, what launched, what came after</span>
+      <h2 id="timeline-h">Three things worth <em>keeping separate</em></h2>
+    </div>
+
+    <div class="tl3" data-rev>
+      <div class="tl3__band tl3__band--mine">
+        <span class="tb-k">Mine &middot; MVP</span>
+        <span class="tb-t">2021&ndash;2022</span>
+        <span class="tb-d">Merchant onboarding, workspace, three-cluster card creator with live preview, storefront and recipient/redemption views, lifecycle visibility.</span>
+      </div>
+      <span class="tl3__arrow" aria-hidden="true">&rarr;</span>
+      <div class="tl3__band tl3__band--company">
+        <span class="tb-k">Company &middot; Launch</span>
+        <span class="tb-t">9 Aug 2022</span>
+        <span class="tb-d">Fully automated SaaS; no setup cost; multiple currencies; payment on sale; consumer-behaviour analytics; regional launch with talabat.</span>
+      </div>
+      <span class="tl3__arrow" aria-hidden="true">&rarr;</span>
+      <div class="tl3__band tl3__band--context">
+        <span class="tb-k">Market presence</span>
+        <span class="tb-t">2022 &rarr; today</span>
+        <span class="tb-d">GiftCardsby.com remains live on its original self-service model. Merit has since grown and raised institutional funding — company-wide context, not an MVP result.</span>
+        <span class="prov prov--context">Context, not MVP result</span>
+      </div>
+    </div>
+
+    <div data-rev>
+      <p>My MVP contribution was the merchant-facing experience. The decision to productise, the commercial model, the underlying platform, and the go-to-market were owned by Merit's product, engineering, and business teams. I designed how it felt to use; they decided what it would be and how it would sell.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §9 REFLECTION (dark band) ============ -->
+<section class="band" id="reflection" aria-labelledby="reflection-h">
+  <div class="wrap">
+    <div data-rev>
+      <span class="eyebrow">What I took from it</span>
+      <h2 id="reflection-h">A subtraction problem <em>of a different order</em></h2>
+    </div>
+    <div data-rev>
+      <p>Before this project, I thought good UX was mostly about removing friction. GiftCardsby.com taught me that productising an enterprise system is a subtraction problem of a different order: the craft is deciding what a person should never have to see, while protecting the few things they need to trust the result.</p>
+      <p>If I were building it again, I would instrument the merchant journey from the first day — sign-up, first card, first sale, redemption — so a productisation bet this size could be proven with numbers, not only argued well.</p>
+    </div>
+
+    <blockquote class="pull" data-rev>“Design the system, measure the behaviour, and let the screens serve both.”</blockquote>
+
+    <nav class="endnav" data-rev>
+      <a href="../../index.html#featured">&larr; All work</a>
+      <a href="../../index.html">Portfolio home &rarr;</a>
+    </nav>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <span>Khushboo Khan &middot; Product Design</span>
+    <span>2021 to 2022 &middot; Built on systems, not screens</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.remove('loading');
+  document.documentElement.classList.add('js');
+  var els=[].slice.call(document.querySelectorAll('[data-rev]'));
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.05});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>

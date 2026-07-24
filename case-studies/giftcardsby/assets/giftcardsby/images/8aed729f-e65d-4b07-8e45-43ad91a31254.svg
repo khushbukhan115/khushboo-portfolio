@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="160" height="160" viewBox="0 0 160 160">
+  <defs>
+    <clipPath id="clip-icon-hassad">
+      <rect width="160" height="160"/>
+    </clipPath>
+  </defs>
+  <g id="icon-hassad" clip-path="url(#clip-icon-hassad)">
+    <g id="icon-home-hassad-selected" transform="translate(0.12 3.681)">
+      <path id="Path_40909" data-name="Path 40909" d="M50.5,7.945h67.069V115.509H8.489V48.693H50.5Z" transform="translate(42.309 38.593)" fill="#00af9a"/>
+      <rect id="Rectangle_6044" data-name="Rectangle 6044" width="34.274" height="34.274" transform="translate(51.16 46.896)" fill="#00af9a"/>
+      <rect id="Rectangle_6045" data-name="Rectangle 6045" width="29.99" height="29.99" transform="translate(48.61 8.571)" fill="#230871"/>
+      <rect id="Rectangle_6046" data-name="Rectangle 6046" width="25" height="25" transform="translate(17.88 43.12)" fill="#230871"/>
+      <rect id="Rectangle_6047" data-name="Rectangle 6047" width="21.421" height="21.421" transform="translate(21.419 15.425)" fill="#00af9a"/>
+      <rect id="Rectangle_6048" data-name="Rectangle 6048" width="18" height="18" transform="translate(-0.12 -0.681)" fill="#230871"/>
+    </g>
+  </g>
+</svg>

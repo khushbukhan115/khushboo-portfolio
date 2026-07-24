@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="en"><head>
+<script>document.documentElement.className='js';</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faster Identity Verification, Fewer Steps, Fewer Drop-offs</title>
+<meta name="description" content="How I redesigned Shufti's KYC document verification so more people get through, with fewer screens and fewer failed checks.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#050706; --bg-soft:#080b0a; --surface:#0d110f; --surface-2:#121714;
+    --line:#232826; --text:#f4f7f5; --text-dim:#a4afa9; --text-mute:#8b948d;
+    --band:#0a0e0c; --paper:#ecefe9; --paper-card:#ffffff; --paper-line:#d9ded7; --paper-ink:#151b17; --paper-mute:#6a736c;
+    --accent:#34e29b; --accent-2:#9efad0; --bad:#e0625f; --warn:#e8a23d;
+    --serif:'Space Grotesk',Georgia,serif; --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --mono:'IBM Plex Mono',monospace; --max:940px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;overflow-x:clip;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .docbar{border-bottom:1px solid var(--line);background:var(--bg);}
+  .docbar-inner{max-width:var(--max);margin:0 auto;padding:15px 32px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--text-mute);}
+  .docbar-inner a{color:var(--text-dim);transition:color 120ms;}
+  .docbar-inner a:hover,.sig a:hover{color:var(--accent);}
+  .docbar-inner .back::before{content:'\2190  ';color:var(--accent);}
+  .docbar-inner .ident{color:var(--text);}
+  .docbar-inner .ident .caret{color:var(--accent);margin:0 6px;}
+
+  /* HERO */
+  .hero{padding:108px 32px 76px;background:radial-gradient(ellipse at 18% 0%,rgba(52,226,155,0.13),transparent 55%),var(--bg);border-bottom:1px solid var(--line);}
+  .hero-inner{max-width:var(--max);margin:0 auto;}
+  .eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(40px,6vw,68px);line-height:1.03;letter-spacing:-0.02em;margin-bottom:20px;}
+  .hero .sub{font-size:19px;color:var(--text-dim);max-width:660px;line-height:1.55;margin-bottom:36px;}
+  .impact-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .is-cell{background:var(--surface);padding:20px 18px;}
+  .is-n{font-family:var(--serif);font-size:clamp(24px,3vw,32px);font-weight:600;color:var(--accent);letter-spacing:-0.02em;line-height:1;}
+  .is-k{font-size:12.5px;color:var(--text-dim);margin-top:8px;line-height:1.4;}
+  .impact-note{font-size:14px;color:var(--text-mute);margin-top:16px;max-width:660px;line-height:1.55;}
+  .hero-links{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px;}
+  .hero-links a{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:12.5px;letter-spacing:0.03em;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:10px 16px;transition:border-color .2s,color .2s,transform .2s;}
+  .hero-links a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+  .hero-links a svg{width:13px;height:13px;}
+  @media(max-width:720px){.impact-strip{grid-template-columns:1fr 1fr;}}
+
+  /* STICKY SECTION NAV */
+  .subnav{position:sticky;top:0;z-index:45;background:rgba(5,7,6,0.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+  .subnav-inner{max-width:var(--max);margin:0 auto;padding:11px 26px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;}
+  .subnav-inner::-webkit-scrollbar{display:none;}
+  .chip{flex:none;font-family:var(--mono);font-size:11px;letter-spacing:0.07em;color:var(--text-mute);border:1px solid transparent;border-radius:20px;padding:8px 14px;white-space:nowrap;transition:color 160ms ease,background 160ms ease,border-color 160ms ease;}
+  .chip:hover{color:var(--text-dim);background:rgba(255,255,255,0.03);}
+  .chip.active{color:var(--accent);border-color:rgba(52,226,155,0.35);background:rgba(52,226,155,0.08);}
+
+  main{max-width:var(--max);margin:0 auto;padding:40px 32px 80px;}
+  section.sec{padding:72px 0 48px;scroll-margin-top:72px;}
+  section.sec:first-of-type{padding-top:44px;}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:14px;display:flex;gap:10px;align-items:center;}
+  .kicker .step{color:var(--text-mute);}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.2vw,36px);line-height:1.15;letter-spacing:-0.02em;margin-bottom:18px;max-width:720px;}
+  p{margin-bottom:16px;color:var(--text-dim);max-width:680px;}
+  p strong{color:var(--text);font-weight:600;}
+  .lead{font-size:19px;color:var(--text);}
+  .cap{font-size:13px;color:var(--text-mute);margin-top:14px;max-width:680px;line-height:1.55;}
+
+  /* KYC MAP */
+  .kyc-map{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:8px 0;}
+  .kyc-node{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 16px;text-align:center;display:flex;flex-direction:column;justify-content:center;}
+  .kyc-node.here{border-color:var(--accent);background:rgba(52,226,155,0.07);}
+  .kyc-node .kn-t{font-weight:600;color:var(--text);font-size:15px;}
+  .kyc-node.here .kn-t{color:var(--accent);}
+  .kyc-node .kn-s{font-size:12px;color:var(--text-mute);margin-top:6px;line-height:1.4;}
+  .kyc-arrow{display:flex;align-items:center;color:var(--text-mute);font-size:20px;}
+  @media(max-width:720px){.kyc-arrow{display:none;}.kyc-node{min-width:100%;}}
+
+  /* SCENARIO STRIP */
+  .scene{display:grid;gap:10px;counter-reset:sc;}
+  .scene-step{display:grid;grid-template-columns:38px 1fr;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;align-items:start;}
+  .scene-step .sc-n{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--accent);}
+  .scene-step .sc-t{font-weight:600;color:var(--text);}
+  .scene-step .sc-think{font-size:13.5px;color:var(--text-mute);margin-top:5px;}
+  .scene-step .sc-think b{color:var(--text-dim);font-weight:500;}
+  .scene-step.snag{border-color:rgba(224,98,95,0.5);background:rgba(224,98,95,0.05);}
+  .scene-step.snag .sc-n,.scene-step.snag .sc-t{color:var(--bad);}
+  .scene-out{margin-top:12px;padding:16px 18px;border:1px dashed var(--line);border-radius:12px;font-size:14.5px;color:var(--text-dim);}
+  .scene-out b{color:var(--text);}
+
+  /* RESEARCH WALL */
+  .wall{position:relative;background:var(--paper);border:1px solid var(--paper-line);border-radius:18px;padding:28px 26px 10px;box-shadow:0 34px 80px -46px rgba(0,0,0,0.85);}
+  .wall-cards{columns:3;column-gap:14px;}
+  .fbcard{break-inside:avoid;margin-bottom:14px;background:var(--paper-card);border:1px solid var(--paper-line);border-radius:12px;padding:16px 16px 14px;box-shadow:0 4px 14px rgba(20,32,26,0.10);}
+  .fbcard .stars{font-size:12px;letter-spacing:2px;margin-bottom:9px;}
+  .fbcard .stars .on{color:#e0902a;} .fbcard .stars .off{color:#d3d8d1;}
+  .fbcard .q{font-size:14px;color:var(--paper-ink);line-height:1.45;}
+  .fbcard .m{font-family:var(--mono);font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-mute);margin-top:11px;}
+  .fbcard.hot{border-color:rgba(198,66,62,0.55);box-shadow:0 6px 18px rgba(198,66,62,0.16);}
+  .fbcard.dim{opacity:0.55;}
+  .fbcard.r1{transform:rotate(-1deg);} .fbcard.r2{transform:rotate(0.8deg);} .fbcard.r3{transform:rotate(-0.5deg);}
+  .wall-fade{position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(to bottom,transparent,var(--paper));pointer-events:none;border-radius:0 0 18px 18px;}
+  .wall-more{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);margin-top:6px;}
+  @media(max-width:900px){.wall-cards{columns:2;}}
+  @media(max-width:600px){.wall-cards{columns:1;}}
+
+  /* METHOD row */
+  .method{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px;}
+  .method .mc{background:var(--surface);padding:18px 16px;}
+  .method .mc .k{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .method .mc .v{font-size:13px;color:var(--text-dim);line-height:1.5;}
+  @media(max-width:720px){.method{grid-template-columns:1fr 1fr;}}
+
+  /* FLOW GHOST */
+  .flowghost{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:30px;}
+  .fg-count{text-align:center;}
+  .fg-count .from{font-family:var(--serif);font-size:34px;font-weight:500;color:var(--text-mute);text-decoration:line-through;text-decoration-color:var(--bad);}
+  .fg-count .arrow{font-family:var(--mono);font-size:18px;color:var(--text-mute);margin:4px 0;}
+  .fg-count .to{font-family:var(--serif);font-size:clamp(64px,9vw,96px);font-weight:600;color:var(--accent);line-height:0.85;letter-spacing:-0.03em;}
+  .fg-count .cl{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mute);margin:12px auto 0;max-width:130px;line-height:1.5;}
+  .fg-steps{display:flex;flex-direction:column;gap:6px;}
+  .fg-step{display:flex;align-items:center;gap:12px;padding:9px 13px;border:1px solid var(--line);border-radius:8px;background:var(--bg-soft);font-size:13.5px;color:var(--text);}
+  .fg-step .fg-i{font-family:var(--mono);font-size:11px;color:var(--text-mute);min-width:15px;}
+  .fg-step.stay .fg-tag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);}
+  .fg-step.gone{opacity:0.4;border-style:dashed;background:transparent;}
+  .fg-step.gone .fg-t{text-decoration:line-through;text-decoration-color:var(--bad);}
+  .fg-step.gone .fg-tag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);}
+  @media(max-width:720px){.flowghost{grid-template-columns:1fr;gap:22px;}}
+
+  /* MOVES cards */
+  .moves{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0;}
+  .movecard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;}
+  .movecard .mv-n{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:9px;}
+  .movecard .mv-t{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .movecard .mv-d{font-size:13.5px;color:var(--text-dim);line-height:1.5;}
+  @media(max-width:720px){.moves{grid-template-columns:1fr;}}
+
+  /* GATE */
+  .gate{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:28px;}
+  .gate-node{text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:12px 16px;max-width:320px;margin:0 auto;}
+  .gate-node.decision{border-color:rgba(52,226,155,0.4);color:var(--accent);}
+  .gate-stem{width:1px;height:20px;background:var(--line);margin:0 auto;}
+  .gate-share{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:18px auto 8px;max-width:480px;}
+  .gate-share .a{background:var(--accent);}.gate-share .b{background:rgba(52,226,155,0.45);}.gate-share .c{background:var(--accent-2);opacity:0.55;}
+  .gate-legend{display:flex;justify-content:center;gap:20px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);margin-bottom:18px;flex-wrap:wrap;}
+  .gate-branches{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .gate-branch{background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:16px 15px;border-top:3px solid var(--line);}
+  .gate-branch.hi{border-top-color:var(--accent);}.gate-branch.mid{border-top-color:rgba(164,175,169,0.5);}.gate-branch.esc{border-top-color:var(--accent-2);}
+  .gate-branch .gb-s{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+  .gate-branch .gb-a{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .gate-branch.hi .gb-a{color:var(--accent);}.gate-branch.esc .gb-a{color:var(--accent-2);}
+  .gate-branch .gb-d{font-size:12px;color:var(--text-dim);line-height:1.5;}
+  @media(max-width:720px){.gate-branches{grid-template-columns:1fr;}}
+
+  /* PHASES */
+  .phases{display:grid;gap:12px;}
+  .phase{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;}
+  .phase .pb{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(52,226,155,0.4);border-radius:20px;padding:5px 12px;white-space:nowrap;}
+  .phase .pt{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .phase .pd{font-size:13.5px;color:var(--text-dim);line-height:1.5;}
+  .phase-check{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:baseline;padding:6px 0 6px 22px;margin-left:12px;border-left:2px solid var(--accent);}
+  .phase-check .ck{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);white-space:nowrap;}
+  .phase-check .cd{font-size:13px;color:var(--text-dim);line-height:1.5;}
+  @media(max-width:720px){.phase,.phase-check{grid-template-columns:1fr;gap:8px;}}
+
+  /* MATRIX */
+  .matrix{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+  .mrow{display:grid;grid-template-columns:1fr 1.3fr 1.3fr;border-bottom:1px solid var(--line);}
+  .mrow:last-child{border-bottom:none;}
+  .mrow.head{background:var(--bg-soft);}
+  .mcell{padding:14px 16px;font-size:13px;color:var(--text-dim);line-height:1.5;border-right:1px solid var(--line);}
+  .mcell:last-child{border-right:none;}
+  .mrow.head .mcell{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);}
+  .mcell.mode{color:var(--text);font-weight:600;}
+  .mcell .esc{color:var(--accent);font-weight:600;}
+  @media(max-width:720px){.mrow{grid-template-columns:1fr;}.mrow.head{display:none;}.mcell{border-right:none;border-bottom:1px dashed var(--line);}.mcell::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:5px;}}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:28px;}
+  .timeline::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line);}
+  .tl{position:relative;padding-bottom:22px;}
+  .tl:last-child{padding-bottom:0;}
+  .tl::before{content:'';position:absolute;left:-28px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--text-mute);box-sizing:border-box;}
+  .tl.turn::before{border-color:var(--bad);background:rgba(224,98,95,0.2);}
+  .tl.win::before{border-color:var(--accent);background:var(--accent);}
+  .tl .tt{font-weight:600;color:var(--text);margin-bottom:3px;}
+  .tl.turn .tt{color:var(--bad);}.tl.win .tt{color:var(--accent);}
+  .tl .td{font-size:14px;color:var(--text-dim);line-height:1.5;max-width:620px;}
+
+  /* CALLOUT */
+  .callout{margin:22px 0 4px;padding:20px 22px;border-left:3px solid var(--accent-2);background:var(--surface);border-radius:0 8px 8px 0;font-size:14.5px;color:var(--text-dim);line-height:1.6;}
+  .callout .cl-l{font-family:var(--mono);font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent-2);margin-bottom:8px;}
+  .callout b{color:var(--text);}
+
+  /* OUTCOME */
+  .out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .out-cell{background:var(--surface);padding:24px 20px;}
+  .out-cell .n{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--accent);letter-spacing:-0.02em;}
+  .out-cell .k{font-size:13px;color:var(--text-dim);margin-top:8px;line-height:1.45;}
+  @media(max-width:720px){.out-grid{grid-template-columns:1fr;}}
+
+  .ending{border-top:1px solid var(--line);background:var(--bg-soft);padding:64px 32px 84px;}
+  .ending-inner{max-width:var(--max);margin:0 auto;}
+  .ending .eyebrow{color:var(--text-mute);}
+  .ending p.big{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:500;color:var(--text);line-height:1.35;letter-spacing:-0.01em;max-width:680px;}
+  .sig{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:22px;margin-top:38px;font-family:var(--mono);font-size:12px;letter-spacing:0.06em;}
+  .sig a{color:var(--text-dim);}
+
+  .kyc-node .kn-here{font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-top:8px;}
+  .why{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:24px 26px;}
+  .why-line{font-family:var(--serif);font-size:clamp(17px,2.1vw,21px);font-weight:500;color:var(--text);line-height:1.35;margin-bottom:12px;padding-left:22px;position:relative;}
+  .why-line::before{content:'';position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .why-sum{font-size:14.5px;color:var(--text-dim);line-height:1.6;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+
+  .costs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:6px 0 4px;}
+  .cost{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--bad);border-radius:12px;padding:18px;}
+  .cost .ct{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--text);margin-bottom:5px;}
+  .cost .cd{font-size:13px;color:var(--text-dim);line-height:1.5;}
+  @media(max-width:720px){.costs{grid-template-columns:1fr;}}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:8px 0 4px;align-items:start;}
+  .shot .s-label{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .shot.brk .s-label{color:var(--bad);}
+  .shot img{width:100%;display:block;}
+  .shot .s-cap{font-size:13px;color:var(--text-dim);line-height:1.5;margin-top:12px;}
+  @media(max-width:720px){.shots{grid-template-columns:1fr;max-width:300px;margin-left:auto;margin-right:auto;}}
+
+  .walk{margin:10px 0 4px;}
+  .wstep{display:flex;align-items:center;gap:48px;}
+  .wstep.rev{flex-direction:row-reverse;}
+  .wphone{flex:0 0 248px;}
+  .wphone img{width:100%;display:block;}
+  .wtext{flex:1;}
+  .wtext .wlabel{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .wstep.brk .wtext .wlabel{color:var(--bad);}
+  .wtext h3{font-family:var(--serif);font-size:clamp(20px,2.4vw,26px);font-weight:600;color:var(--text);line-height:1.2;margin:0 0 10px;}
+  .wtext p{font-size:15px;color:var(--text-dim);line-height:1.55;margin:0;max-width:400px;}
+  .wconnect{display:flex;justify-content:center;color:var(--text-mute);font-size:24px;padding:16px 0;}
+  @media(max-width:720px){.wstep,.wstep.rev{flex-direction:column;gap:16px;text-align:center;}.wphone{flex:0 0 auto;max-width:230px;}.wtext p{margin-left:auto;margin-right:auto;}}
+
+  .pivot{margin:44px 0 22px;padding-top:28px;border-top:1px solid var(--line);}
+  .pivot-h{font-family:var(--serif);font-size:clamp(22px,2.8vw,30px);font-weight:600;color:var(--text);line-height:1.25;letter-spacing:-0.01em;margin-bottom:12px;}
+  .pivot p{font-size:15.5px;color:var(--text-dim);line-height:1.6;max-width:640px;margin:0;}
+  .handoff{margin-top:40px;padding-top:30px;border-top:1px solid var(--line);text-align:center;}
+  .handoff-k{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-mute);margin-bottom:10px;}
+  .handoff-q{font-family:var(--serif);font-size:clamp(24px,3vw,34px);font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+
+  /* ===== PROBLEM SECTION: guided walkthrough, warm warning identity ===== */
+  .problem-sec{--pa:#e8a23d;--pr:#e0625f;--prl:#f2a6a2;}
+  .prob-tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--pa);background:rgba(232,162,61,0.1);border:1px solid rgba(232,162,61,0.35);border-radius:20px;padding:7px 15px;margin-bottom:22px;}
+  .prob-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--pa);}
+  .problem-sec h2{max-width:760px;}
+  .problem-sec h2 em{color:var(--prl);font-style:normal;}
+  .journey{margin-top:48px;}
+  .jstep{display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:center;}
+  .jstep.rev{grid-template-columns:1fr 300px;}
+  .jstep.rev .jphone{order:2;}
+  .jphone{position:relative;max-width:300px;}
+  .jphone img{width:100%;display:block;filter:drop-shadow(0 22px 46px rgba(0,0,0,0.5));}
+  .tag-float{position:absolute;z-index:4;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text);background:rgba(8,11,10,0.82);border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:6px 10px;white-space:nowrap;}
+  .pin{position:absolute;z-index:4;transform:translate(-50%,-50%);}
+  .pin-ring{width:56px;height:56px;border:2px solid var(--pr);border-radius:50%;box-shadow:0 0 0 6px rgba(224,98,95,0.16);}
+  .pin-label{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 10px);white-space:nowrap;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:#fff;background:var(--pr);padding:5px 9px;border-radius:6px;}
+  .jbody .jnum{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--pa);letter-spacing:0.12em;margin-bottom:12px;}
+  .jbody .jkick{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;}
+  .jbody .jtitle{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);font-weight:600;color:var(--text);line-height:1.2;margin-bottom:12px;}
+  .jbody .jtext{font-size:15.5px;color:var(--text-dim);line-height:1.6;max-width:440px;margin-bottom:16px;}
+  .janno{font-size:13.5px;color:var(--text-dim);line-height:1.55;max-width:440px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--pa);border-radius:0 10px 10px 0;padding:13px 16px;}
+  .janno b{color:var(--text);font-weight:600;}
+  .jconnect{display:flex;justify-content:center;padding:20px 0;color:rgba(232,162,61,0.5);font-size:22px;}
+  .jstep.turn{background:linear-gradient(180deg,rgba(224,98,95,0.06),rgba(224,98,95,0.02));border:1px solid rgba(224,98,95,0.22);border-radius:18px;padding:32px 34px;}
+  .jstep.turn .jinsight{font-family:var(--serif);font-size:clamp(25px,3.4vw,38px);font-weight:600;color:var(--prl);line-height:1.14;letter-spacing:-0.02em;margin-bottom:12px;}
+  .jstep.turn .jinsight-sub{font-size:17px;color:var(--text);font-weight:500;line-height:1.4;}
+  @media(max-width:760px){.jstep,.jstep.rev{grid-template-columns:1fr;gap:22px;justify-items:center;text-align:center;}.jstep.rev .jphone{order:0;}.jphone{max-width:260px;margin:0 auto;}.jbody{text-align:left;}.jbody .jtext,.janno{max-width:100%;}.jstep.turn{padding:24px 20px;}}
+  .impacts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:6px 0 4px;}
+  .impactc{background:linear-gradient(180deg,rgba(232,162,61,0.08),rgba(224,98,95,0.03));border:1px solid rgba(232,162,61,0.3);border-radius:14px;padding:26px 22px;}
+  .impactc .ic-n{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--pr);line-height:1;margin-bottom:12px;}
+  .impactc .ic-t{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:9px;}
+  .impactc .ic-d{font-size:13.5px;color:var(--text-dim);line-height:1.55;}
+  @media(max-width:720px){.impacts{grid-template-columns:1fr;}}
+  .whymatter{margin-top:44px;background:linear-gradient(135deg,rgba(224,98,95,0.1),rgba(232,162,61,0.05));border:1px solid rgba(224,98,95,0.28);border-radius:18px;padding:38px 40px;}
+  .whymatter .wm-k{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--prl);margin-bottom:16px;}
+  .whymatter .wm-lead{font-family:var(--serif);font-size:clamp(23px,3vw,32px);font-weight:600;color:var(--text);line-height:1.25;letter-spacing:-0.01em;margin-bottom:16px;max-width:780px;}
+  .whymatter p{font-size:16px;color:var(--text-dim);line-height:1.65;max-width:720px;margin:0;}
+  .whymatter p b{color:var(--text);font-weight:600;}
+  @media(max-width:720px){.whymatter{padding:28px 24px;}}
+  .cliff{margin:64px 0 8px;text-align:center;}
+  .cliff-k{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-mute);margin-bottom:18px;}
+  .cliff-q{font-family:var(--serif);font-size:clamp(30px,5vw,52px);font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1.05;}
+  .cliff-arrow{color:rgba(232,162,61,0.6);font-size:26px;margin-top:26px;}
+  .problem-sec .pivot{border-top-color:rgba(232,162,61,0.3);}
+  .problem-sec .pivot-h{color:var(--prl);}
+  .prob-take{font-family:var(--serif);font-size:clamp(19px,2.4vw,25px);font-weight:600;color:var(--text);line-height:1.32;letter-spacing:-0.01em;margin:20px 0 4px;padding-left:20px;border-left:3px solid var(--pr);}
+
+  /* ===== SECTION IDENTITY TAGS + editorial helpers ===== */
+  section.sec > .kicker{display:inline-flex;align-items:center;gap:9px;background:rgba(52,226,155,0.1);border:1px solid rgba(52,226,155,0.32);border-radius:20px;padding:7px 15px;}
+  section.sec > .kicker::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;}
+  section.sec > .kicker .step{color:var(--accent);}
+  .emph{font-family:var(--serif);font-size:clamp(21px,2.6vw,28px);font-weight:600;color:var(--text);line-height:1.3;letter-spacing:-0.01em;max-width:720px;margin:26px 0;padding-left:22px;border-left:3px solid var(--accent);}
+  .emph em{color:var(--accent-2);font-style:normal;}
+  .compare{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;margin:10px 0 4px;align-items:stretch;}
+  .compare .cc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;}
+  .compare .cc.concern{border-left:3px solid var(--warn);}
+  .compare .cc.answer{border-left:3px solid var(--accent);}
+  .compare .cc .cc-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;}
+  .compare .cc.concern .cc-k{color:var(--warn);}
+  .compare .cc.answer .cc-k{color:var(--accent);}
+  .compare .cc-q{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--text);line-height:1.45;}
+  .checks{list-style:none;margin:0;display:grid;gap:11px;}
+  .checks li{position:relative;padding-left:26px;font-size:13.5px;color:var(--text-dim);line-height:1.5;}
+  .checks li::before{content:'\2713';position:absolute;left:0;top:0;color:var(--accent);font-weight:700;}
+  .checks li b{color:var(--text);font-weight:600;}
+  @media(max-width:720px){.compare{grid-template-columns:1fr;}}
+  .mindset{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;margin:10px 0 4px;}
+  .mindset .ms{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;}
+  .mindset .ms.after{border-color:rgba(52,226,155,0.35);background:linear-gradient(180deg,rgba(52,226,155,0.05),var(--surface));}
+  .mindset .ms .ms-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;}
+  .mindset .ms.after .ms-k{color:var(--accent);}
+  .mindset .ms .ms-t{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--text);line-height:1.3;}
+  .mindset .ms-arrow{color:var(--accent);font-size:26px;}
+  @media(max-width:720px){.mindset{grid-template-columns:1fr;gap:12px;}.mindset .ms-arrow{transform:rotate(90deg);justify-self:center;}}
+
+  /* ===== RESEARCH BOARD ===== */
+  .portal{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .portal-bar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--bg-soft);font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--text-mute);}
+  .portal-bar .pf b{color:var(--text);}
+  .portal-bar .portal-count{margin-left:auto;color:var(--accent);}
+  .prow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:11px 18px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--text-dim);}
+  .prow:last-child{border-bottom:none;}
+  .prow .p-stars{color:var(--warn);letter-spacing:1px;font-size:11px;}
+  .prow .p-out{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--bad);}
+  .affinity{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+  .acol{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:12px;padding:20px 18px;}
+  .acol .a-t{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--text);line-height:1.25;margin-bottom:14px;}
+  .acol .a-chip{font-size:12.5px;color:var(--text-dim);line-height:1.4;padding:9px 12px;background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;margin-bottom:8px;}
+  .acol .a-chip:last-child{margin-bottom:0;}
+  @media(max-width:720px){.affinity{grid-template-columns:1fr;}}
+  .qpanel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;}
+  .qbar{display:grid;grid-template-columns:210px 1fr;gap:16px;align-items:center;margin-bottom:14px;}
+  .qbar:last-child{margin-bottom:0;}
+  .qbar .qb-l{font-size:13px;color:var(--text-dim);}
+  .qbar .qb-track{height:14px;background:var(--bg-soft);border-radius:7px;overflow:hidden;}
+  .qbar .qb-fill{height:100%;background:var(--accent);border-radius:7px;}
+  @media(max-width:720px){.qbar{grid-template-columns:1fr;gap:6px;}}
+  .loop2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 4px;}
+  .lo{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;}
+  .lo .lo-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .lo .lo-t{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--text);line-height:1.3;}
+  @media(max-width:720px){.loop2{grid-template-columns:1fr;}}
+  .rollout{margin:14px 0 4px;}
+  .rollout .ro-lead{font-family:var(--serif);font-size:clamp(17px,2vw,20px);font-weight:600;color:var(--text);line-height:1.35;letter-spacing:-0.01em;margin-bottom:16px;max-width:760px;}
+  .rollout .ro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .rollout .ro-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;}
+  .rollout .ro-card.first{border-left:3px solid var(--accent);}
+  .rollout .ro-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:9px;}
+  .rollout .ro-v{font-size:13.5px;color:var(--text-dim);line-height:1.55;}
+  .rollout .ro-v b{color:var(--text);font-weight:600;}
+  @media(max-width:720px){.rollout .ro-grid{grid-template-columns:1fr;}}
+  /* Redesign walk-through: green-toned parity with the Problem journey */
+  .walk{margin-top:20px;}
+  .wstep{display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:center;}
+  .wstep.rev{grid-template-columns:1fr 300px;}
+  .wstep.rev .wphone{order:2;}
+  .wphone{position:relative;max-width:300px;}
+  .wphone img{width:100%;display:block;filter:drop-shadow(0 22px 46px rgba(0,0,0,0.5));}
+  .wbody .wnum{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--accent);letter-spacing:0.12em;margin-bottom:12px;}
+  .wbody .wkick{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;}
+  .wbody .wtitle{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);font-weight:600;color:var(--text);line-height:1.2;margin-bottom:12px;}
+  .wbody .wtext{font-size:15.5px;color:var(--text-dim);line-height:1.6;max-width:440px;margin-bottom:16px;}
+  .wanno{font-size:13.5px;color:var(--text-dim);line-height:1.55;max-width:440px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:13px 16px;}
+  .wanno b{color:var(--text);font-weight:600;}
+  .wconnect{display:flex;justify-content:center;padding:18px 0;color:rgba(52,226,155,0.5);font-size:22px;}
+  @media(max-width:720px){.wstep,.wstep.rev{grid-template-columns:1fr;gap:24px;}.wstep.rev .wphone{order:0;}.wphone{max-width:230px;margin:0 auto;}}
+  /* Modeled ROI (clearly-labelled estimate) */
+  .roimodel{margin:24px 0 8px;background:linear-gradient(135deg,rgba(52,226,155,0.07),rgba(52,226,155,0.02));border:1px dashed rgba(52,226,155,0.5);border-radius:18px;padding:32px 34px;}
+  .roimodel .rm-tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(52,226,155,0.4);border-radius:999px;padding:4px 11px;margin-bottom:16px;}
+  .roimodel .rm-lead{font-family:var(--serif);font-size:clamp(19px,2.3vw,24px);font-weight:600;color:var(--text);line-height:1.3;letter-spacing:-0.01em;margin-bottom:20px;}
+  .roimodel .rm-calc{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+  .roimodel .rm-row{display:grid;grid-template-columns:24px 92px 1fr;align-items:baseline;gap:12px;}
+  .roimodel .rm-op{font-family:var(--serif);font-size:20px;color:var(--text-mute);text-align:center;}
+  .roimodel .rm-v{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--accent-2);text-align:right;white-space:nowrap;}
+  .roimodel .rm-l{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+  .roimodel .rm-row.total{border-top:1px solid rgba(52,226,155,0.25);padding-top:13px;margin-top:3px;}
+  .roimodel .rm-row.total .rm-v{color:var(--accent);font-size:30px;}
+  .roimodel .rm-scale{font-family:var(--serif);font-size:clamp(16px,1.9vw,19px);color:var(--text);line-height:1.42;margin-bottom:16px;}
+  .roimodel .rm-scale b{color:var(--accent-2);font-weight:600;}
+  .roimodel .rm-note{font-size:12.5px;color:var(--text-mute);line-height:1.55;border-left:2px solid var(--line);padding-left:14px;}
+  @media(max-width:640px){.roimodel{padding:24px 20px;}.roimodel .rm-row{grid-template-columns:20px 68px 1fr;gap:8px;}.roimodel .rm-v{font-size:21px;}.roimodel .rm-row.total .rm-v{font-size:24px;}}
+
+  /* ===== EVOLUTION ===== */
+  .mismatch{display:flex;align-items:center;justify-content:center;gap:20px;background:linear-gradient(180deg,rgba(232,162,61,0.10),rgba(224,98,95,0.04));border:1px solid rgba(232,162,61,0.32);border-radius:14px;padding:26px;flex-wrap:wrap;}
+  .mm-card{text-align:center;min-width:150px;background:rgba(0,0,0,0.22);border:1px solid rgba(232,162,61,0.28);border-radius:10px;padding:18px 22px;}
+  .mm-card .mm-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--pa);margin-bottom:8px;}
+  .mm-card .mm-v{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--text);}
+  .mm-vs{font-family:var(--serif);font-size:28px;color:var(--pr);font-weight:600;}
+  .evo{margin:8px 0 4px;}
+  .evo-step{display:grid;grid-template-columns:44px 1fr;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;align-items:start;}
+  .evo-step.win{border-color:rgba(52,226,155,0.35);background:linear-gradient(180deg,rgba(52,226,155,0.05),var(--surface));}
+  .evo-step .es-n{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--accent);}
+  .evo-step .es-t{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--text);line-height:1.25;margin-bottom:6px;}
+  .evo-step .es-d{font-size:14px;color:var(--text-dim);line-height:1.55;}
+  .evo-connect{display:flex;justify-content:center;color:var(--text-mute);font-size:20px;padding:12px 0;}
+
+  /* ===== PROBLEM pattern labels ===== */
+  .patt-label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--pr);margin:10px 0 20px;display:flex;align-items:center;gap:10px;}
+  .patt-label::before{content:'';width:20px;height:2px;background:var(--pr);}
+
+  /* ===== EVOLUTION: the loop + iteration cards ===== */
+  .loopbar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:8px 0 26px;}
+  .loopbar .lb{font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);}
+  .loopbar .lb.measure{color:var(--accent);}
+  .loopbar .lb-a{color:var(--text-mute);font-size:12px;}
+  .iter{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:26px 28px;margin:32px 0 0;}
+  .iter.win{border-color:rgba(52,226,155,0.4);}
+  .iter-n{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .iter-t{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--text);margin-bottom:18px;line-height:1.2;}
+  .iter-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .if-step{background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:14px;}
+  .if-step.measure{border-color:rgba(52,226,155,0.4);background:rgba(52,226,155,0.05);}
+  .if-k{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:8px;}
+  .if-step.measure .if-k{color:var(--accent);}
+  .if-v{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+  .iter-result{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--text-dim);line-height:1.55;}
+  .iter-result b{color:var(--text);}
+  @media(max-width:820px){.iter-flow{grid-template-columns:1fr 1fr;}}
+  @media(max-width:520px){.iter-flow{grid-template-columns:1fr;}}
+
+  /* ===== EDITORIAL MOTION + COHERENCE ===== */
+  .progress-track{position:fixed;top:0;left:0;right:0;height:3px;z-index:100;background:transparent;pointer-events:none;}
+  .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 0 10px rgba(52,226,155,0.45);}
+  .js .reveal{opacity:0;transform:translateY(20px);transition:opacity .62s cubic-bezier(.16,.8,.3,1),transform .62s cubic-bezier(.16,.8,.3,1);}
+  .js .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.js .reveal{opacity:1 !important;transform:none !important;transition:none !important;}}
+
+  /* subheads inside a scene (lighter than the section pill) */
+  .subhead{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);margin:48px 0 18px;display:flex;align-items:center;gap:10px;}
+  .subhead::before{content:'';width:18px;height:2px;background:var(--accent);opacity:0.7;flex:none;}
+
+  /* hero before -> after strip */
+  .is-ba{display:flex;align-items:baseline;gap:9px;line-height:1;margin-bottom:2px;}
+  .is-ba .was{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--text-mute);text-decoration:line-through;text-decoration-color:rgba(224,98,95,0.75);}
+  .is-ba .arw{font-family:var(--mono);font-size:13px;color:var(--text-mute);}
+  .is-ba .now{font-family:var(--serif);font-size:clamp(30px,3.4vw,38px);font-weight:600;color:var(--accent);letter-spacing:-0.02em;}
+  .is-ba .now.word{font-size:clamp(21px,2.6vw,26px);}
+
+  /* context: check chips + onboarding rail */
+  .checkrow{display:flex;gap:12px;flex-wrap:wrap;margin:4px 0 2px;}
+  .checkchip{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 18px;flex:1;min-width:230px;}
+  .checkchip .ci{width:36px;height:36px;border-radius:9px;background:rgba(52,226,155,0.1);border:1px solid rgba(52,226,155,0.3);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;}
+  .checkchip .cc-t{font-weight:600;color:var(--text);font-size:14.5px;}
+  .checkchip .cc-s{font-size:12.5px;color:var(--text-mute);margin-top:2px;line-height:1.4;}
+  @media(max-width:600px){.checkchip{min-width:100%;}}
+  .rail{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:stretch;margin:4px 0 2px;}
+  .rail-node{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px;display:flex;flex-direction:column;gap:7px;}
+  .rail-node.here{border-color:rgba(52,226,155,0.45);background:linear-gradient(180deg,rgba(52,226,155,0.08),var(--surface));}
+  .rail-node .rn-step{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);}
+  .rail-node.here .rn-step{color:var(--accent);}
+  .rail-node .rn-t{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--text);line-height:1.2;}
+  .rail-node .rn-s{font-size:12.5px;color:var(--text-dim);line-height:1.45;}
+  .rail-node .rn-here{margin-top:3px;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);}
+  .rail-arrow{display:flex;align-items:center;color:var(--text-mute);font-size:18px;}
+  @media(max-width:760px){.rail{grid-template-columns:1fr;}.rail-arrow{transform:rotate(90deg);justify-self:center;}}
+
+  /* ===== SCENE TRANSITIONS: bridges that carry one idea into the next ===== */
+  .bridge{max-width:660px;margin:6px auto 0;padding-top:30px;text-align:center;}
+  .bridge-k{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;}
+  .bridge-l{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);font-weight:500;color:var(--text-dim);line-height:1.36;letter-spacing:-0.01em;}
+  .bridge-l b{color:var(--text);font-weight:600;}
+  .bridge-caret{color:var(--accent);opacity:0.5;font-size:20px;margin-top:16px;line-height:1;}
+  .bridge.warm .bridge-caret{color:var(--warn);}
+
+  /* ===== BEFORE / AFTER with real screens ===== */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:10px 0 4px;align-items:start;}
+  .ba-col{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 22px 24px;}
+  .ba-col.before{border-top:3px solid var(--bad);}
+  .ba-col.after{border-top:3px solid var(--accent);}
+  .ba-tag{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .ba-tag .t{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;}
+  .ba-col.before .ba-tag .t{color:var(--bad);}
+  .ba-col.after .ba-tag .t{color:var(--accent);}
+  .ba-tag .n{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);border:1px solid var(--line);border-radius:20px;padding:4px 10px;}
+  .ba-phones{display:flex;gap:10px;justify-content:center;align-items:flex-start;}
+  .ba-phones img{width:100%;max-width:158px;display:block;border-radius:14px;filter:drop-shadow(0 16px 34px rgba(0,0,0,0.55));}
+  .ba-cap{font-size:13px;color:var(--text-dim);line-height:1.55;margin-top:18px;}
+  .ba-cap b{color:var(--text);font-weight:600;}
+  @media(max-width:720px){.ba{grid-template-columns:1fr;}}
+
+  /* ===== FINISHED-FLOW FILMSTRIP (payoff) ===== */
+  .film{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+  .film figure{flex:0 0 176px;scroll-snap-align:start;margin:0;}
+  .film img{width:100%;display:block;border-radius:15px;filter:drop-shadow(0 16px 34px rgba(0,0,0,0.55));}
+  .film figcaption{margin-top:12px;}
+  .film .fc-s{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);}
+  .film .fc-t{font-size:12.5px;color:var(--text-dim);line-height:1.45;margin-top:5px;}
+  .film-hint{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);margin-top:4px;}
+
+  /* ===== EVIDENCE: production-data statement ===== */
+  .statement{margin:26px 0 8px;background:linear-gradient(135deg,rgba(52,226,155,0.09),rgba(52,226,155,0.02));border:1px solid rgba(52,226,155,0.28);border-radius:18px;padding:44px 40px;text-align:center;}
+  .statement .st-lead{font-family:var(--serif);font-size:clamp(24px,3vw,34px);font-weight:600;color:var(--text);line-height:1.22;letter-spacing:-0.01em;margin:0 auto 16px;max-width:820px;}
+  .statement p{font-size:16px;color:var(--text-dim);line-height:1.65;max-width:660px;margin:0 auto;}
+  .statement p b{color:var(--text);font-weight:600;}
+  @media(max-width:720px){.statement{padding:26px 22px;}}
+
+  /* ===== EVIDENCE: production analytics panel ===== */
+  .analytics{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .an-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:15px 20px;border-bottom:1px solid var(--line);background:var(--bg-soft);flex-wrap:wrap;}
+  .an-title{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);}
+  .an-range{font-family:var(--mono);font-size:11px;letter-spacing:0.05em;color:var(--accent);}
+  .an-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+  .an-cell{padding:22px 20px;border-right:1px solid var(--line);}
+  .an-cell:last-child{border-right:none;}
+  .an-n{font-family:var(--serif);font-size:clamp(26px,3.4vw,34px);font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1;}
+  .an-k{font-size:12.5px;color:var(--text-dim);margin-top:9px;line-height:1.4;}
+  .an-k .pct{color:var(--text-mute);}
+  .an-split{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);}
+  .an-pat{padding:20px;border-right:1px solid var(--line);}
+  .an-pat:last-child{border-right:none;}
+  .an-pat .ap-k{font-family:var(--mono);font-size:10px;letter-spacing:0.09em;text-transform:uppercase;color:var(--warn);margin-bottom:10px;}
+  .an-pat .ap-n{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--text);line-height:1;}
+  .an-pat .ap-d{font-size:12.5px;color:var(--text-dim);margin-top:6px;line-height:1.45;}
+  .an-foot{padding:15px 20px;border-top:1px solid var(--line);font-size:13.5px;color:var(--text-dim);line-height:1.55;background:var(--bg-soft);}
+  .an-foot b{color:var(--text);font-weight:600;}
+  @media(max-width:640px){.an-grid{grid-template-columns:1fr;}.an-cell{border-right:none;border-bottom:1px solid var(--line);}.an-split{grid-template-columns:1fr;}.an-pat{border-right:none;border-bottom:1px solid var(--line);}}
+
+  /* ===== EVIDENCE: Mouseflow observations ===== */
+  .obs{display:grid;gap:8px;margin:6px 0 4px;}
+  .obs-item{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 15px;}
+  .obs-ic{width:26px;height:26px;border-radius:50%;border:1px solid rgba(52,226,155,0.4);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;}
+  .obs-time{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--accent);flex:none;min-width:36px;}
+  .obs-t{font-size:14px;color:var(--text-dim);line-height:1.5;}
+  .obs-t b{color:var(--text);font-weight:600;}
+  @media(max-width:600px){.obs-time{display:none;}}
+
+  /* ===== INSIGHT: even-if cards ===== */
+  .evenif{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 4px;}
+  .ei-card{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:12px;padding:20px 22px;}
+  .ei-k{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--warn);margin-bottom:12px;}
+  .ei-t{font-size:15px;color:var(--text-dim);line-height:1.55;}
+  .ei-t b{color:var(--text);font-weight:600;}
+  .ei-conclusion{font-size:17px;color:var(--text-dim);line-height:1.6;margin:18px 0 4px;max-width:700px;}
+  .ei-conclusion strong{color:var(--text);font-weight:600;}
+  @media(max-width:640px){.evenif{grid-template-columns:1fr;}}
+
+  /* ===== INSIGHT: asked vs system already knew ===== */
+  .askknow{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;margin:8px 0 4px;}
+  .ak-col{border-radius:14px;padding:22px;border:1px solid var(--line);}
+  .ak-col.ask{background:linear-gradient(180deg,rgba(232,162,61,0.07),transparent);border-color:rgba(232,162,61,0.3);}
+  .ak-col.know{background:linear-gradient(180deg,rgba(52,226,155,0.07),transparent);border-color:rgba(52,226,155,0.3);}
+  .ak-h{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
+  .ak-col.ask .ak-h{color:var(--warn);}
+  .ak-col.know .ak-h{color:var(--accent);}
+  .ak-row{font-size:14px;color:var(--text-dim);line-height:1.5;padding:11px 0;border-top:1px solid var(--line);}
+  .ak-row:first-of-type{border-top:none;}
+  .ak-col.ask .ak-row{color:var(--text);}
+  .ak-arrow{color:var(--accent);font-size:22px;align-self:center;}
+  @media(max-width:720px){.askknow{grid-template-columns:1fr;}.ak-arrow{transform:rotate(90deg);justify-self:center;}}
+
+  /* ===== INSIGHT: the central principle ===== */
+  .principle{margin:30px 0 8px;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(52,226,155,0.12),transparent 70%),var(--surface);border:1px solid rgba(52,226,155,0.4);border-radius:20px;padding:44px 40px;}
+  .pr-k{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+  .pr-line{font-family:var(--serif);font-size:clamp(26px,4vw,40px);font-weight:600;color:var(--text);line-height:1.16;letter-spacing:-0.02em;max-width:760px;margin:0 auto;}
+  .pr-sub{font-size:14.5px;color:var(--text-dim);margin-top:18px;}
+  @media(max-width:640px){.principle{padding:32px 24px;}}
+
+  /* ===== EVOLUTION: measure emphasis in the loop ===== */
+  .loopbar .lb.measure{color:var(--accent);font-weight:700;}
+
+  /* ===== EVOLUTION: outcome chips ===== */
+  .outcomes{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:10px;margin:16px 0 2px;}
+  .outcome{display:flex;align-items:flex-start;gap:10px;background:rgba(52,226,155,0.06);border:1px solid rgba(52,226,155,0.28);border-radius:10px;padding:13px 14px;}
+  .outcome .oc-ic{color:var(--accent);flex:none;margin-top:1px;}
+  .outcome .oc-t{font-size:13px;color:var(--text);line-height:1.35;font-weight:500;}
+
+  /* ===== EVOLUTION: pivotal question ===== */
+  .bigq{font-family:var(--serif);font-size:clamp(24px,3.4vw,36px);font-weight:600;color:var(--text);line-height:1.2;letter-spacing:-0.02em;max-width:760px;margin:36px auto;text-align:center;padding:0 10px;}
+  .bigq em{color:var(--accent);font-style:normal;}
+
+  /* ===== EVOLUTION: the big decision ===== */
+  .decision{margin:26px 0 8px;background:linear-gradient(135deg,rgba(52,226,155,0.08),rgba(52,226,155,0.02));border:1px solid rgba(52,226,155,0.3);border-radius:18px;padding:34px 36px;}
+  .decision .dc-k{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+  .decision .dc-lead{font-family:var(--serif);font-size:clamp(20px,2.5vw,26px);font-weight:600;color:var(--text);line-height:1.3;letter-spacing:-0.01em;}
+  .decision p{font-size:15px;color:var(--text-dim);line-height:1.6;max-width:760px;margin:14px 0 0;}
+  .decision p b{color:var(--text);font-weight:600;}
+  .reliers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 4px;}
+  .relier{background:rgba(0,0,0,0.22);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;}
+  .relier .rl-t{font-weight:600;color:var(--text);font-size:13px;}
+  .relier .rl-s{font-size:11px;color:var(--text-mute);margin-top:4px;line-height:1.35;}
+  .decision .dc-earned{font-family:var(--serif);font-size:clamp(18px,2.2vw,23px);font-weight:600;color:var(--accent-2);line-height:1.3;margin-top:20px;padding-top:18px;border-top:1px solid rgba(52,226,155,0.2);}
+  @media(max-width:640px){.reliers{grid-template-columns:1fr 1fr;}.decision{padding:26px 22px;}}
+  .stratshift{margin:22px 0 30px;background:linear-gradient(135deg,rgba(232,162,61,0.08),rgba(232,162,61,0.015));border:1px solid rgba(232,162,61,0.26);border-left:3px solid var(--warn);border-radius:18px;padding:34px 36px;}
+  .stratshift .pv-k{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--warn);margin-bottom:16px;}
+  .stratshift .pv-lead{font-family:var(--serif);font-size:clamp(19px,2.4vw,25px);font-weight:600;color:var(--text);line-height:1.32;letter-spacing:-0.01em;}
+  .stratshift .pv-lead em{color:var(--accent-2);font-style:italic;}
+  .stratshift .pv-body{margin-top:15px;font-size:15px;color:var(--text-dim);line-height:1.65;max-width:680px;}
+  .stratshift .pv-body b{color:var(--text);font-weight:600;}
+  @media(max-width:640px){.stratshift{padding:26px 22px;}}
+
+  /* ===== EVOLUTION: 6 to 3 flow map ===== */
+  .flowmap{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin:8px 0 4px;}
+  .fm-col{border:1px solid var(--line);border-radius:16px;padding:22px 20px;background:var(--surface);}
+  .fm-col.new{border-color:rgba(52,226,155,0.35);background:linear-gradient(180deg,rgba(52,226,155,0.05),var(--surface));}
+  .fm-h{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:6px;}
+  .fm-col.new .fm-h{color:var(--accent);}
+  .fm-step{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--text-dim);padding:10px 0;border-top:1px solid var(--line);}
+  .fm-step:first-of-type{border-top:none;}
+  .fm-step .fm-i{font-family:var(--mono);font-size:11px;color:var(--text-mute);min-width:15px;}
+  .fm-step .fm-tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-mute);white-space:nowrap;}
+  .fm-col.old .fm-step.drop .fm-t{color:var(--text-mute);text-decoration:line-through;text-decoration-color:rgba(224,98,95,0.7);}
+  .fm-col.new .fm-step .fm-t{color:var(--text);}
+  .fm-mid{text-align:center;}
+  .fm-from{font-family:var(--serif);font-size:26px;font-weight:500;color:var(--text-mute);text-decoration:line-through;text-decoration-color:rgba(224,98,95,0.7);line-height:1;}
+  .fm-arw{font-family:var(--mono);color:var(--text-mute);margin:4px 0;}
+  .fm-to{font-family:var(--serif);font-size:clamp(44px,6vw,64px);font-weight:600;color:var(--accent);line-height:0.9;letter-spacing:-0.02em;}
+  .fm-cl{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mute);margin-top:8px;}
+  @media(max-width:720px){.flowmap{grid-template-columns:1fr;}.fm-mid{display:flex;align-items:center;justify-content:center;gap:14px;}.fm-mid .fm-arw{transform:rotate(90deg);}}
+
+  /* ===== EVOLUTION: full-flow before/after ===== */
+  .fullflow{display:grid;gap:16px;margin:8px 0 4px;}
+  .ff-label{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+  .ff-label .ff-dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .ff-row.old .ff-label{color:var(--warn);} .ff-row.old .ff-dot{background:var(--warn);}
+  .ff-row.new .ff-label{color:var(--accent);} .ff-row.new .ff-dot{background:var(--accent);}
+  .ff-frame{border:1px solid var(--line);border-radius:14px;background:var(--bg-soft);padding:12px;overflow-x:auto;scrollbar-width:thin;}
+  .ff-frame img{display:block;height:clamp(260px,40vh,340px);width:auto;max-width:none;border-radius:8px;}
+  .ff-hint{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mute);margin-top:2px;}
+  .ba.stack{grid-template-columns:1fr;}
+  .ba.stack .ba-phones img{max-width:100%;}
+
+  /* ===== VALIDATION: uncertain-path real screen ===== */
+  .edgecase{display:grid;grid-template-columns:210px 1fr;gap:34px;align-items:center;margin:20px 0 4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 30px;}
+  .edgecase .ec-phone{max-width:210px;}
+  .edgecase .ec-phone img{width:100%;display:block;border-radius:14px;filter:drop-shadow(0 16px 34px rgba(0,0,0,0.55));}
+  .edgecase .ec-k{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+  .edgecase .ec-t{font-size:15.5px;color:var(--text-dim);line-height:1.6;}
+  .edgecase .ec-t b{color:var(--text);font-weight:600;}
+  .edgecase .ec-note{font-size:13.5px;color:var(--text-mute);margin-top:12px;}
+  @media(max-width:720px){.edgecase{grid-template-columns:1fr;gap:20px;justify-items:center;text-align:center;}.edgecase .ec-phone{max-width:200px;}}
+
+  /* ===== COMPLIANCE: aligned goals ===== */
+  .aligned{margin:24px 0 4px;background:linear-gradient(135deg,rgba(52,226,155,0.09),rgba(52,226,155,0.02));border:1px solid rgba(52,226,155,0.3);border-radius:18px;padding:32px 34px;text-align:center;}
+  .al-pair{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:20px;}
+  .al-chip{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:10px 16px;}
+  .al-eq{font-family:var(--serif);font-size:24px;color:var(--accent);font-weight:600;}
+  .al-line{font-family:var(--serif);font-size:clamp(20px,2.6vw,28px);font-weight:600;color:var(--text);line-height:1.28;letter-spacing:-0.01em;max-width:720px;margin:0 auto;}
+  .al-line em{color:var(--accent-2);font-style:normal;}
+  @media(max-width:600px){.aligned{padding:26px 22px;}}
+
+  /* ===== ENTERPRISE: the payoff ===== */
+  .payoff{max-width:780px;margin:32px auto 6px;text-align:center;}
+  .payoff .pf-k{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+  .payoff .pf-lead{font-family:var(--serif);font-size:clamp(25px,3.6vw,38px);font-weight:600;color:var(--text);line-height:1.18;letter-spacing:-0.02em;margin-bottom:18px;}
+  .payoff p{font-size:16px;color:var(--text-dim);line-height:1.65;max-width:680px;margin:0 auto;}
+  .payoff .pf-close{font-family:var(--serif);font-size:clamp(17px,2vw,21px);font-weight:500;color:var(--accent-2);line-height:1.4;margin:22px auto 0;max-width:680px;}
+
+  /* ===== SECTION RHYTHM: full-bleed bands + feature ===== */
+  .sec.band{background:var(--band);margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding-left:calc(50vw - 50%);padding-right:calc(50vw - 50%);padding-top:80px;padding-bottom:64px;}
+  .sec.feature{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding-left:calc(50vw - 50%);padding-right:calc(50vw - 50%);padding-top:84px;padding-bottom:72px;background:radial-gradient(ellipse at 50% 0%,rgba(52,226,155,0.08),transparent 62%),linear-gradient(180deg,#0a100d,#070a09);border-top:1px solid rgba(52,226,155,0.16);border-bottom:1px solid rgba(52,226,155,0.16);}
+
+  /* ===== ACCESSIBILITY: visible focus ===== */
+  a:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px;}
+
+  /* ===== ANALYTICS (redesigned) ===== */
+  .an-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line);}
+  .an-stat{background:var(--surface);padding:22px 22px;}
+  .an-stat .an-n{font-family:var(--serif);font-size:clamp(28px,3.6vw,36px);font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1;}
+  .an-stat .an-k{font-size:12.5px;color:var(--text-dim);margin-top:9px;}
+  .an-stat.warn .an-n{color:var(--warn);}
+  .an-find{padding:26px 24px 22px;}
+  .an-find-h{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mute);margin-bottom:16px;}
+  .an-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;gap:2px;}
+  .an-bar .seg{height:100%;}
+  .an-bar .seg.s1{background:var(--warn);}
+  .an-bar .seg.s2{background:var(--bad);}
+  .an-bar .seg.s3{background:#252b28;}
+  .an-legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:16px;}
+  .an-legend span{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-dim);}
+  .an-legend b{color:var(--text);font-weight:600;}
+  .an-legend i{width:10px;height:10px;border-radius:3px;flex:none;}
+  .an-legend .d1{background:var(--warn);}.an-legend .d2{background:var(--bad);}.an-legend .d3{background:#252b28;}
+  @media(max-width:600px){.an-stats{grid-template-columns:1fr;}}
+
+  /* ===== ANALYTICS: distribution rows (Evidence before) ===== */
+  .dist{display:grid;gap:22px;}
+  .dist-top{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .dist-name{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--text);}
+  .dist-of{font-size:12.5px;color:var(--text-mute);}
+  .dist-pct{margin-left:auto;font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.4vw,34px);letter-spacing:-0.02em;line-height:1;}
+  .dist-row.m1 .dist-pct{color:var(--warn);}
+  .dist-row.m2 .dist-pct{color:var(--bad);}
+  .dist-bar{height:12px;background:var(--bg-soft);border-radius:6px;overflow:hidden;}
+  .dist-fill{height:100%;border-radius:6px;}
+  .dist-fill.s1{background:var(--warn);}
+  .dist-fill.s2{background:var(--bad);}
+  .dist-note{font-size:12px;color:var(--text-mute);margin-top:9px;}
+
+  /* ===== ANALYTICS: before/after proof (Impact) ===== */
+  .prova{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .prova-card{background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;padding:22px;}
+  .pv-name{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--text);}
+  .pv-sub{font-size:12px;color:var(--text-mute);margin:3px 0 18px;}
+  .pv-ba{display:flex;align-items:baseline;gap:12px;}
+  .pv-before{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--text-mute);text-decoration:line-through;text-decoration-color:rgba(224,98,95,0.6);}
+  .pv-arrow{color:var(--text-mute);font-family:var(--mono);font-size:14px;}
+  .pv-after{font-family:var(--serif);font-size:clamp(30px,4vw,40px);font-weight:600;color:var(--accent);letter-spacing:-0.02em;line-height:1;}
+  .pv-delta{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);background:rgba(52,226,155,0.1);border:1px solid rgba(52,226,155,0.3);border-radius:20px;padding:5px 12px;}
+  @media(max-width:600px){.prova{grid-template-columns:1fr;}}
+
+  /* ===== EVOLUTION: shrink progression across iterations ===== */
+  .shrink{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;margin:8px 0 4px;}
+  .shrink-node{flex:0 0 auto;min-width:118px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;text-align:center;display:flex;flex-direction:column;justify-content:center;}
+  .shrink-node.win{border-color:rgba(52,226,155,0.4);background:linear-gradient(180deg,rgba(52,226,155,0.06),var(--surface));}
+  .shrink-node .sn-n{font-family:var(--serif);font-size:clamp(34px,4.4vw,46px);font-weight:600;color:var(--text);letter-spacing:-0.02em;line-height:1;}
+  .shrink-node.win .sn-n{color:var(--accent);}
+  .shrink-node .sn-l{font-size:11.5px;color:var(--text-dim);margin-top:8px;line-height:1.35;}
+  .shrink-link{flex:1;min-width:150px;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:0 6px;}
+  .shrink-link .sl-arw{font-family:var(--mono);color:var(--text-mute);font-size:17px;line-height:1;}
+  .shrink-link .sl-it{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+  .shrink-link .sl-d{font-size:12px;color:var(--text-dim);line-height:1.4;}
+  @media(max-width:720px){.shrink{flex-direction:column;}.shrink-link{flex-direction:row;align-items:center;gap:10px;}.shrink-link .sl-arw{transform:rotate(90deg);}}
+
+  /* breathing room between the research stages in Evidence */
+  .visual{margin-top:50px;}
+  /* business-consequence line: the "why it mattered for the business" link */
+  .biz{margin-top:18px;padding:2px 0 2px 16px;border-left:2px solid rgba(52,226,155,0.55);font-size:14px;color:var(--text-dim);line-height:1.55;}
+  .biz b{color:var(--text);font-weight:600;}
+  /* My Role block, sets ownership expectations up front */
+  .role{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;}
+  .role-row{display:grid;grid-template-columns:140px 1fr;gap:18px;padding:15px 20px;border-bottom:1px solid var(--line);}
+  .role-row:last-child{border-bottom:none;}
+  .role-k{font-family:var(--mono);font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);padding-top:3px;}
+  .role-v{font-size:14.5px;color:var(--text-dim);line-height:1.55;}
+  .role-v b{color:var(--text);font-weight:600;}
+  @media(max-width:600px){.role-row{grid-template-columns:1fr;gap:5px;}}
+
+  /* ============ CONFIDENTIAL ACCESS GATE ============ */
+  html.av-locked{overflow:hidden;}
+  .av-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 700px at 50% -12%,rgba(52,226,155,0.10),transparent 60%),rgba(4,6,5,0.93);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;animation:avFade .5s ease forwards;}
+  .av-gate.av-hide{opacity:0;transform:scale(1.015);pointer-events:none;animation:none;transition:opacity .55s ease,transform .55s ease,-webkit-backdrop-filter .55s ease,backdrop-filter .55s ease;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);}
+  @keyframes avFade{to{opacity:1;}}
+  .av-card{position:relative;width:100%;max-width:440px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:22px;padding:40px 38px 32px;text-align:center;box-shadow:0 40px 120px -40px rgba(0,0,0,0.9),0 0 90px -44px rgba(52,226,155,0.55);transform:translateY(16px);opacity:0;animation:avRise .6s .08s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes avRise{to{transform:none;opacity:1;}}
+  .av-lock{width:56px;height:56px;margin:0 auto 22px;border-radius:16px;display:grid;place-items:center;color:var(--accent);background:rgba(52,226,155,0.10);border:1px solid rgba(52,226,155,0.32);box-shadow:0 0 30px -8px rgba(52,226,155,0.6);}
+  .av-lock svg{width:26px;height:26px;}
+  .av-kick{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:13px;}
+  .av-title{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:-0.02em;line-height:1.16;color:var(--text);margin-bottom:13px;}
+  .av-intro{font-size:14.5px;color:var(--text-dim);line-height:1.6;margin-bottom:26px;}
+  .av-form{display:flex;flex-direction:column;gap:11px;text-align:left;}
+  .av-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);}
+  .av-input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--text);font-family:var(--sans);font-size:16px;transition:border-color .25s,box-shadow .25s;}
+  .av-input::placeholder{color:var(--text-mute);}
+  .av-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(52,226,155,0.14);}
+  .av-gate.av-error .av-input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(224,98,95,0.14);animation:avShake .4s;}
+  @keyframes avShake{10%,90%{transform:translateX(-2px);}30%,70%{transform:translateX(4px);}50%{transform:translateX(-6px);}}
+  .av-err{font-size:13px;color:var(--bad);line-height:1.5;opacity:0;transform:translateY(-4px);transition:opacity .25s,transform .25s;}
+  .av-gate.av-error .av-err{opacity:1;transform:none;}
+  .av-btn{margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;background:var(--accent);color:#04130d;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.03em;border:none;border-radius:999px;padding:15px 22px;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 12px 30px -12px rgba(52,226,155,0.8);}
+  .av-btn:hover{background:#48eaa6;transform:translateY(-2px);}
+  .av-btn:active{transform:translateY(0);}
+  .av-btn svg{width:15px;height:15px;}
+  .av-foot{margin-top:22px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:var(--text-mute);line-height:1.6;}
+  .av-foot a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+  @media(prefers-reduced-motion:reduce){.av-gate,.av-card{animation:none;opacity:1;transform:none;}.av-gate.av-hide{transition:opacity .2s ease;}.av-gate.av-error .av-input{animation:none;}}
+  @media(max-width:480px){.av-card{padding:32px 24px 26px;border-radius:18px;}.av-title{font-size:22px;}}
+</style>
+</head>
+<body>
+
+<div class="av-gate" id="avGate" role="dialog" aria-modal="true" aria-labelledby="avGateTitle" aria-describedby="avGateIntro">
+  <div class="av-card">
+    <div class="av-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+    <div class="av-kick">Confidential case study</div>
+    <h2 class="av-title" id="avGateTitle">This case study is password-protected.</h2>
+    <p class="av-intro" id="avGateIntro">It contains proprietary product strategy, research, and implementation details from commercial work. If we&rsquo;ve scheduled an interview, you should already have the password.</p>
+    <form class="av-form" id="avForm" novalidate>
+      <label class="av-label" for="avPass">Password</label>
+      <input class="av-input" id="avPass" type="password" name="av-pass" placeholder="Enter password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="avErr">
+      <div class="av-err" id="avErr" role="alert">That password is not correct. Please try again.</div>
+      <button class="av-btn" type="submit">Unlock case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="av-foot">If not, you can request access at <a href="mailto:khushbukhan115@gmail.com">khushbukhan115@gmail.com</a></div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='av_unlocked_adaptive';
+  var enc='YWRhcHRpdmUtdmVyaWZpY2F0aW9u';
+  var gate=document.getElementById('avGate');
+  var doc=document.documentElement;
+  if(!gate){return;}
+  var unlocked=false;
+  try{unlocked=sessionStorage.getItem(KEY)==='1';}catch(e){}
+  if(unlocked){ if(gate.parentNode){gate.parentNode.removeChild(gate);} return; }
+  doc.classList.add('av-locked');
+  var form=document.getElementById('avForm');
+  var input=document.getElementById('avPass');
+  var pass=''; try{pass=atob(enc);}catch(e){pass='';}
+  function reveal(){
+    try{sessionStorage.setItem(KEY,'1');}catch(e){}
+    doc.classList.remove('av-locked');
+    gate.classList.add('av-hide');
+    var gone=function(){ if(gate&&gate.parentNode){gate.parentNode.removeChild(gate);} };
+    gate.addEventListener('transitionend',gone,{once:true});
+    setTimeout(gone,700);
+    var h1=document.querySelector('h1'); if(h1){h1.setAttribute('tabindex','-1'); try{h1.focus({preventScroll:true});}catch(e){}}
+  }
+  if(form){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(input.value===pass){ reveal(); }
+      else{ gate.classList.add('av-error'); try{input.select();}catch(e){} }
+    });
+    input.addEventListener('input',function(){ gate.classList.remove('av-error'); });
+  }
+  setTimeout(function(){ try{input.focus();}catch(e){} },420);
+})();
+</script>
+
+<div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="docbar"><div class="docbar-inner">
+  <a class="back" href="../../index.html">Khushboo Khan</a>
+  <span class="ident">Case Study<span class="caret">/</span>KYC Verification<span class="caret">/</span>Detailed</span>
+</div></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Product Design &middot; Identity Verification &middot; Shufti</div>
+    <h1>Faster identity verification.<br>Fewer steps, fewer drop-offs.</h1>
+    <p class="sub">
+      I redesigned the KYC document check that runs inside our clients' signups, so the system works
+      out what it can on its own and only asks the user when it truly needs to. More people get
+      through, with fewer screens and fewer failed verifications.
+    </p>
+    <div class="impact-strip">
+      <div class="is-cell"><div class="is-ba"><span class="was">6</span><span class="arw">&rarr;</span><span class="now">3</span></div><div class="is-k">steps in the verification flow</div></div>
+      <div class="is-cell"><div class="is-ba"><span class="was">2</span><span class="arw">&rarr;</span><span class="now">0</span></div><div class="is-k">manual selections before capture</div></div>
+      <div class="is-cell"><div class="is-ba"><span class="was">2</span><span class="arw">&rarr;</span><span class="now">1</span></div><div class="is-k">camera sessions</div></div>
+      <div class="is-cell"><div class="is-ba"><span class="now word">TikTok</span></div><div class="is-k">shipped to ByteDance after production proof</div></div>
+    </div>
+    <p class="impact-note">
+      In production, the behaviours that drove failed checks became much less frequent, so
+      interaction-driven declines fell and the main path got faster. Measured before and after
+      rollout in Shufti's internal analytics.
+    </p>
+
+    <div class="role">
+      <div class="role-row"><span class="role-k">Role</span><span class="role-v"><b>Lead Product Designer</b></span></div>
+      <div class="role-row"><span class="role-k">Ownership</span><span class="role-v">Product strategy, UX research, behavioural analysis, interaction design, experimentation strategy, stakeholder alignment, and rollout planning.</span></div>
+      <div class="role-row"><span class="role-k">Partnered with</span><span class="role-v">The <b>Data Analyst team</b>, who quantified the patterns from existing decline codes and production telemetry; <b>Engineering</b>, who built and safely released each iteration; and <b>Compliance</b>, who signed off every change before rollout.</span></div>
+      <div class="role-row"><span class="role-k">ROI</span><span class="role-v">Reduced verification time, fewer avoidable declines, improved verification success, and more successful customer onboarding.</span></div>
+    </div>
+    <div class="hero-links">
+      <a href="https://www.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=77-27894&amp;t=WFjrWP232E0Ev77A-1" target="_blank" rel="noopener">View the Figma design file <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<div class="subnav" id="subnav">
+  <nav class="subnav-inner" aria-label="Case study sections">
+    <a class="chip" href="#context">What is KYC</a>
+    <a class="chip" href="#problem">Problem</a>
+    <a class="chip" href="#research">Evidence</a>
+    <a class="chip" href="#insight">Insight</a>
+    <a class="chip" href="#evolution">Evolution</a>
+    <a class="chip" href="#validation">Validation</a>
+    <a class="chip" href="#enterprise">ByteDance</a>
+    <a class="chip" href="#impact">Impact</a>
+  </nav>
+</div>
+
+<main>
+
+  <!-- CONTEXT -->
+  <section class="sec band" id="context">
+    <div class="kicker"><span class="step">Context</span></div>
+    <h2>First, what actually is KYC?</h2>
+    <p class="lead">
+      Whenever you sign up for a bank, a fintech app, or a crypto platform, you have to prove who you are
+      before you can use it. You photograph your government ID, and often take a selfie. That check is
+      called Know Your Customer, or KYC.
+    </p>
+    <p>
+      Shufti runs this identity check for more than <strong>2,000 businesses worldwide</strong>. Their users
+      meet it during onboarding, before they are let into the product. Because it sits at the very start of
+      the journey, it has to be fast and accurate at the same time. If a legitimate person struggles here,
+      the business loses a customer before that customer ever sees the product.
+    </p>
+
+    <div class="subhead">What the check asks for</div>
+    <div class="checkrow">
+      <div class="checkchip">
+        <div class="ci"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><circle cx="8" cy="11" r="2.2"/><line x1="13" y1="10" x2="18.5" y2="10"/><line x1="13" y1="14" x2="18.5" y2="14"/></svg></div>
+        <div><div class="cc-t">A government ID</div><div class="cc-s">Front and back of a passport, ID card, or licence</div></div>
+      </div>
+      <div class="checkchip">
+        <div class="ci"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c0-4 3.5-6 7.5-6s7.5 2 7.5 6"/></svg></div>
+        <div><div class="cc-t">Sometimes a selfie</div><div class="cc-s">A quick face check, matched against the document</div></div>
+      </div>
+    </div>
+
+    <div class="subhead">Where it happens in onboarding</div>
+    <div class="rail">
+      <div class="rail-node"><div class="rn-step">Step 1</div><div class="rn-t">Create account</div><div class="rn-s">Email, password, a few basic details</div></div>
+      <div class="rail-arrow">&rarr;</div>
+      <div class="rail-node here"><div class="rn-step">Step 2</div><div class="rn-t">Verify identity</div><div class="rn-s">Capture the ID, take a selfie</div><div class="rn-here">&#9679;&ensp;The experience I redesigned</div></div>
+      <div class="rail-arrow">&rarr;</div>
+      <div class="rail-node"><div class="rn-step">Step 3</div><div class="rn-t">Start using the product</div><div class="rn-s">Customer successfully onboarded</div></div>
+    </div>
+    <div class="cap">KYC is the gate between signing up and getting in. Everything in this case study happens inside step 2.</div>
+
+    <div class="subhead">Why it mattered</div>
+    <div class="why">
+      <div class="why-line">Every unnecessary decline is a legitimate customer lost before they ever became one.</div>
+      <div class="why-line">Every second removed from verification cuts friction at the most valuable stage of the acquisition funnel.</div>
+      <div class="why-sum">So this was never really about screens. At Shufti's scale, this single experience decides how many legitimate customers its clients successfully onboard, which is why small improvements here compound into real business outcomes.</div>
+    </div>
+
+    <div class="bridge warm">
+      <div class="bridge-k">And yet, at scale</div>
+      <div class="bridge-l">This simple-looking check was quietly turning legitimate people away every day. <b>Not because of who they were, but because of how it was built.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="sec problem-sec" id="problem">
+    <div class="prob-tag">The problem</div>
+    <h2>One small moment of <em>confusion</em>, repeated thousands of times.</h2>
+
+    <div class="patt-label">Pattern one &middot; the document mismatch</div>
+    <div class="jstep">
+      <div class="jphone">
+        <img src="assets/old-flow/old-flow-country-document-type-select.png" alt="Document selection screen: choose issuing country, then document type, with Passport, National ID and Driver's License options">
+      </div>
+      <div class="jbody">
+        <div class="jnum">01</div>
+        <div class="jkick">Document selection</div>
+        <div class="jtitle">First, they classify their document</div>
+        <p class="jtext">Before the camera even opens, the flow asks them to pick their issuing country and document type. Say United Kingdom, then National ID.</p>
+      </div>
+    </div>
+
+    <div class="jconnect">&darr;</div>
+
+    <div class="mismatch">
+      <div class="mm-card"><div class="mm-k">They selected</div><div class="mm-v">National ID</div></div>
+      <div class="mm-vs">&ne;</div>
+      <div class="mm-card"><div class="mm-k">They presented</div><div class="mm-v">Driver's licence</div></div>
+    </div>
+    <div class="cap">Then, at the camera, they hold up a different document, a valid and supported UK driving licence, just not the one they picked. The document was fine, and the verification could still fail, because it didn't match the earlier choice.</div>
+    <div class="prob-take">This was a product problem, not a user error.</div>
+
+    <div class="patt-label">Pattern two &middot; the capture confusion</div>
+    <div class="journey">
+      <div class="jstep">
+        <div class="jphone">
+          <img src="assets/old-flow/old-flow-front-capture.png" alt="Front capture screen: the camera captures the front of a driving licence">
+          <div class="tag-float" style="top:81%;left:50%;transform:translate(-50%,-50%)">Auto-captures</div>
+        </div>
+        <div class="jbody">
+          <div class="jnum">01</div>
+          <div class="jkick">Front capture</div>
+          <div class="jtitle">The front is captured</div>
+          <p class="jtext">The user photographs the front of their ID. It captures, and a preview appears.</p>
+          <div class="janno">Whether the capture is automatic or manual, the next screen is always the same: <b>the proof preview.</b></div>
+        </div>
+      </div>
+
+      <div class="jconnect">&darr;</div>
+
+      <div class="jstep rev turn">
+        <div class="jphone">
+          <img src="assets/old-flow/old-flow-front-proof-preview.png" alt="Proof preview screen asking whether the document is clear, with Confirm and Retake buttons">
+          <div class="pin" style="top:82%;left:50%"><div class="pin-ring"></div><div class="pin-label">Reads as &ldquo;done&rdquo;</div></div>
+        </div>
+        <div class="jbody">
+          <div class="jnum">02</div>
+          <div class="jkick">Proof preview &middot; the turning point</div>
+          <div class="jinsight">Users naturally assumed they had finished.</div>
+          <div class="jinsight-sub">Many put their ID back into their wallet, before they even tapped Continue.</div>
+        </div>
+      </div>
+
+      <div class="jconnect">&darr;</div>
+
+      <div class="jstep break">
+        <div class="jphone">
+          <img src="assets/old-flow/old-flow-back-capture.png" alt="Back capture screen: the camera reopens to capture the back of the licence">
+          <div class="tag-float" style="top:15%;left:50%;transform:translate(-50%,-50%)">A second camera, for the back</div>
+        </div>
+        <div class="jbody">
+          <div class="jnum">03</div>
+          <div class="jkick">Back capture</div>
+          <div class="jtitle">The camera opens again</div>
+          <p class="jtext">Now it asks for the back of the document. With nothing linking it to what just happened, many assume the first capture failed.</p>
+          <div class="janno">So instead of the back, <b>they capture the front a second time.</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pivot">
+      <div class="pivot-h">These weren't isolated mistakes.</div>
+      <p>Two patterns kept surfacing across production, the document mismatch and the capture confusion, and both fed the same three business problems.</p>
+    </div>
+
+    <div class="impacts">
+      <div class="impactc"><div class="ic-n">01</div><div class="ic-t">Longer verification time</div><div class="ic-d">Every retry and re-capture stretched a check that should take seconds.</div></div>
+      <div class="impactc"><div class="ic-n">02</div><div class="ic-t">Unnecessary retries</div><div class="ic-d">People repeated steps they had already completed correctly.</div></div>
+      <div class="impactc"><div class="ic-n">03</div><div class="ic-t">Avoidable verification declines</div><div class="ic-d">Legitimate users failed verification because of the interaction, not their identity.</div></div>
+    </div>
+
+    <div class="whymatter">
+      <div class="wm-k">Why it mattered</div>
+      <div class="wm-lead">At Shufti's scale, this wasn't happening once. It was happening across production traffic, every day.</div>
+      <p>Businesses weren't just seeing more retries and slower checks. <b>They were losing legitimate customers.</b> For our clients, every avoidable decline was a real person who failed onboarding because of the interaction, not their identity, a paying customer turned away at the very first step, before they ever became one.</p>
+    </div>
+
+    <div class="cliff">
+      <div class="cliff-k">The obvious question became</div>
+      <div class="cliff-q">Why was this happening?</div>
+      <div class="cliff-arrow">&darr;</div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section class="sec" id="research">
+    <div class="kicker"><span class="step">The evidence</span></div>
+    <h2>I didn't guess this. I read it hundreds of times.</h2>
+
+    <div class="callout">
+      <div class="cl-l">How the signal was captured</div>
+      At the end of every KYC journey, <b>users could rate their experience and leave written feedback.</b> Every rating and comment was stored alongside the verification itself: the client, country, document type, request ID, and outcome, in Shufti's internal analytics portal.
+    </div>
+
+    <div class="statement">
+      <div class="st-lead">The redesign didn't begin with assumptions. It began with production data.</div>
+      <p>Because every comment was tied to a real verification, I was analysing real user behaviour at scale, not opinions. This was <b>unmoderated qualitative research on production data</b>, not a lab study with a handful of recruited participants.</p>
+    </div>
+
+    <div class="visual">
+      <div class="kicker"><span>01</span> <span class="step">Filter to the low-rated sessions</span></div>
+      <div class="portal">
+        <div class="portal-bar">
+          <span class="pf">Rating <b>&#9733;&#9734;&#9734;&#9734;&#9734;</b></span>
+          <span class="pf">Date range <b>set</b></span>
+          <span class="portal-count">hundreds of sessions</span>
+        </div>
+        <div class="prow"><span class="p-stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span><span>Passport &middot; Brazil</span><span class="p-out">Timeout</span></div>
+        <div class="prow"><span class="p-stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span><span>ID card &middot; Nigeria</span><span class="p-out">Declined</span></div>
+        <div class="prow"><span class="p-stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span><span>Driving licence &middot; UK</span><span class="p-out">Retry</span></div>
+        <div class="prow"><span class="p-stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span><span>ID card &middot; Philippines</span><span class="p-out">Timeout</span></div>
+        <div class="prow"><span class="p-stars">&#9733;&#9734;&#9734;&#9734;&#9734;</span><span>Passport &middot; Egypt</span><span class="p-out">Declined</span></div>
+      </div>
+      <div class="cap">I filtered the lowest-rated sessions, especially one-star experiences, over a set window, then reviewed hundreds of real verification journeys across different countries, clients, document types, and outcomes.</div>
+    </div>
+
+    <div class="visual">
+      <div class="kicker"><span>02</span> <span class="step">Patterns observed</span></div>
+      <div class="wall">
+        <div class="wall-cards">
+          <div class="fbcard hot r1"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"Why is it asking me to scan my card again?"</div><div class="m">ID card &middot; retry</div></div>
+          <div class="fbcard r2"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"I already uploaded it."</div><div class="m">Passport &middot; timeout</div></div>
+          <div class="fbcard hot"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"Why does the camera keep opening?"</div><div class="m">ID card &middot; timeout</div></div>
+          <div class="fbcard r3"><div class="stars"><span class="on">&#9733;&#9733;</span><span class="off">&#9733;&#9733;&#9733;</span></div><div class="q">"It keeps rejecting my document."</div><div class="m">Driving licence &middot; declined</div></div>
+          <div class="fbcard"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"This verification never finishes."</div><div class="m">Passport &middot; timeout</div></div>
+          <div class="fbcard hot r1"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"I don't understand what it wants."</div><div class="m">ID card &middot; retry</div></div>
+          <div class="fbcard r2"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"I showed the front twice and it's still stuck."</div><div class="m">ID card &middot; declined</div></div>
+          <div class="fbcard"><div class="stars"><span class="on">&#9733;&#9733;</span><span class="off">&#9733;&#9733;&#9733;</span></div><div class="q">"The second camera confused me."</div><div class="m">Passport &middot; retry</div></div>
+          <div class="fbcard dim r3"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"Took too long, I gave up."</div><div class="m">ID card &middot; timeout</div></div>
+          <div class="fbcard dim"><div class="stars"><span class="on">&#9733;&#9733;</span><span class="off">&#9733;&#9733;&#9733;</span></div><div class="q">"Had to pick country and type before anything."</div><div class="m">Passport &middot; retry</div></div>
+          <div class="fbcard dim r1"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"Kept asking for the back after I finished."</div><div class="m">ID card &middot; timeout</div></div>
+          <div class="fbcard dim r2"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"No idea why it failed."</div><div class="m">Driving licence &middot; declined</div></div>
+          <div class="fbcard hot r1"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"I chose ID card but used my licence, why did it fail?"</div><div class="m">Driving licence &middot; declined</div></div>
+          <div class="fbcard r2"><div class="stars"><span class="on">&#9733;</span><span class="off">&#9733;&#9733;&#9733;&#9733;</span></div><div class="q">"It rejected my passport even though it's valid."</div><div class="m">Passport &middot; declined</div></div>
+          <div class="fbcard dim"><div class="stars"><span class="on">&#9733;&#9733;</span><span class="off">&#9733;&#9733;&#9733;</span></div><div class="q">"Why does the document type even matter?"</div><div class="m">ID card &middot; retry</div></div>
+        </div>
+        <div class="wall-fade"></div>
+      </div>
+      <div class="wall-more">A slice of the one-star feedback. I wasn't hunting single complaints, I was looking for the same behaviour, again and again.</div>
+    </div>
+
+    <div class="visual">
+      <div class="kicker"><span>03</span> <span class="step">Cluster into themes, affinity mapping</span></div>
+      <div class="affinity">
+        <div class="acol"><div class="a-t">Theme 1 &middot; Selected one document, presented another</div><div class="a-chip">"I chose ID card but used my licence."</div><div class="a-chip">"It rejected my passport even though it's valid."</div><div class="a-chip">"Why does the document type even matter?"</div><div class="a-chip">"Had to pick country and type before anything."</div></div>
+        <div class="acol"><div class="a-t">Theme 2 &middot; Captured the front instead of the back</div><div class="a-chip">"Why does the camera keep opening?"</div><div class="a-chip">"The second camera confused me."</div><div class="a-chip">"I showed the front twice, still stuck."</div><div class="a-chip">"Kept asking for the back after I finished."</div></div>
+      </div>
+      <div class="cap">Through thematic analysis, the feedback clustered into two dominant themes. I kept reading until new sessions stopped revealing new behaviours, the point of theme saturation, so the patterns were consistent, not anecdotal.</div>
+    </div>
+
+    <div class="visual">
+      <div class="kicker"><span>04</span> <span class="step">Quantify with the Data Analyst Team</span></div>
+      <p>
+        The one-star sessions had given me strong hypotheses, but two things kept them honest: they came from users
+        who were already unhappy, and the reading was mine. Before either became a product decision, the Data Analyst
+        team validated the patterns across <b>all production traffic, not only the sessions that complained,</b>
+        satisfied users included. The qualitative work generated the hypotheses; an independent quantitative pass
+        tested them before anything shipped.
+      </p>
+      <div class="callout">
+        <div class="cl-l">How each pattern was measured, not guessed</div>
+        The two patterns failed in two different ways, so they were measured on two different trails. <b>Document mismatch showed up as declines:</b> each declined verification carried a structured decline reason with its own error code, and selecting one document type while presenting another produced a specific code the Data Analyst team could query across all production traffic, broken down by client and document type, and re-run after every iteration. <b>Capture confusion showed up as timeouts, which carry no decline code,</b> so it was sized from production telemetry instead: retry counts on the capture step and step-completion events showed where sessions stalled and repeated before running out of time. For both, whenever a number raised a question I traced it back to individual <b>request IDs and the matching Mouseflow recordings</b>, so the metric always reconciled with the real behaviour.
+      </div>
+      <div class="analytics">
+        <div class="an-head">
+          <div class="an-title">Document verification &middot; production analysis</div>
+          <div class="an-range">1 to 15 October 2025</div>
+        </div>
+        <div class="an-stats">
+          <div class="an-stat"><div class="an-n">48,217</div><div class="an-k">verifications analysed</div></div>
+          <div class="an-stat warn"><div class="an-n">6,912</div><div class="an-k">declined &middot; 14.3%</div></div>
+          <div class="an-stat warn"><div class="an-n">3,180</div><div class="an-k">timed out &middot; 6.6%</div></div>
+        </div>
+        <div class="an-find">
+          <div class="an-find-h">How much of that traced back to the two patterns</div>
+          <div class="dist">
+            <div class="dist-row m1">
+              <div class="dist-top"><span class="dist-name">Document mismatch</span><span class="dist-of">of all declined verifications</span><span class="dist-pct">31%</span></div>
+              <div class="dist-bar"><div class="dist-fill s1" style="width:31%"></div></div>
+              <div class="dist-note">2,146 of the 6,912 declines: valid documents that did not match the earlier selection</div>
+            </div>
+            <div class="dist-row m2">
+              <div class="dist-top"><span class="dist-name">Capture confusion</span><span class="dist-of">of all timed-out verifications</span><span class="dist-pct">79%</span></div>
+              <div class="dist-bar"><div class="dist-fill s2" style="width:79%"></div></div>
+              <div class="dist-note">2,514 of the 3,180 timeouts: repeated retries around the second capture</div>
+            </div>
+          </div>
+        </div>
+        <div class="an-foot">The two behaviours from the recordings were not edge cases. They were behind <b>most of the avoidable declines and timeouts.</b></div>
+      </div>
+      <div class="cap">Driving licences and national IDs showed the most document mismatches. Capture confusion clustered on two-sided documents, where the flow asked for a separate back image.</div>
+    </div>
+
+    <div class="loop2">
+      <div class="lo"><div class="lo-k">The analytics</div><div class="lo-t">explained what was happening</div></div>
+      <div class="lo"><div class="lo-k">The sessions, in Mouseflow</div><div class="lo-t">explained why it was happening</div></div>
+    </div>
+    <p>
+      The numbers told me where checks were failing. To understand why, I went back to individual journeys by
+      request ID and watched the real session recordings in Mouseflow.
+    </p>
+    <div class="subhead">What the recordings showed</div>
+    <div class="obs">
+      <div class="obs-item"><span class="obs-ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="obs-time">00:12</span><span class="obs-t">Users <b>hesitating before the second capture</b>, unsure why the camera had reopened.</span></div>
+      <div class="obs-item"><span class="obs-ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="obs-time">00:19</span><span class="obs-t">Confusion right after the proof preview, with <b>repeated taps on unexpected areas</b> of the screen.</span></div>
+      <div class="obs-item"><span class="obs-ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="obs-time">00:26</span><span class="obs-t">Users <b>assuming the process had finished</b> and starting to put their document away.</span></div>
+      <div class="obs-item"><span class="obs-ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="obs-time">00:34</span><span class="obs-t">At the back step, <b>presenting the front side again</b> instead of the back.</span></div>
+      <div class="obs-item"><span class="obs-ic"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="obs-time">00:48</span><span class="obs-t"><b>Repeated retries</b> of the same capture, a number of them ending in a timeout.</span></div>
+    </div>
+    <p>
+      That closed the loop between the numbers and the behaviour. The analytics showed the scale, the
+      recordings showed the human reason behind it.
+    </p>
+
+    <div class="pivot">
+      <div class="pivot-h">Two patterns kept repeating.</div>
+      <p>Not a scatter of isolated issues, and not only the users who complained. Measured across all production traffic, two clear patterns held: the document mismatch, and the capture confusion. Together they became the foundation of the redesign.</p>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-k">Before I changed anything</div>
+      <div class="bridge-l">I knew what was breaking, and why. <b>But both patterns shared one root, and that was the real thing to fix.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- INSIGHT: what we learned -->
+  <section class="sec" id="insight">
+    <div class="kicker"><span class="step">The insight</span></div>
+    <h2>The screens were never the problem. The work was on the wrong side.</h2>
+    <p>
+      It would be easy to read these two patterns as a copy problem, or an instructions problem. They were
+      not. Improving the interface alone would never remove the friction, because the friction was built into
+      what we were asking people to do.
+    </p>
+
+    <div class="evenif">
+      <div class="ei-card">
+        <div class="ei-k">Even if we improved the copy</div>
+        <div class="ei-t">Users would still have to choose their document country and document type <b>before verification could even begin.</b></div>
+      </div>
+      <div class="ei-card">
+        <div class="ei-k">Even if we improved the instructions</div>
+        <div class="ei-t">Users would still move through <b>two separate camera sessions,</b> with a break in between.</div>
+      </div>
+    </div>
+    <p class="ei-conclusion">Those changes would polish the experience. They would not remove the work. <strong>That was the real insight.</strong></p>
+
+    <div class="subhead">We were asking users for information the system could already determine</div>
+    <div class="askknow">
+      <div class="ak-col ask">
+        <div class="ak-h">What we kept asking the user</div>
+        <div class="ak-row">Which country issued the document?</div>
+        <div class="ak-row">What type of document is it?</div>
+        <div class="ak-row">Is the captured image good enough?</div>
+      </div>
+      <div class="ak-arrow">&rarr;</div>
+      <div class="ak-col know">
+        <div class="ak-h">What the system could already determine</div>
+        <div class="ak-row">The country and document type, read straight from the capture with document recognition.</div>
+        <div class="ak-row">The image quality, judged automatically with image-quality analysis.</div>
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="pr-k">The principle</div>
+      <div class="pr-line">Ask the user only for what the system cannot work out itself.</div>
+      <div class="pr-sub">Almost every design decision that followed came from this one rule.</div>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-k">A rule is easy to write, and risky to ship</div>
+      <div class="bridge-l">So I didn't apply it in one redesign. <b>I earned it, one tested change at a time.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- EVOLUTION: what changed -->
+  <section class="sec band" id="evolution">
+    <div class="kicker"><span class="step">The evolution</span></div>
+    <h2>Three changes, each proven in production before the next.</h2>
+
+    <div class="stratshift">
+      <div class="pv-k">Where the strategy changed</div>
+      <div class="pv-lead">My original goal was to remove the country and document-type screen immediately. The evidence told me the product was not ready for that yet, so <em>I changed the strategy.</em></div>
+      <div class="pv-body">Instead of one large redesign, I broke it into three smaller changes and earned the decision one at a time. The first two iterations were not the destination. They reduced the risk and built the <b>production evidence</b> that made it safe to remove the screen at all.</div>
+    </div>
+
+    <p>
+      Every change followed the same loop, so nothing shipped on faith. Each one was rolled out carefully and
+      measured in production before I decided the next move.
+    </p>
+
+    <div class="loopbar">
+      <span class="lb">Observe a behaviour</span><span class="lb-a">&rarr;</span>
+      <span class="lb">Form a hypothesis</span><span class="lb-a">&rarr;</span>
+      <span class="lb">Ship the smallest change</span><span class="lb-a">&rarr;</span>
+      <span class="lb measure">Measure in production</span><span class="lb-a">&rarr;</span>
+      <span class="lb">Decide the next step</span>
+    </div>
+
+    <div class="rollout">
+      <div class="ro-lead">The rollout was incremental too. No change ever met the whole customer base at once.</div>
+      <div class="ro-grid">
+        <div class="ro-card first">
+          <div class="ro-k">Who saw it first</div>
+          <div class="ro-v">Each change went live for a <b>small group of lower-volume, lower-risk clients</b>, so I could watch it in real production with limited business exposure. High-volume and business-critical accounts were not exposed to a change until the evidence was in.</div>
+        </div>
+        <div class="ro-card">
+          <div class="ro-k">Within hours of release</div>
+          <div class="ro-v">For higher-risk changes, a <b>health check</b> on production metrics to catch regressions early. This only confirmed the rollout was stable. It was never how I judged success.</div>
+        </div>
+        <div class="ro-card">
+          <div class="ro-k">Around 15 days, before and after</div>
+          <div class="ro-v">The <b>comparison window</b> that showed whether the behaviour had actually changed, and the evidence I used to widen the rollout or move to the next iteration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="cl-l">Why one change at a time</div>
+      Working this way was not only a UX choice. Each small, isolated change kept <b>engineering risk low</b>, let me <b>validate the effect in production</b> before going further, and gave <b>the business the confidence</b> to approve the next step. A big-bang redesign hides which change caused what. One change at a time makes cause and effect obvious, and makes every step defensible.
+    </div>
+
+    <div class="iter">
+      <div class="iter-n">Iteration 1</div>
+      <div class="iter-t">Fix the capture experience</div>
+      <div class="iter-flow">
+        <div class="if-step"><div class="if-k">Observed</div><div class="if-v">People finished the front, saw a proof preview, assumed they were done, and got confused when the camera reopened for the back.</div></div>
+        <div class="if-step"><div class="if-k">Hypothesis</div><div class="if-v">Removing the interruption between front and back would cut the confusion and the retries.</div></div>
+        <div class="if-step"><div class="if-k">Smallest test</div><div class="if-v">Keep the camera open. Capture the front, a quick confirmation blink, rotate for the back, then one proof preview showing both images together.</div></div>
+        <div class="if-step measure"><div class="if-k">Measured, 15-day window</div><div class="if-v">The front-shown-when-back-expected behaviour fell, and if someone did shoot the front twice they now saw it at once and retried, instead of being declined later.</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Fewer retries</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Better capture quality</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Fewer avoidable declines</span></div>
+      </div>
+      <div class="biz">For legitimate users, this meant fewer people <b>abandoning onboarding halfway through</b>, so more of them reached the product they had signed up for.</div>
+    </div>
+
+    <div class="ba stack">
+      <div class="ba-col before">
+        <div class="ba-tag"><span class="t">Before</span><span class="n">Old capture flow &middot; 4 screens</span></div>
+        <div class="ba-phones"><img src="assets/old-flow/old-flow-capture-combined.png" alt="Old capture flow: front capture, a proof preview, a second camera for the back, then another proof preview"></div>
+        <div class="ba-cap">Two captures and <b>two separate proof previews</b>, with a break between front and back that read as finished.</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-tag"><span class="t">After</span><span class="n">New capture flow &middot; 3 screens</span></div>
+        <div class="ba-phones"><img src="assets/new-flow/new-flow-capture-combined.png" alt="New capture flow: front then back captured in one continuous session, then a single proof preview showing both sides together"></div>
+        <div class="ba-cap">One continuous session captures front then back, then <b>a single proof preview of both sides together</b>. Nothing feels unfinished, and a bad capture is caught here instead of failing later.</div>
+      </div>
+    </div>
+
+    <div class="iter">
+      <div class="iter-n">Iteration 2</div>
+      <div class="iter-t">Stop punishing the document mismatch</div>
+      <div class="iter-flow">
+        <div class="if-step"><div class="if-k">Observed</div><div class="if-v">People selected one document type, say National ID, then presented another valid one, like a driving licence. The check could still fail, though the document was fine.</div></div>
+        <div class="if-step"><div class="if-k">Hypothesis</div><div class="if-v">If we trusted the document they actually presented, we would cut avoidable declines without weakening the check.</div></div>
+        <div class="if-step"><div class="if-k">Smallest test</div><div class="if-v">Change the verification logic, not the screen. If the captured document was a different but supported and valid type, accept it and continue.</div></div>
+        <div class="if-step measure"><div class="if-k">Measured, 15-day window</div><div class="if-v">Successful verifications went up. Declines and timeouts from wrong-type selections went down, and verification integrity held.</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Higher successful verifications</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Fewer declines</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Fewer timeouts</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">No loss of verification integrity</span></div>
+      </div>
+      <div class="biz">Genuine customers were <b>no longer turned away over a dropdown choice</b> they got wrong, so more of the same traffic converted into onboarded users.</div>
+    </div>
+
+    <p>The result carried a realisation: after capture, the system was <b>already recognising the real document reliably enough to remove the manual selection step,</b> with fallback paths kept for the uncertain cases.</p>
+
+    <div class="bigq">If the system already knew the answer, <em>why were we still asking users to provide it?</em></div>
+
+    <div class="iter win">
+      <div class="iter-n">Iteration 3</div>
+      <div class="iter-t">Remove the country and document-type screen</div>
+      <div class="iter-flow">
+        <div class="if-step"><div class="if-k">Observed</div><div class="if-v">The selection screen had quietly stopped adding value. The system was already making that call itself, reliably, in production.</div></div>
+        <div class="if-step"><div class="if-k">Hypothesis</div><div class="if-v">Removing the whole decision would cut a fundamental step and a lot of cognitive load, without hurting verification.</div></div>
+        <div class="if-step"><div class="if-k">Smallest test</div><div class="if-v">Take the screen out of the happy path, behind a staged rollout, keeping a fallback for genuinely unclear scans.</div></div>
+        <div class="if-step measure"><div class="if-k">Measured, 15-day window</div><div class="if-v">The step was gone, the journey was faster and simpler, and verification accuracy held.</div></div>
+      </div>
+      <div class="outcomes">
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">A fundamental step removed</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Faster, simpler journey</span></div>
+        <div class="outcome"><span class="oc-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="oc-t">Verification accuracy held</span></div>
+      </div>
+      <div class="biz">A <b>shorter, lower-effort path at the most valuable point of acquisition</b>, with none of the verification accuracy given up to get it.</div>
+    </div>
+
+    <div class="emph">The country and document-type selection screen, the backbone of a traditional KYC flow, was <em>removed from the happy path.</em></div>
+
+    <div class="decision">
+      <div class="dc-k">Why this was a big decision, not a small one</div>
+      <div class="dc-lead">That selection screen was not just another screen. It had become part of the product's foundation.</div>
+      <div class="reliers">
+        <div class="relier"><div class="rl-t">Engineering</div><div class="rl-s">built around it</div></div>
+        <div class="relier"><div class="rl-t">Compliance</div><div class="rl-s">relied on it</div></div>
+        <div class="relier"><div class="rl-t">Product leadership</div><div class="rl-s">hesitant to remove it</div></div>
+        <div class="relier"><div class="rl-t">The business</div><div class="rl-s">needed certainty</div></div>
+      </div>
+      <p>Almost every identity verification provider uses one, and the verification architecture leaned on it. Removing it was not simply my call to make. I had to build enough production evidence to convince Engineering, Compliance, Product leadership, and the business that taking it out would reduce friction <b>without increasing risk.</b> That is exactly why it became the final iteration, not the first.</p>
+      <div class="dc-earned">The redesign was never about persuading people with opinions. It was about earning trust through evidence.</div>
+    </div>
+
+    <div class="callout">
+      <div class="cl-l">The UX principle underneath</div>
+      Hick's Law: the more choices you put in front of someone, the longer and harder the decision. Once the system could identify the document reliably itself, asking users to choose the country and type first was avoidable load. Removing it was recognition over recall, lower interaction cost, and error prevention, all at once.
+    </div>
+
+    <div style="margin-top:30px">
+      <div class="subhead">The flow got shorter with each change</div>
+      <div class="shrink">
+        <div class="shrink-node"><div class="sn-n">6</div><div class="sn-l">steps to start</div></div>
+        <div class="shrink-link"><span class="sl-arw">&rarr;</span><span class="sl-it">Iteration 1</span><span class="sl-d">front and back in one capture, two previews became one</span></div>
+        <div class="shrink-node"><div class="sn-n">4</div><div class="sn-l">after continuous capture</div></div>
+        <div class="shrink-link"><span class="sl-arw">&rarr;</span><span class="sl-it">Iteration 3</span><span class="sl-d">the selection screen removed</span></div>
+        <div class="shrink-node win"><div class="sn-n">3</div><div class="sn-l">the flow today</div></div>
+      </div>
+      <div class="cap">Each production-validated change made the journey a little simpler. Iteration 2 did not remove a screen; it changed the logic that made it safe to remove the selection screen in iteration 3.</div>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-k">A shorter path is only a win if</div>
+      <div class="bridge-l">it still holds up when the model is wrong. <b>So before I trusted it, I tried to break it.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- VALIDATION: how we knew it worked -->
+  <section class="sec" id="validation">
+    <div class="kicker"><span class="step">Validation</span></div>
+    <h2>Fewer screens mean nothing if the check gets weaker.</h2>
+    <p>
+      So I treated safety as part of the design, not a review at the end. On the same production measures, the
+      behaviours that caused failed checks fell, and verification integrity held. Then I made sure the flow
+      stayed safe for exactly the cases the model could not be certain about.
+    </p>
+
+    <div class="subhead">First, I designed the wrong-answer cases</div>
+    <div class="matrix">
+      <div class="mrow head"><div class="mcell">If this happens</div><div class="mcell">The system asks for</div><div class="mcell">Why that is the smallest fix</div></div>
+      <div class="mrow"><div class="mcell mode" data-l="If this happens">Not sure of country or type</div><div class="mcell" data-l="Asks for">A quick confirm, or a short list to pick from</div><div class="mcell" data-l="Why">One small step instead of starting over</div></div>
+      <div class="mrow"><div class="mcell mode" data-l="If this happens">Document not supported</div><div class="mcell" data-l="Asks for">A different, accepted document</div><div class="mcell" data-l="Why">Tell people early, with a way forward, not a dead end</div></div>
+      <div class="mrow"><div class="mcell mode" data-l="If this happens">Photo blurry or cropped</div><div class="mcell" data-l="Asks for">A retake, with clear guidance</div><div class="mcell" data-l="Why">Fix the photo now, before the check fails later</div></div>
+      <div class="mrow"><div class="mcell mode" data-l="If this happens">Keeps failing or looks unusual</div><div class="mcell" data-l="Asks for"><span class="esc">Nothing. It goes to a human reviewer</span></div><div class="mcell" data-l="Why">A risky, uncertain case belongs with a person, not a guess</div></div>
+    </div>
+    <div class="emph">Ask for the smallest thing that fixes the problem.</div>
+    <div class="cap">Every uncertain case gets a way forward, never a dead end. And when the stakes are too high to guess, the case goes to a person. <b>Human review became a designed outcome, not a failure.</b></div>
+
+    <div class="subhead">Then, where the system is allowed to act on its own</div>
+    <div class="gate">
+      <div class="gate-node">Document captured</div>
+      <div class="gate-stem"></div>
+      <div class="gate-node decision">How confident is the system?</div>
+      <div class="gate-stem"></div>
+      <div class="gate-share"><div class="a" style="width:76%"></div><div class="b" style="width:18%"></div><div class="c" style="width:6%"></div></div>
+      <div class="gate-legend"><span>Most captures</span><span>Some</span><span>A few</span></div>
+      <div class="gate-branches">
+        <div class="gate-branch hi"><div class="gb-s">Most captures</div><div class="gb-a">Keep going</div><div class="gb-d">Country and type read, clean photo, confirm skipped. Most people never see a step they did not need.</div></div>
+        <div class="gate-branch mid"><div class="gb-s">Some</div><div class="gb-a">Ask one thing</div><div class="gb-d">Show the photo to confirm, or offer a single choice. One quick step, without starting over.</div></div>
+        <div class="gate-branch esc"><div class="gb-s">A few</div><div class="gb-a">Hand to a person</div><div class="gb-d">The case goes to a human reviewer. A normal, correct outcome here, not a failure.</div></div>
+      </div>
+    </div>
+    <div class="cap">The bar shows the shape we designed for, not exact measured numbers. Most people sail through; only a few need a human.</div>
+
+    <div class="edgecase">
+      <div class="ec-phone"><img src="assets/new-flow/new-flow-front-proof-preview.png" alt="Low-confidence path: the system shows the captured document and asks the user to confirm or retake"></div>
+      <div>
+        <div class="ec-k">The uncertain path, in the product</div>
+        <div class="ec-t">When the system is not fully confident a capture is clean, it does not fail the person. It shows exactly what it captured and asks one thing: <b>confirm, or retake.</b></div>
+        <div class="ec-note">One quick step, never a dead end, and never a silent decline.</div>
+      </div>
+    </div>
+
+    <div class="callout"><div class="cl-l">A signal from the market</div>After we shipped this, a competing verification provider later moved in the same direction. Not proof we caused it, but a good sign this was where the category was heading.</div>
+
+    <div class="biz">For enterprise clients, this mattered as much as the speed: a simpler, faster flow they could adopt <b>without taking on any new verification risk.</b></div>
+
+    <div class="bridge">
+      <div class="bridge-k">It held up technically</div>
+      <div class="bridge-l">Now it had to hold up somewhere less forgiving: <b>a compliance audit.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <section class="sec band" id="compliance">
+    <div class="kicker"><span class="step">Compliance</span></div>
+    <h2>Compliance was a partner, not a gate at the end.</h2>
+    <p>
+      In a regulated product, compliance can feel like the team that says no. I brought them in early,
+      while I was still shaping the flow, not at the end for sign-off.
+    </p>
+    <div class="compare">
+      <div class="cc concern">
+        <div class="cc-k">Their concern</div>
+        <div class="cc-q">If the system starts inferring things automatically, can we still trust the result, trace how we got it, and defend it in an audit?</div>
+      </div>
+      <div class="cc answer">
+        <div class="cc-k">How the design already answered it</div>
+        <ul class="checks">
+          <li><b>Confidence thresholds</b>, set with engineering against real accuracy, so automation only acts when it is sure.</li>
+          <li><b>A full record</b> of every decision the system made.</li>
+          <li><b>A human review path</b> for anything uncertain.</li>
+          <li><b>Data minimisation</b>, collecting only what the check genuinely needs.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="aligned">
+      <div class="al-pair"><span class="al-chip">Good UX</span><span class="al-eq">=</span><span class="al-chip">What data protection requires</span></div>
+      <div class="al-line">"Only ask for what you need" was never a trade-off between experience and compliance. <em>It was the same principle, serving both at once.</em></div>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-k">Cleared internally</div>
+      <div class="bridge-l">The idea was sound, and safe. <b>The real test was the one customer with the most to lose.</b></div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- ENTERPRISE -->
+  <section class="sec feature" id="enterprise">
+    <div class="kicker"><span class="step">The hardest customer</span></div>
+    <h2>Our biggest customer said no. That mattered most.</h2>
+    <p>
+      ByteDance, who run verification for TikTok, review any big change before adopting it. I presented the
+      redesign with the evidence behind it. They said no, on operational risk: at their volume, even a small
+      regression affects millions of people, and they would not bet that on a prediction.
+    </p>
+    <div class="timeline">
+      <div class="tl"><div class="tt">I presented the redesign, with the evidence</div><div class="td">The problem, the design, and the expected impact, taken straight to their team.</div></div>
+      <div class="tl turn"><div class="tt">ByteDance said no, on operational risk</div><div class="td">Not a no to the idea. A no to betting millions of users on a prediction. They were the one customer not ready to accept that risk yet.</div></div>
+      <div class="tl"><div class="tt">We launched it for every other customer</div><div class="td">Every other customer approved the redesign and moved forward. It went live in production across the customer base, with ByteDance deliberately held back until there was proof.</div></div>
+      <div class="tl"><div class="tt">Production gave us the evidence</div><div class="td">Across the rest of the customer base, on the exact measures ByteDance cared about, the drop-off behaviours fell and verification integrity held. A forecast had become a fact.</div></div>
+      <div class="tl win"><div class="tt">We went back to ByteDance, with proof</div><div class="td">The same proposal, now carrying real production results for the exact risk they had raised. This time they approved.</div></div>
+      <div class="tl win"><div class="tt">It went live for TikTok</div><div class="td">I worked with their team and our engineers through the rollout.</div></div>
+    </div>
+
+    <div class="payoff">
+      <div class="pf-k">The payoff</div>
+      <div class="pf-lead">The evidence cleared the exact risk they had raised.</div>
+      <p>ByteDance had declined on operational risk, not on the idea. What changed their answer was production data from the rest of the customer base, measured on the same drop-off behaviours they cared about, showing the redesign reduced friction while verification held. On that evidence, they approved the rollout for TikTok.</p>
+      <div class="pf-close">That was the moment it all came together: months of research, incremental experiments proven in production, and hard-won cross-functional trust. At this scale you do not earn the most risk-averse customer's approval with a better argument. You earn it with evidence.</div>
+    </div>
+
+    <div class="bridge">
+      <div class="bridge-k">So, after all of it</div>
+      <div class="bridge-l">What actually changed, for the people using this and for the business?</div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section class="sec band" id="impact">
+    <div class="kicker"><span class="step">Impact</span></div>
+    <h2>The experience I shipped, and what it changed.</h2>
+
+    <div class="subhead">The redesigned flow, moment by moment</div>
+    <p>
+      The old flow opened by asking people to classify their document. The redesigned flow opens where it
+      should have all along, at the camera, and lets the system do the rest.
+    </p>
+    <div class="walk">
+      <div class="wstep">
+        <div class="wphone">
+          <img src="assets/new-flow/new-flow-front-capture.png" alt="Redesigned front capture: the flow opens directly at the camera with a UK driving licence in frame, auto-capturing, with no document-type selection beforehand">
+        </div>
+        <div class="wbody">
+          <div class="wnum">01</div>
+          <div class="wkick">Step 1 &middot; Capture</div>
+          <div class="wtitle">It opens at the camera</div>
+          <p class="wtext">No country screen, no document-type screen. The two manual selections that used to come first are gone. The user just holds up their ID and it auto-captures.</p>
+          <div class="wanno">The same UK driving licence that could be declined in the old flow, for not matching an earlier choice, now simply works. <b>The system reads the country and type from the capture itself.</b></div>
+        </div>
+      </div>
+
+      <div class="wconnect">&darr;</div>
+
+      <div class="wstep rev">
+        <div class="wphone">
+          <img src="assets/new-flow/new-flow-back-capture.png" alt="Redesigned back capture: the same camera session continues straight to the back of the same licence, with no confirmation screen in between">
+        </div>
+        <div class="wbody">
+          <div class="wnum">02</div>
+          <div class="wkick">Step 1 &middot; Same session</div>
+          <div class="wtitle">Straight on to the back</div>
+          <p class="wtext">The camera stays open and asks for the back of the same document. There is no screen in between, and no moment that reads as finished.</p>
+          <div class="wanno">This is the fix for the capture confusion: <b>front and back are one continuous step</b>, so people no longer put their ID away or re-shoot the front.</div>
+        </div>
+      </div>
+
+      <div class="wconnect">&darr;</div>
+
+      <div class="wstep">
+        <div class="wphone">
+          <img src="assets/new-flow/new-flow-front-proof-preview.png" alt="Redesigned proof preview: the front and back are shown together on a single screen with one Confirm or Retake choice">
+        </div>
+        <div class="wbody">
+          <div class="wnum">03</div>
+          <div class="wkick">Step 2 &middot; One preview</div>
+          <div class="wtitle">Both sides, confirmed once</div>
+          <p class="wtext">A single proof preview shows the front and back together, with a clear Confirm or Retake. Two separate previews became one.</p>
+          <div class="wanno">A poor capture is caught <b>here, before the check runs</b>, instead of failing silently later. One decision, not two.</div>
+        </div>
+      </div>
+
+      <div class="wconnect">&darr;</div>
+
+      <div class="wstep rev">
+        <div class="wphone">
+          <img src="assets/new-flow/new-flow-success.png" alt="Verification successful screen confirming the identity check passed">
+        </div>
+        <div class="wbody">
+          <div class="wnum">04</div>
+          <div class="wkick">Step 3 &rarr; verified</div>
+          <div class="wtitle">A quick selfie, then done</div>
+          <p class="wtext">The last step is a short face check, matched against the document. Then the verification completes.</p>
+          <div class="wanno">Six steps became three, and <b>most of them happen automatically.</b> The person is verified without ever classifying their own document.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subhead">The complete journey, before and after</div>
+    <div class="fullflow">
+      <div class="ff-row old">
+        <div class="ff-label"><span class="ff-dot"></span>Before &middot; the old flow</div>
+        <div class="ff-frame"><img src="assets/old-flow/old-flow-combined-full-flow.png" alt="The full old verification flow: a long sequence from country and document selection through two separate captures and two proof previews and the selfie to the result"></div>
+      </div>
+      <div class="ff-row new">
+        <div class="ff-label"><span class="ff-dot"></span>After &middot; the redesigned flow</div>
+        <div class="ff-frame"><img src="assets/new-flow/New-flow-combined-1.png" alt="The full redesigned verification flow: a shorter sequence from continuous front and back capture through a single combined proof preview and the selfie to the verified result"></div>
+      </div>
+    </div>
+    <div class="ff-hint">Scroll each flow to compare &rarr;</div>
+
+    <div class="emph">Now, what I can honestly claim, and what I won't.</div>
+
+    <div class="subhead">The two patterns, measured again after launch</div>
+    <p>
+      Five months later, the Data Analyst team ran exactly the same analysis, the same measures over the same
+      fifteen-day window, on the fully live redesign. The two behaviours that started this project had both
+      fallen sharply.
+    </p>
+
+    <div class="callout">
+      <div class="cl-l">A built-in control, not just a before and after</div>
+      The strongest evidence was not these two snapshots months apart. It was the rollout itself. Every other customer moved to the new flow while <b>ByteDance deliberately stayed on the previous experience</b> until the evidence was in. Over the same window and the same markets, the two behaviours fell for the migrated customers and held steady for the cohort still on the old flow. That side by side is what lets me attribute the drop to the redesign rather than to something else changing over time. The after-launch numbers below confirm it held once the redesign was fully live.
+    </div>
+
+    <div class="analytics">
+      <div class="an-head">
+        <div class="an-title">Document verification &middot; same analysis, after launch</div>
+        <div class="an-range">1 to 15 March 2026</div>
+      </div>
+      <div class="an-stats">
+        <div class="an-stat"><div class="an-n">51,684</div><div class="an-k">verifications analysed</div></div>
+        <div class="an-stat"><div class="an-n">9.1%</div><div class="an-k">declined &middot; was 14.3%</div></div>
+        <div class="an-stat"><div class="an-n">2.9%</div><div class="an-k">timed out &middot; was 6.6%</div></div>
+      </div>
+      <div class="an-find">
+        <div class="an-find-h">The two patterns, before and after</div>
+        <div class="prova">
+          <div class="prova-card">
+            <div class="pv-name">Document mismatch</div>
+            <div class="pv-sub">declines it caused</div>
+            <div class="pv-ba"><span class="pv-before">2,146</span><span class="pv-arrow">&rarr;</span><span class="pv-after">193</span></div>
+            <div class="pv-delta">down 91%</div>
+          </div>
+          <div class="prova-card">
+            <div class="pv-name">Capture confusion</div>
+            <div class="pv-sub">timeouts and retries it caused</div>
+            <div class="pv-ba"><span class="pv-before">2,514</span><span class="pv-arrow">&rarr;</span><span class="pv-after">654</span></div>
+            <div class="pv-delta">down 74%</div>
+          </div>
+        </div>
+      </div>
+      <div class="an-foot">Document mismatch was designed out with the selection screen. Capture confusion fell once front and back became one continuous step.</div>
+    </div>
+
+    <div class="roimodel">
+      <span class="rm-tag">Estimated from production data &middot; not a measured KPI</span>
+      <div class="rm-lead">From fewer failed checks to more customers through the door.</div>
+      <div class="rm-calc">
+        <div class="rm-row"><span class="rm-op"></span><span class="rm-v">1,953</span><span class="rm-l">fewer document-mismatch declines in the window (measured: 2,146 &rarr; 193)</span></div>
+        <div class="rm-row"><span class="rm-op">+</span><span class="rm-v">1,860</span><span class="rm-l">fewer capture-confusion timeouts in the same window (measured: 2,514 &rarr; 654)</span></div>
+        <div class="rm-row total"><span class="rm-op">=</span><span class="rm-v">~3,800</span><span class="rm-l">legitimate verifications that used to fail for interaction reasons, now completing, in one fifteen-day window on the traffic analysed</span></div>
+      </div>
+      <div class="rm-scale">At that rate, on the same slice of traffic, roughly <b>7,600 more legitimate customers onboarded a month</b> who the old flow would have turned away before they ever became customers.</div>
+      <div class="rm-note">This is a projection, not a counted onboarding metric. It takes the measured fall in the two interaction-driven failure patterns and assumes those recovered users clear the remaining steps at the normal rate. The failure reductions are measured and exact; the customers-onboarded figure is the business translation of them.</div>
+    </div>
+
+    <div class="emph">Behind every recovered verification is a legitimate customer who now completes onboarding instead of being turned away at the front door. The shorter flow was never the point. <em>Onboarding more of the right people, with less friction and no loss of integrity, was.</em></div>
+
+    <div class="subhead">What the redesign delivered</div>
+    <div class="out-grid">
+      <div class="out-cell"><div class="n">6 &rarr; 3</div><div class="k">steps in the verification flow</div></div>
+      <div class="out-cell"><div class="n">2 &rarr; 0</div><div class="k">manual selections before the camera opens</div></div>
+      <div class="out-cell"><div class="n">TikTok</div><div class="k">adopted by ByteDance after production evidence, then live for their app</div></div>
+    </div>
+    <div class="callout"><div class="cl-l">What is measured, and what is modelled</div>Every hard number here comes from the same internal analytics I used to find the problems: the same decline codes and capture telemetry, over the same fifteen-day window, before and after rollout. The failure reductions and the structural changes are measured and exact. The one figure I modelled, the additional customers onboarded, is labelled as an estimate and derived directly from those measured reductions, never presented as a counted KPI.</div>
+
+    <div class="bridge">
+      <div class="bridge-k">The outcome mattered</div>
+      <div class="bridge-l">What it taught me about simplifying a product mattered more.</div>
+      <div class="bridge-caret">&darr;</div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section class="sec" id="takeaway">
+    <div class="kicker"><span class="step">What I took away</span></div>
+    <h2>It changed how I think about simplifying a product.</h2>
+    <div class="mindset">
+      <div class="ms before"><div class="ms-k">Before this project</div><div class="ms-t">Simplifying meant reducing the interface. Fewer screens, less clutter.</div></div>
+      <div class="ms-arrow">&rarr;</div>
+      <div class="ms after"><div class="ms-k">After</div><div class="ms-t">Simplifying meant moving work off the user, onto the system.</div></div>
+    </div>
+    <div class="emph">The question changed. Not "what should the user do here," but <em>"what should the system already know before it asks the user anything."</em></div>
+    <p>
+      That is the lens I bring to every complex product now. Find the work sitting on the wrong side of
+      that line, and move it. The screens get simpler on their own.
+    </p>
+  </section>
+
+</main>
+
+<div class="ending"><div class="ending-inner">
+  <div class="eyebrow">The one line</div>
+  <p class="big">I did not set out to remove screens. I set out to stop asking people for things the system already knew, and the simpler flow followed from that.</p>
+  <div class="sig">
+    <a href="../../index.html">&larr; Back to portfolio</a>
+    <a href="index.html">Read the short version &rarr;</a>
+    <a href="https://www.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=77-27894&amp;t=WFjrWP232E0Ev77A-1" target="_blank" rel="noopener">View the Figma file &rarr;</a>
+  </div>
+</div></div>
+
+<script>
+(function(){
+  var docEl=document.documentElement;
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var bar=document.getElementById('progressBar');
+  function prog(){
+    var max=docEl.scrollHeight-docEl.clientHeight;
+    var p=max>0?Math.min(1,Math.max(0,(window.pageYOffset||docEl.scrollTop)/max)):0;
+    if(bar){bar.style.width=(p*100).toFixed(2)+'%';}
+  }
+  window.addEventListener('scroll',prog,{passive:true});
+  window.addEventListener('resize',prog);
+  prog();
+
+  if(reduce || !('IntersectionObserver' in window)) return;
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -6% 0px'});
+
+  function tag(kids){
+    var vis=0;
+    Array.prototype.forEach.call(kids,function(el){
+      var r=el.getBoundingClientRect();
+      if(r.top < window.innerHeight*0.92){return;} /* already in view on load: no animation, no flash */
+      el.classList.add('reveal');
+      el.style.transitionDelay=Math.min(vis,5)*55+'ms';
+      vis++;
+      io.observe(el);
+    });
+  }
+  document.querySelectorAll('main > section.sec').forEach(function(sec){tag(sec.children);});
+  var ei=document.querySelector('.ending-inner'); if(ei){tag(ei.children);}
+})();
+</script>
+<script>
+(function(){
+  var subnav=document.getElementById('subnav');
+  var nav=subnav?subnav.querySelector('.subnav-inner'):null;
+  if(!nav) return;
+  var links=[].slice.call(nav.querySelectorAll('.chip'));
+  if(!links.length) return;
+  var rm=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets=links.map(function(a){return {a:a, el:document.getElementById(a.getAttribute('href').slice(1))};}).filter(function(t){return t.el;});
+  if(!targets.length) return;
+
+  var ticking=false, activeHref=null, lockUntil=0;
+  function top(el){return el.getBoundingClientRect().top + window.pageYOffset;}
+  function setActive(a){
+    if(!a || a.getAttribute('href')===activeHref) return;
+    activeHref=a.getAttribute('href');
+    links.forEach(function(x){x.classList.toggle('active', x===a);});
+    var left=a.offsetLeft - nav.clientWidth/2 + a.clientWidth/2;
+    nav.scrollTo({left:Math.max(0,left), behavior: rm?'auto':'smooth'});
+  }
+  function update(){
+    ticking=false;
+    if(Date.now()<lockUntil) return;
+    var offset=subnav.offsetHeight + 28;
+    var line=window.pageYOffset + offset;
+    var cur=targets[0].a;
+    for(var i=0;i<targets.length;i++){ if(top(targets[i].el) <= line){ cur=targets[i].a; } else { break; } }
+    if((window.innerHeight + window.pageYOffset) >= document.documentElement.scrollHeight - 4){ cur=targets[targets.length-1].a; }
+    setActive(cur);
+  }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  links.forEach(function(a){ a.addEventListener('click', function(){ lockUntil=Date.now() + (rm?0:800); setActive(a); }); });
+  update();
+})();
+</script>
+</body></html>

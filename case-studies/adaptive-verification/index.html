@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Faster Identity Verification · KYC Verification · Khushboo Khan</title>
+<meta name="description" content="Executive case: redesigning a KYC document check from a rigid, form-first flow into an adaptive one that asks the user only for what the system cannot work out itself. The problem, the principle, and the outcome." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ===========================================================
+   EXECUTIVE CASE  ·  Adaptive Verification (KYC)
+   Editorial, green-on-black brand. Problem, principle, impact.
+   =========================================================== */
+:root{
+  --bg:#050706; --bg-soft:#080b0a; --surface:#0d110f; --surface-2:#121714;
+  --ink:#F4F7F5; --muted:#A4AFA9; --faint:#79827C; --line:rgba(255,255,255,.11); --line-2:rgba(255,255,255,.06);
+  --accent:#34E29B; --accent-2:#9EFAD0; --good:#34E29B; --bad:#E0625F; --warn:#E8A23D;
+  --l1:#5B8DEF; --l2:#3FD0C9; --l3:#34E29B; --l4:#B57EDC; --l5:#E8A23D;
+  --disp:"Space Grotesk",sans-serif; --sans:"Inter",sans-serif; --mono:"IBM Plex Mono",monospace;
+  --max:1180px; --measure:760px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(1100px 700px at 84% -8%,rgba(52,226,155,.15),transparent 56%),radial-gradient(900px 600px at -4% 4%,rgba(91,141,239,.09),transparent 52%),radial-gradient(900px 760px at 50% 118%,rgba(232,162,61,.06),transparent 60%)}
+a{color:inherit;text-decoration:none}::selection{background:rgba(52,226,155,.28);color:#fff}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:0;z-index:200;background:var(--accent);color:#04130d;padding:.7rem 1.1rem;border-radius:0 0 10px 0;font-weight:600}.skip:focus{left:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}.measure{max-width:var(--measure)}
+.chrome{border-bottom:1px solid var(--line-2);position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(5,7,6,.88),rgba(5,7,6,.45))}
+.chrome-in{max-width:var(--max);margin:0 auto;padding:13px 32px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--faint)}
+.chrome-in a.back{color:var(--muted);display:inline-flex;gap:.5rem;align-items:center;transition:color .25s}.chrome-in a.back:hover{color:var(--ink)}
+.chrome-in .ident b{color:var(--ink);font-weight:500}.chrome-in .caret{color:var(--accent);margin:0 7px}
+.hero{padding:clamp(64px,10vw,128px) 0 clamp(20px,3vw,32px)}
+.spectrum{display:flex;gap:6px;margin-bottom:30px;max-width:360px}.spectrum span{height:5px;border-radius:3px;flex:1}
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:.6rem;margin-bottom:24px}.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(48px,8.4vw,110px);line-height:1.02;letter-spacing:-.045em;margin-bottom:28px}
+.hero h1 em{font-style:normal;color:var(--accent);text-shadow:0 0 46px rgba(52,226,155,.45)}
+.hero .thesis{font-family:var(--disp);font-weight:400;font-size:clamp(21px,2.6vw,30px);line-height:1.4;color:var(--muted);max-width:36ch;letter-spacing:-.01em}.hero .thesis b{color:var(--ink);font-weight:500}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:52px;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.meta-grid .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}.meta-grid .v{font-size:15px;color:var(--ink);font-weight:500}
+@media(max-width:720px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+.role-band{padding:clamp(4px,1vw,10px) 0 clamp(32px,4vw,46px)}
+.role{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.role-row{display:grid;grid-template-columns:180px 1fr;gap:24px;padding:18px 26px;border-bottom:1px solid var(--line);align-items:start}
+.role-row:last-child{border-bottom:none}
+.role-k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding-top:3px}
+.role-v{font-size:15px;color:var(--muted);line-height:1.6}.role-v b{color:var(--ink);font-weight:600}
+@media(max-width:640px){.role-row{grid-template-columns:1fr;gap:6px;padding:16px 20px}}
+section.act{padding:clamp(52px,7vw,104px) 0;position:relative}
+.act-marker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:.6rem}.act-marker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+h2{font-family:var(--disp);font-weight:600;font-size:clamp(36px,6vw,72px);line-height:1.02;letter-spacing:-.032em;margin-bottom:26px}
+h2 em{font-style:normal;color:var(--accent);text-shadow:0 0 34px rgba(52,226,155,.4)}
+p{margin-bottom:20px;color:var(--muted);max-width:var(--measure)}p strong{color:var(--ink);font-weight:600}
+.lead{font-family:var(--disp);font-weight:400;font-size:clamp(20px,2.3vw,26px);line-height:1.5;color:var(--ink);letter-spacing:-.01em;max-width:36ch}
+.mt{margin-top:48px}
+.pull{font-family:var(--disp);font-weight:500;font-size:clamp(24px,3.1vw,36px);line-height:1.3;color:#fff;padding:14px 0 14px 34px;border-left:3px solid var(--accent);margin:52px 0;max-width:26ch;letter-spacing:-.012em}.pull em{font-style:normal;color:var(--accent)}.pull .src-l{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint);margin-top:14px;font-weight:400}
+.pull.alarm{display:flex;align-items:center;gap:18px;font-size:clamp(20px,2.4vw,28px);max-width:none;width:100%;color:var(--ink);border-left-color:var(--bad);background:linear-gradient(120deg,rgba(224,98,95,.12),transparent 72%);border-radius:0 14px 14px 0;padding:24px 30px;box-shadow:0 0 54px -26px rgba(224,98,95,.8)}
+.pull.alarm em{color:var(--bad);text-shadow:0 0 30px rgba(224,98,95,.5)}
+.pull.alarm .pull-flag{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;color:var(--bad);background:rgba(224,98,95,.15);border:1px solid rgba(224,98,95,.4);box-shadow:0 0 22px -6px rgba(224,98,95,.7)}
+.pull.alarm .pull-flag svg{width:19px;height:19px}
+.pull.alarm .pull-txt{flex:1}
+.note{margin:32px 0;padding:22px 24px 22px 26px;border-left:3px solid var(--accent-2);background:var(--surface);border-radius:0 10px 10px 0;font-size:14.5px;color:var(--muted);line-height:1.6;max-width:var(--measure)}.note .n-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);font-weight:500;margin-bottom:10px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:40px 0}
+.stat-cell{background:var(--bg-soft);padding:30px 26px}
+.stat-cell .n{font-family:var(--disp);font-size:clamp(26px,3.2vw,42px);font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:12px;color:var(--ink)}
+.stat-cell .n.good{color:var(--good);text-shadow:0 0 30px rgba(52,226,155,.3)}.stat-cell .n.bad{color:var(--bad)}.stat-cell .n.warn{color:var(--warn)}.stat-cell .l{font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:760px){.stat-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:460px){.stat-grid{grid-template-columns:1fr}}
+.mega{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:baseline;margin:40px 0}
+.mega .n{font-family:var(--disp);font-size:clamp(64px,11vw,150px);font-weight:600;letter-spacing:-.05em;line-height:.84;color:var(--accent);text-shadow:0 0 56px rgba(52,226,155,.32);white-space:nowrap}
+.mega .l{font-family:var(--disp);font-size:clamp(21px,2.4vw,30px);line-height:1.28;font-weight:500;letter-spacing:-.01em;color:var(--ink)}.mega .l small{display:block;font-family:var(--sans);font-size:14.5px;color:var(--muted);font-weight:400;margin-top:12px;line-height:1.55}
+@media(max-width:720px){.mega{grid-template-columns:1fr;gap:10px}}
+.ctaband{border:1px solid var(--line);border-radius:18px;background:linear-gradient(140deg,rgba(52,226,155,.09),transparent 70%);padding:clamp(30px,5vw,52px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;box-shadow:0 0 60px -30px rgba(52,226,155,.6);margin-top:20px}
+.ctaband h3{font-family:var(--disp);font-weight:600;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.02em;max-width:18ch}.ctaband .sub{font-size:14px;color:var(--muted);margin-top:8px;max-width:46ch}
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:13px;letter-spacing:.04em;border-radius:999px;padding:.95rem 1.5rem;transition:.3s}
+.btn-solid{background:var(--accent);color:#04130d;font-weight:600}.btn-solid:hover{background:#48eaa6;transform:translateY(-2px)}.btn-ghost{border:1px solid var(--line);color:var(--ink)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.ending{padding:clamp(80px,12vw,150px) 0;background:radial-gradient(ellipse at 50% 120%,rgba(52,226,155,.12),transparent 60%);border-top:1px solid var(--line)}
+.ending p{font-family:var(--disp);font-size:clamp(30px,5vw,58px);line-height:1.06;color:#fff;font-weight:600;letter-spacing:-.03em;max-width:20ch}.ending p em{font-style:normal;color:var(--accent);text-shadow:0 0 44px rgba(52,226,155,.45)}
+.ending .sig{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--faint)}.ending .sig a:hover{color:var(--accent)}
+html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{transition:opacity .8s var(--ease),transform .8s var(--ease)}[data-rev].in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html.js [data-rev]:not(.in){opacity:1;transform:none}[data-rev]{transition:none}}
+
+/* prominent live-product + confidentiality band — centered, icon aligned to heading, CTA at bottom */
+.livebox{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;border:1px solid rgba(232,162,61,.45);border-radius:18px;background:linear-gradient(120deg,rgba(232,162,61,.14),rgba(232,162,61,.02) 60%,transparent);padding:clamp(26px,3.6vw,40px);box-shadow:0 0 64px -26px rgba(232,162,61,.6)}
+.livebox .n-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#E8A23D;display:inline-flex;align-items:center;gap:.5rem}
+.livebox .n-label::before{content:"";width:7px;height:7px;border-radius:50%;background:#E8A23D;box-shadow:0 0 10px #E8A23D}
+.livebox .lb-head{display:flex;align-items:center;justify-content:center;gap:16px}
+.livebox h3{font-family:var(--disp);font-weight:600;font-size:clamp(21px,2.5vw,28px);color:var(--ink);letter-spacing:-.015em;text-align:left}
+.livebox p{font-size:14.5px;color:var(--muted);margin:0;max-width:56ch}.livebox p b{color:var(--ink);font-weight:600}
+.livebox .lb-cta{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:13px;letter-spacing:.03em;background:#E8A23D;color:#1c1305;font-weight:600;border-radius:999px;padding:1rem 1.5rem;white-space:nowrap;transition:.3s;margin-top:4px}
+.livebox .lb-cta:hover{background:#f0b659;transform:translateY(-2px)}.livebox .lb-cta svg{width:15px;height:15px}
+.livebox .conf-ico{flex:0 0 auto;width:54px;height:54px;border-radius:14px;display:grid;place-items:center;color:#E8A23D;background:rgba(232,162,61,.14);border:1px solid rgba(232,162,61,.45);box-shadow:0 0 26px -8px rgba(232,162,61,.7)}
+.livebox .conf-ico svg{width:26px;height:26px}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<div class="chrome">
+  <div class="chrome-in">
+    <a class="back" href="../../index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Khushboo Khan</a>
+    <span class="ident">Case Study<span class="caret">/</span>KYC Verification<span class="caret">/</span>Executive</span>
+  </div>
+</div>
+
+<header class="hero wrap" id="main">
+  <div data-rev>
+    <div class="spectrum" aria-hidden="true"><span style="background:var(--l1)"></span><span style="background:var(--l2)"></span><span style="background:var(--l3)"></span><span style="background:var(--l4)"></span><span style="background:var(--l5)"></span></div>
+    <div class="eyebrow">Case study &middot; KYC Verification</div>
+    <h1>Faster identity verification. <em>Fewer steps</em>, fewer drop-offs.</h1>
+    <p class="thesis"><b>A global identity verification provider</b> runs the KYC checks that other businesses rely on to confirm a new user is who they claim to be. I led the redesign of its document verification flow, <b>shifting work off the user and onto the system</b> so the check confirms what it can automatically and asks the person only when it needs to.</p>
+  </div>
+</header>
+
+<section class="role-band">
+  <div class="wrap">
+    <div class="role" data-rev>
+      <div class="role-row"><span class="role-k">Role</span><span class="role-v"><b>Lead Product Designer</b></span></div>
+      <div class="role-row"><span class="role-k">Ownership</span><span class="role-v">Product strategy, UX research, behavioural analysis, interaction design, experimentation strategy, stakeholder alignment, and rollout planning.</span></div>
+      <div class="role-row"><span class="role-k">Partnered with</span><span class="role-v">The <b>Data Analyst team</b>, who quantified the patterns from existing decline codes and production telemetry; <b>Engineering</b>, who built and safely released each iteration; and <b>Compliance</b>, who signed off every change before rollout.</span></div>
+      <div class="role-row"><span class="role-k">ROI</span><span class="role-v">Reduced verification time, fewer avoidable declines, improved verification success, and more successful customer onboarding.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" style="margin-bottom:8px">
+  <div class="livebox" data-rev>
+    <div class="n-label">Confidentiality</div>
+    <div class="lb-head">
+      <div class="conf-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.4" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+      <h3>Live in production. Implementation details under NDA.</h3>
+    </div>
+    <p>This is real, shipped work for a live enterprise product. The company name, production data, internal design files, and workflow artefacts are protected under NDA and are not shown here. This executive summary covers the product thinking, strategy, and outcomes.</p>
+    <a class="lb-cta" href="detailed.html">View the detailed case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</div>
+
+<main>
+
+<section class="act">
+  <div class="wrap">
+    <div data-rev><div class="act-marker"><span class="dot"></span>The problem</div>
+    <h2>A check that failed <em>valid users</em>.</h2></div>
+    <div class="measure" data-rev>
+      <p class="lead">The verification worked, but it front-loaded manual steps. It asked people to classify their own document before the camera opened, then captured the front and back of a single ID as two separate sessions.</p>
+      <p>Two behaviours recurred in production. People selected one document type and then presented a different but valid one, and the mismatch caused a decline. And because a mid-capture confirmation looked like the end of the process, many stopped early or re-shot the wrong side. Both behaviours were predictable, given what the flow asked people to do.</p>
+    </div>
+    <div class="stat-grid" data-rev>
+      <div class="stat-cell"><div class="n bad">6</div><div class="l">steps in the original verification flow</div></div>
+      <div class="stat-cell"><div class="n bad">2</div><div class="l">manual selections before the camera opened</div></div>
+      <div class="stat-cell"><div class="n warn">2</div><div class="l">disconnected camera sessions, front then back</div></div>
+      <div class="stat-cell"><div class="n warn">2</div><div class="l">recurring behaviours behind most avoidable failures</div></div>
+    </div>
+    <div class="pull" data-rev>This was a product problem, <em>not a user error</em>.</div>
+  </div>
+</section>
+
+<section class="act">
+  <div class="wrap">
+    <div data-rev><div class="act-marker"><span class="dot"></span>The insight, and the move</div>
+    <h2>Ask only for what the system <em>cannot work out</em>.</h2></div>
+    <div class="measure" data-rev>
+      <p class="lead">The screens weren't the real problem. We were asking users to supply information the system could already determine from the document itself.</p>
+      <p>The redesign moved that work to the system: it reads the country and document type from the capture, checks image quality automatically, and captures front and back in one continuous step. The rule behind each decision was consistent, <strong>ask the user only for what the system cannot reliably determine</strong>, with a fallback for the cases where it can't.</p>
+      <p>I did not ship this as a single redesign. My initial plan was to remove the document-selection screen outright, but the early evidence showed the product wasn't ready for that, so I changed the approach. Each change shipped as a small, production-validated step, released to lower-risk customers first and measured before the next, until there was enough evidence to safely remove a screen the wider architecture depended on.</p>
+    </div>
+  </div>
+</section>
+
+<section class="act">
+  <div class="wrap">
+    <div data-rev><div class="act-marker"><span class="dot"></span>The impact</div>
+    <h2>Six steps to <em>three</em>.</h2></div>
+    <div class="mega" data-rev><div class="n">6 &rarr; 3</div><div class="l">steps in the verification flow.<small>The two manual selections were removed, the two camera sessions became one, and most of the check now runs automatically, with a fallback for uncertain cases.</small></div></div>
+    <div class="stat-grid" data-rev>
+      <div class="stat-cell"><div class="n good">2 &rarr; 0</div><div class="l">manual selections before the camera opens</div></div>
+      <div class="stat-cell"><div class="n good">2 &rarr; 1</div><div class="l">camera sessions, front and back now continuous</div></div>
+      <div class="stat-cell"><div class="n good">3</div><div class="l">incremental changes, each validated in production</div></div>
+      <div class="stat-cell"><div class="n good">Enterprise</div><div class="l">adopted by the company's most risk-averse enterprise customer, after production evidence</div></div>
+    </div>
+    <div class="note" data-rev><div class="n-label">Measured privately, shared as outcomes</div>The production analytics behind this work, the decline and timeout rates before and after, and a modelled estimate of the additional legitimate users who now complete onboarding, remain in the detailed case study under NDA. This summary reports the structural changes and the direction of the results: fewer avoidable declines, higher verification success on the same traffic, and a shorter flow, with no reduction in verification integrity.</div>
+    <div class="pull alarm" data-rev><span class="pull-flag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h16.9a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span><span class="pull-txt">The most demanding review came from <em>the company's most risk-averse enterprise customer</em>, who adopted the redesign only after it had been proven in production.</span></div>
+  </div>
+</section>
+
+<section class="act">
+  <div class="wrap">
+    <div class="ctaband" data-rev>
+      <div><h3>Read the full case study.</h3><div class="sub">The research, the two behavioural patterns, the incremental rollout and how each change was validated in production, the enterprise decision, and the measured impact. Password-protected for confidentiality.</div></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-solid" href="detailed.html">View the detailed case study <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="../../index.html">Back to portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="ending">
+  <div class="wrap" data-rev>
+    <div class="eyebrow" style="margin-bottom:34px">Thesis</div>
+    <p>The real change was moving the effort of verification from the person to the <em>system</em>.</p>
+    <div class="sig">
+      <span>Khushboo Khan &middot; Product Design &middot; 2025 to 2026</span>
+      <span><a href="detailed.html">View the detailed case study &rarr;</a></span>
+    </div>
+  </div>
+</section>
+
+<script>
+document.documentElement.classList.add('js');
+document.documentElement.classList.remove('loading');
+(function(){var els=[].slice.call(document.querySelectorAll('[data-rev]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});els.forEach(function(e){io.observe(e)});})();
+</script>
+</body>
+</html>
