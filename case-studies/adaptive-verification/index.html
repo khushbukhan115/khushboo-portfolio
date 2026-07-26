@@ -116,7 +116,7 @@ html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{tran
 <section class="role-band">
   <div class="wrap">
     <div class="role" data-rev>
-      <div class="role-row"><span class="role-k">Role</span><span class="role-v"><b>Lead Product Designer</b></span></div>
+      <div class="role-row"><span class="role-k">Role on this project</span><span class="role-v"><b>Lead Product Designer</b></span></div>
       <div class="role-row"><span class="role-k">Ownership</span><span class="role-v">Product strategy, UX research, behavioural analysis, interaction design, experimentation strategy, stakeholder alignment, and rollout planning.</span></div>
       <div class="role-row"><span class="role-k">Partnered with</span><span class="role-v">The <b>Data Analyst team</b>, who quantified the patterns from existing decline codes and production telemetry; <b>Engineering</b>, who built and safely released each iteration; and <b>Compliance</b>, who signed off every change before rollout.</span></div>
       <div class="role-row"><span class="role-k">ROI</span><span class="role-v">Reduced verification time, fewer avoidable declines, improved verification success, and more successful customer onboarding.</span></div>
@@ -129,9 +129,9 @@ html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{tran
     <div class="n-label">Confidentiality</div>
     <div class="lb-head">
       <div class="conf-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.4" r="1.4" fill="currentColor" stroke="none"/></svg></div>
-      <h3>Live in production. Implementation details under NDA.</h3>
+      <h3>Live in production. Shown de-identified.</h3>
     </div>
-    <p>This is real, shipped work for a live enterprise product. The company name, production data, internal design files, and workflow artefacts are protected under NDA and are not shown here. This executive summary covers the product thinking, strategy, and outcomes.</p>
+    <p>This is real, shipped work for a live enterprise product. The client is not named, customer identities and documents are redacted, and figures are de-identified and provenance-labelled. Everything shown here is safe to publish.</p>
     <a class="lb-cta" href="detailed.html">View the detailed case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
 </div>
@@ -179,7 +179,11 @@ html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{tran
       <div class="stat-cell"><div class="n good">3</div><div class="l">incremental changes, each validated in production</div></div>
       <div class="stat-cell"><div class="n good">Enterprise</div><div class="l">adopted by the company's most risk-averse enterprise customer, after production evidence</div></div>
     </div>
-    <div class="note" data-rev><div class="n-label">Measured privately, shared as outcomes</div>The production analytics behind this work, the decline and timeout rates before and after, and a modelled estimate of the additional legitimate users who now complete onboarding, remain in the detailed case study under NDA. This summary reports the structural changes and the direction of the results: fewer avoidable declines, higher verification success on the same traffic, and a shorter flow, with no reduction in verification integrity.</div>
+    <div class="stat-grid" data-rev style="margin-top:14px">
+      <div class="stat-cell"><div class="n good">14.3% &rarr; 9.1%</div><div class="l">verification declines<small>Observed in production analytics, two matched 15-day windows</small></div></div>
+      <div class="stat-cell"><div class="n good">6.6% &rarr; 2.9%</div><div class="l">capture timeouts<small>Observed in production analytics, same windows</small></div></div>
+    </div>
+    <div class="note" data-rev><div class="n-label">What is measured and what is modelled</div>The two rates above are <strong>observed</strong>, taken from production analytics across two matched 15-day windows on comparable traffic. The estimate of additional legitimate users who now complete onboarding is <strong>modelled</strong> from those rates, not a measured KPI, and is labelled as such in the detailed case study. Verification integrity held: the flow got shorter without loosening the check.</div>
     <div class="pull alarm" data-rev><span class="pull-flag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h16.9a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span><span class="pull-txt">The most demanding review came from <em>the company's most risk-averse enterprise customer</em>, who adopted the redesign only after it had been proven in production.</span></div>
   </div>
 </section>
@@ -187,7 +191,7 @@ html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{tran
 <section class="act">
   <div class="wrap">
     <div class="ctaband" data-rev>
-      <div><h3>Read the full case study.</h3><div class="sub">The research, the two behavioural patterns, the incremental rollout and how each change was validated in production, the enterprise decision, and the measured impact. Password-protected for confidentiality.</div></div>
+      <div><h3>Read the full case study.</h3><div class="sub">The research, the two behavioural patterns, the incremental rollout and how each change was validated in production, the enterprise decision, and the measured impact.</div></div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <a class="btn btn-solid" href="detailed.html">View the detailed case study <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-ghost" href="../../index.html">Back to portfolio</a>

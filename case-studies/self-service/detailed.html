@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- Per §H build note: the subhead phrase "From sales-gated to self-serve" carries the <title>, og:title, and nav label; the on-page H1 intentionally differs and leads on the reframe. -->
 <title>From sales-gated to self-serve · Self-Service Portal · Khushboo Khan</title>
-<meta name="description" content="Confidential case study: how Shufti's sales-gated onboarding became a self-serve revenue engine. The research, the four-gap diagnosis, the decisions, and the measured impact. Password-protected." />
+<meta name="description" content="How a sales-gated onboarding became a self-serve revenue engine. The research, the four-gap diagnosis, the decisions, and the measured impact." />
 <meta property="og:title" content="From sales-gated to self-serve" />
-<meta property="og:description" content="Turning a sales-gated onboarding into a self-serve revenue engine at Shufti." />
+<meta property="og:description" content="Turning a sales-gated onboarding into a self-serve revenue engine." />
 <meta property="og:type" content="article" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -79,9 +79,9 @@ p{margin-bottom:20px;color:var(--muted);max-width:var(--measure);font-size:22px;
 /* section heading — same display family as the hero H1, one step down */
 h2{font-family:var(--disp);font-weight:500;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.05;letter-spacing:-.035em;margin-bottom:24px}
 h2 em{font-style:normal;color:var(--accent);text-shadow:0 0 34px rgba(52,226,155,.4)}
-/* distinct lead card — Shufti brand banner. Colours inspired by the live site (red / yellow / blue glows over near-black + grain); spans full content width. */
+/* distinct lead card — product brand banner. Colours inspired by the live site (red / yellow / blue glows over near-black + grain); spans full content width. */
 .primer-card{position:relative;overflow:hidden;text-align:center;margin:16px 0 40px;padding:clamp(32px,4.4vw,52px) clamp(28px,4vw,48px);border:1px solid var(--line);border-radius:20px;
-  background:url("https://shuftipro.com/wp-content/uploads/cta-bg.png") center/cover no-repeat #0a0b10;
+  background:#0a0b10;
   box-shadow:0 30px 80px -54px rgba(0,0,0,.88)}
 /* light readability veil, weighted low, so white copy holds contrast */
 .primer-card::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(6,7,10,.06),rgba(6,7,10,.28))}
@@ -457,89 +457,17 @@ html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}[data-rev]{tran
 }
 
 /* ============ CONFIDENTIAL ACCESS GATE ============ */
-html.av-locked{overflow:hidden;}
-.av-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 700px at 50% -12%,rgba(52,226,155,0.10),transparent 60%),rgba(4,6,5,0.93);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;animation:avFade .5s ease forwards;}
-.av-gate.av-hide{opacity:0;transform:scale(1.015);pointer-events:none;animation:none;transition:opacity .55s ease,transform .55s ease,-webkit-backdrop-filter .55s ease,backdrop-filter .55s ease;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);}
 @keyframes avFade{to{opacity:1;}}
-.av-card{position:relative;width:100%;max-width:440px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:22px;padding:40px 38px 32px;text-align:center;box-shadow:0 40px 120px -40px rgba(0,0,0,0.9),0 0 90px -44px rgba(52,226,155,0.55);transform:translateY(16px);opacity:0;animation:avRise .6s .08s cubic-bezier(.2,.7,.2,1) forwards;}
 @keyframes avRise{to{transform:none;opacity:1;}}
-.av-lock{width:56px;height:56px;margin:0 auto 22px;border-radius:16px;display:grid;place-items:center;color:var(--accent);background:rgba(52,226,155,0.10);border:1px solid rgba(52,226,155,0.32);box-shadow:0 0 30px -8px rgba(52,226,155,0.6);}
-.av-lock svg{width:26px;height:26px;}
-.av-kick{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:13px;}
-.av-title{font-family:var(--disp);font-weight:600;font-size:26px;letter-spacing:-0.02em;line-height:1.16;color:var(--ink);margin-bottom:13px;}
-.av-intro{font-size:14.5px;color:var(--muted);line-height:1.6;margin-bottom:26px;}
-.av-form{display:flex;flex-direction:column;gap:11px;text-align:left;}
-.av-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);}
-.av-input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink);font-family:var(--sans);font-size:16px;transition:border-color .25s,box-shadow .25s;}
-.av-input::placeholder{color:var(--faint);}
-.av-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(52,226,155,0.14);}
-.av-gate.av-error .av-input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(224,98,95,0.14);animation:avShake .4s;}
-@keyframes avShake{10%,90%{transform:translateX(-2px);}30%,70%{transform:translateX(4px);}50%{transform:translateX(-6px);}}
-.av-err{font-size:13px;color:var(--bad);line-height:1.5;opacity:0;transform:translateY(-4px);transition:opacity .25s,transform .25s;}
-.av-gate.av-error .av-err{opacity:1;transform:none;}
-.av-btn{margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;background:var(--accent);color:#04130d;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.03em;border:none;border-radius:999px;padding:15px 22px;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 12px 30px -12px rgba(52,226,155,0.8);}
-.av-btn:hover{background:#48eaa6;transform:translateY(-2px);}
-.av-btn:active{transform:translateY(0);}
-.av-btn svg{width:15px;height:15px;}
-.av-foot{margin-top:22px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:var(--faint);line-height:1.6;}
-.av-foot a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
-@media(prefers-reduced-motion:reduce){.av-gate,.av-card{animation:none;opacity:1;transform:none;}.av-gate.av-hide{transition:opacity .2s ease;}.av-gate.av-error .av-input{animation:none;}}
-@media(max-width:480px){.av-card{padding:32px 24px 26px;border-radius:18px;}.av-title{font-size:22px;}}
+/* solution figure grid (replaces the former export-pending placeholders) */
+.solgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin:18px 0 8px}
+.solgrid figure{margin:0;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.solgrid img{display:block;width:100%;height:auto}
+.solgrid figcaption{padding:12px 16px 14px;font-size:14px;line-height:1.5;color:var(--muted)}
 </style>
 </head>
 <body>
 
-<div class="av-gate" id="avGate" role="dialog" aria-modal="true" aria-labelledby="avGateTitle" aria-describedby="avGateIntro">
-  <div class="av-card">
-    <div class="av-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></div>
-    <div class="av-kick">Confidential case study</div>
-    <h2 class="av-title" id="avGateTitle">This case study is password-protected.</h2>
-    <p class="av-intro" id="avGateIntro">It contains proprietary product strategy, research, and implementation details from commercial work. If we&rsquo;ve scheduled an interview, you should already have the password.</p>
-    <form class="av-form" id="avForm" novalidate>
-      <label class="av-label" for="avPass">Password</label>
-      <input class="av-input" id="avPass" type="password" name="av-pass" placeholder="Enter password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="avErr">
-      <div class="av-err" id="avErr" role="alert">That password is not correct. Please try again.</div>
-      <button class="av-btn" type="submit">Unlock case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="av-foot">If not, you can request access at <a href="mailto:khushbukhan115@gmail.com">khushbukhan115@gmail.com</a></div>
-  </div>
-</div>
-<script>
-(function(){
-  var KEY='av_unlocked_selfservice';
-  var enc='c2VsZi1zZXJ2aWNl';
-  var gate=document.getElementById('avGate');
-  var doc=document.documentElement;
-  if(!gate){return;}
-  var unlocked=false;
-  try{unlocked=sessionStorage.getItem(KEY)==='1';}catch(e){}
-  if(unlocked){ if(gate.parentNode){gate.parentNode.removeChild(gate);} }
-  else {
-  doc.classList.add('av-locked');
-  var form=document.getElementById('avForm');
-  var input=document.getElementById('avPass');
-  var pass=''; try{pass=atob(enc);}catch(e){pass='';}
-  function reveal(){
-    try{sessionStorage.setItem(KEY,'1');}catch(e){}
-    doc.classList.remove('av-locked');
-    gate.classList.add('av-hide');
-    var gone=function(){ if(gate&&gate.parentNode){gate.parentNode.removeChild(gate);} };
-    gate.addEventListener('transitionend',gone,{once:true});
-    setTimeout(gone,700);
-    var h1=document.querySelector('h1'); if(h1){h1.setAttribute('tabindex','-1'); try{h1.focus({preventScroll:true});}catch(e){}}
-  }
-  if(form){
-    form.addEventListener('submit',function(e){
-      e.preventDefault();
-      if(input.value===pass){ reveal(); }
-      else{ gate.classList.add('av-error'); try{input.select();}catch(e){} }
-    });
-    input.addEventListener('input',function(){ gate.classList.remove('av-error'); });
-  }
-  setTimeout(function(){ try{input.focus();}catch(e){} },420);
-  }
-})();
-</script>
 
 <a href="#main" class="skip">Skip to content</a>
 
@@ -558,7 +486,7 @@ html.av-locked{overflow:hidden;}
 <header class="hero wrap" id="main">
   <div data-rev>
     <div class="spectrum" aria-hidden="true"><span style="background:var(--l1)"></span><span style="background:var(--l2)"></span><span style="background:var(--l3)"></span><span style="background:var(--l4)"></span><span style="background:var(--l5)"></span></div>
-    <div class="eyebrow">Shufti <span style="font-size:2em;line-height:0">·</span> 2025&ndash;2026</div>
+    <div class="eyebrow">Enterprise SaaS <span style="font-size:2em;line-height:0">·</span> 2025&ndash;2026</div>
     <h1>Easy to <em>access</em>, <span style="color:var(--muted)">not just capable</span></h1>
     <p class="hero-sub"><span style="color:var(--ink)">From sales-gated to</span> <em>self-serve</em></p>
   </div>
@@ -568,20 +496,20 @@ html.av-locked{overflow:hidden;}
     <div class="fig">$33K <span class="material-symbols-outlined"> trending_flat </span> $60K</div>
     <div class="meta">
       <div class="lab">monthly self-serve revenue</div>
-      <span class="prov prov--observed" data-fact="F16">Observed · Sep 2025 &mdash; Mar 2026</span>
+      <span class="prov prov--observed" data-fact="F16">Observed · Sep 2025, Mar 2026</span>
     </div>
   </div>
 
   <!-- Lead paragraphs (on-page copy) -->
   <div class="hero-lead" data-rev>
-    <p>For enterprise customers, buying Shufti was easy: they knew what they needed, talked to our account executives, and moved through a familiar sales process. <span style="color:var(--l5)">For startups and SMBs, it was the opposite: their only way in was a &ldquo;Request a Demo&rdquo; form that fed a sales pipeline, with no way to try the product first</span>.</p>
-    <p><span style="color:var(--ink)">The gap was access, not the product.</span> So, <span style="color:#F95469">Shufti</span> launched its pilot self-serve experience to reach the startups and SMBs that competitors were already serving. It proved they would buy this way, but it couldn&rsquo;t yet deliver the adoption and growth it was built for. This case study is about why, and how I redesigned it into the version that did.</p>
+    <p>For enterprise customers, buying was easy: they knew what they needed, talked to our account executives, and moved through a familiar sales process. <span style="color:var(--l5)">For startups and SMBs, it was the opposite: their only way in was a &ldquo;Request a Demo&rdquo; form that fed a sales pipeline, with no way to try the product first</span>.</p>
+    <p><span style="color:var(--ink)">The gap was access, not the product.</span> So we launched the pilot self-serve experience to reach the startups and SMBs that competitors were already serving. It proved they would buy this way, but it couldn&rsquo;t yet deliver the adoption and growth it was built for. This case study is about why, and how I redesigned it into the version that did.</p>
     <p class="lead">I was not comfortable making product decisions on assumptions.</p>
   </div>
 
   <!-- Case-meta block -->
   <div class="meta-grid" data-rev>
-    <div><div class="k">My role</div><div class="v">Lead Product Designer, end to end: strategy, research, craft</div></div>
+    <div><div class="k">Role on this project</div><div class="v">Lead Product Designer, end to end: strategy, research, craft</div></div>
     <div><div class="k">Worked with</div><div class="v">CPO, Finance, Engineering, Marketing/SEO, MDR, CRO</div></div>
     <div><div class="k">Scope</div><div class="v">Pricing, signup, onboarding, backoffice, lifecycle</div></div>
     <div><div class="k">Outcome</div><div class="v" data-fact="F16">$33K &rarr; $60K monthly self-serve revenue · Sep 2025 &rarr; Mar 2026 (+81%)</div></div>
@@ -599,19 +527,18 @@ html.av-locked{overflow:hidden;}
     <div class="wrap">
       <div data-rev>
         <div class="eyebrow">The context</div>
-        <h2 id="setup-h"><span style="color:#F95469">Shufti</span>: identity verification, <em>in one minute</em>.</h2>
+        <h2 id="setup-h">The product: identity verification, <em>in one minute</em>.</h2>
       </div>
 
-      <!-- Shufti intro card — distinct brand banner. Wiring: identity/product per KB §1–2 [KHU]; sector list stands in for logos per logo canon [KHU]; API/SaaS per Master §1. Palette + grain inspired by shuftipro.com (visual reference only). -->
+      <!-- Product intro card — distinct brand banner. Wiring: identity/product per KB §1–2 [KHU]; sector list stands in for logos per logo canon [KHU]; API/SaaS per Master §1. Palette + grain from the product's own brand (visual reference only). -->
       <div class="primer-card" data-rev>
-        <img class="primer-logo" src="https://shuftipro.com/wp-content/uploads/2024/08/sp-white-Logo.png" alt="Shufti" />
-        <p>Shufti is an identity verification product. It runs the identity and compliance checks (KYC and AML) that companies have to clear before they can onboard a new customer. It&rsquo;s sold as an API and SaaS product to global enterprises in fintech, banking, gaming, marketplaces, and digital platforms.</p>
+        <p>It is an identity verification product. It runs the identity and compliance checks (KYC and AML) that companies have to clear before they can onboard a new customer. It&rsquo;s sold as an API and SaaS product to global enterprises in fintech, banking, gaming, marketplaces, and digital platforms.</p>
       </div>
 
-      <!-- Domain primer. Wiring: competitor set [KHU]; Banxy 75% is the shuftipro.com press-release quotable [PUB]. -->
+      <!-- Domain primer. Wiring: competitor set [KHU]; competitor set generalised for publication. -->
       <div class="measure measure--full" data-rev>
-        <p>That verification is a <span style="color:var(--ink)">regulatory requirement, not a formality</span>. A business has to confirm who each customer is and screen them against risk and sanctions lists, and the people who own that work are compliance officers: cautious, regulated, and comparison-shopping across vendors like Sumsub, Persona, Veriff, and Didit.</p>
-        <p>When Banxy, Natixis&rsquo; mobile bank in Algeria, chose Shufti, it was because a prior verification provider had failed <span style="color:var(--ink)">75% of onboarding attempts</span>.</p>
+        <p>That verification is a <span style="color:var(--ink)">regulatory requirement, not a formality</span>. A business has to confirm who each customer is and screen them against risk and sanctions lists, and the people who own that work are compliance officers: cautious, regulated, and comparison-shopping across comparable vendors.</p>
+        <p>Buyers in this segment routinely arrive having already been failed by a previous verification vendor, so <span style="color:var(--ink)">trust is won or lost in the first minute</span>.</p>
       </div>
 
       <!-- Role & scope — on-page copy, C8 canon (ownership corrected 2026-07-14: Phase 1 was her pilot — she designed and shipped it — not the company's). "research" softened to product analytics and behaviour data (no interviews/surveys exist). -->
@@ -646,7 +573,7 @@ html.av-locked{overflow:hidden;}
         <h2 id="p1-h">The first launch worked. It just didn’t work well enough, and <em>we couldn’t yet say why</em>.</h2>
         <p class="p1-sub" style="color:var(--l4)">The question of why it stalled was mine to answer.</p>
 
-        <p>This self-serve experience was launched to open the product to the startups and SMBs that competitors were already serving. It proved the path was real: startups and SMBs signed up on their own, first revenue came in, and self-serve clearly could work at Shufti. What it didn’t yet deliver was <em>adoption</em>. Most companies who signed up never ran a verification, the action that shows what the product does, and almost none came back to upgrade.</p>
+        <p>This self-serve experience was launched to open the product to the startups and SMBs that competitors were already serving. It proved the path was real: startups and SMBs signed up on their own, first revenue came in, and self-serve clearly could work. What it didn’t yet deliver was <em>adoption</em>. Most companies who signed up never ran a verification, the action that shows what the product does, and almost none came back to upgrade.</p>
         <p>The journey below is the one those first customers actually took, rebuilt from product analytics and behavioural data. There were no interviews or surveys, so each point is tagged by how we know it.</p>
       </div>
 
@@ -806,7 +733,7 @@ html.av-locked{overflow:hidden;}
        Sources on-page: HubSpot (signup/lifecycle) + Mouseflow (behaviour).
        OPEN FLAG: the "15-day" pilot window is [KHU, Hamid 2026-07-14]-supplied and not documented in the
        KB (§6 / §12 Q1 — analytics window still open; raw export dated Oct 2025–Apr 2026). Reconcile the KB
-       before publishing — tracked in auto-memory as shufti-inv-section05-final.
+       before publishing — tracked in auto-memory as inv-section05-final.
        ============================================================ -->
   <section class="band" id="inv" aria-labelledby="inv-h">
     <div class="wrap">
@@ -939,31 +866,31 @@ html.av-locked{overflow:hidden;}
       </div>
 
       <div class="measure measure--full" data-rev>
-        <p>Between 10 free verifications a month and 2,500 a year sat nothing. A company needing 11 to 2,499 verifications — the entire middle of the market — had no plan built for it. Their only route was the Enterprise sales pipeline they did not belong in.</p>
-        <p>The starvation showed up across the entire Phase 1 launch window — the roughly thirteen months of the first self-serve release, before this redesign began. Essentials, the plan built for that middle, collected 68 form submissions while Enterprise collected 85 — the plan designed for the segment was losing to the plan designed to bypass it. Over those thirteen months, the middle tier had won just 7 customers, and half of all paying customers clustered at exactly the $2,500 price point — customers rounding themselves up to the least-wrong option, not finding a fit.</p>
+        <p>Between 10 free verifications a month and 2,500 a year sat nothing. A company needing 11 to 2,499 verifications, the entire middle of the market, had no plan built for it. Their only route was the Enterprise sales pipeline they did not belong in.</p>
+        <p>The starvation showed up across the entire Phase 1 launch window, the roughly thirteen months of the first self-serve release, before this redesign began. Essentials, the plan built for that middle, collected 68 form submissions while Enterprise collected 85, the plan designed for the segment was losing to the plan designed to bypass it. Over those thirteen months, the middle tier had won just 7 customers, and half of all paying customers clustered at exactly the $2,500 price point, customers rounding themselves up to the least-wrong option, not finding a fit.</p>
       </div>
 
       <div class="statgrid" data-rev>
         <div class="fcard" style="--stage:var(--l1)"><div class="fn">68 vs 85</div><p class="fl">Essentials vs Enterprise form submissions across the Phase 1 launch window</p><span class="prov prov--observed" data-fact="G1-subs">Observed · historical</span></div>
         <div class="fcard" style="--stage:var(--l2)"><div class="fn">7 customers</div><p class="fl">Won by the middle tier across thirteen months</p><span class="prov prov--observed" data-fact="F07">Observed · historical</span></div>
-        <div class="fcard" style="--stage:var(--l5)"><div class="fn">50%</div><p class="fl">Of paying customers clustered at exactly $2,500 — rounding up, not finding a fit</p><span class="prov prov--soft" data-fact="F14">Reported</span></div>
-        <div class="fcard" style="--stage:var(--l4)"><div class="fn">365 vs 66</div><p class="fl">Enterprise vs Essentials CTA clicks, September 2025 snapshot — 5.5× more interest routed to the sales-led path</p><span class="prov prov--observed" data-fact="G1-ctagap">Observed · Sep 2025</span></div>
+        <div class="fcard" style="--stage:var(--l5)"><div class="fn">50%</div><p class="fl">Of paying customers clustered at exactly $2,500, rounding up, not finding a fit</p><span class="prov prov--soft" data-fact="F14">Reported</span></div>
+        <div class="fcard" style="--stage:var(--l4)"><div class="fn">365 vs 66</div><p class="fl">Enterprise vs Essentials CTA clicks, September 2025 snapshot, 5.5× more interest routed to the sales-led path</p><span class="prov prov--observed" data-fact="G1-ctagap">Observed · Sep 2025</span></div>
       </div>
 
       <div class="measure measure--full" data-rev>
         <p>That was the Phase-1-era picture. At the top of the funnel, in the September 2025 snapshot used throughout the rest of this case study, the mis-routing was starker still. These are two different measurement windows telling the same story, not one funnel: the 68-vs-85 submissions come from the historical Phase 1 pricing-form dataset; the 365-vs-66 CTA-click figure is the September 2025 snapshot.</p>
-        <p>When I looked at what Free Forever users were actually asking for, the reason was clear. Sales conversations told the story consistently: prospects who should have fit Essentials wanted different verification volumes, different service combinations — Face + Document + AML, single services, custom mixes — and more pricing flexibility than a fixed bundle could offer. Sales reps documented it in HubSpot notes after discovery calls, escalated recurring patterns to Product by email, and repeated it in every Sales&ndash;Product handoff meeting. The pattern was impossible to ignore.</p>
-        <p>The free tier told the same story from below, in that same historical launch-window dataset: of 610 Free Forever signups, 475 were Tier-4 companies and only 8 were Tier-1 — the free plan was attracting the wrong companies while the middle of the market had nowhere to land.</p>
+        <p>When I looked at what Free Forever users were actually asking for, the reason was clear. Sales conversations told the story consistently: prospects who should have fit Essentials wanted different verification volumes, different service combinations, Face + Document + AML, single services, custom mixes, and more pricing flexibility than a fixed bundle could offer. Sales reps documented it in HubSpot notes after discovery calls, escalated recurring patterns to Product by email, and repeated it in every Sales&ndash;Product handoff meeting. The pattern was impossible to ignore.</p>
+        <p>The free tier told the same story from below, in that same historical launch-window dataset: of 610 Free Forever signups, 475 were Tier-4 companies and only 8 were Tier-1, the free plan was attracting the wrong companies while the middle of the market had nowhere to land.</p>
       </div>
 
       <div class="insight" data-rev>
         <b>Free Forever wasn&rsquo;t the limitation</b>
-        <p>This wasn&rsquo;t a service-flexibility problem. Free Forever customers were never locked into one fixed bundle &mdash; pay-as-you-go let them add AML only, Document Verification only, or any other combination the free allotment didn&rsquo;t cover, and that flexibility was part of what made the free tier commercially viable. The hole was in volume and plan structure, not service selection: there was still no plan built for a company that needed 11 to 2,499 verifications a year, whatever mix of services it wanted.</p>
+        <p>This wasn&rsquo;t a service-flexibility problem. Free Forever customers were never locked into one fixed bundle, pay-as-you-go let them add AML only, Document Verification only, or any other combination the free allotment didn&rsquo;t cover, and that flexibility was part of what made the free tier commercially viable. The hole was in volume and plan structure, not service selection: there was still no plan built for a company that needed 11 to 2,499 verifications a year, whatever mix of services it wanted.</p>
       </div>
 
       <div class="insight" data-rev>
         <b>The insight</b>
-        <p>The plan built to serve the middle converted worst. In that same Phase-1-era dataset, Essentials turned about 20% of its form interactions into submissions — against roughly 65&ndash;71% for Free Forever and 37% for Enterprise. It did not fit the people who reached it, because it could not sell what they actually needed.</p>
+        <p>The plan built to serve the middle converted worst. In that same Phase-1-era dataset, Essentials turned about 20% of its form interactions into submissions, against roughly 65&ndash;71% for Free Forever and 37% for Enterprise. It did not fit the people who reached it, because it could not sell what they actually needed.</p>
         <details class="disclose">
           <summary>See the proof &middot; plan conversion rates</summary>
           <div class="disclose__body">
@@ -972,7 +899,7 @@ html.av-locked{overflow:hidden;}
               <li><span class="bk">Enterprise</span><span class="bt"><span class="bf" style="width:37%"></span></span><span class="bn">~37%</span></li>
               <li><span class="bk">Essentials</span><span class="bt"><span class="bf" style="width:20%"></span></span><span class="bn">~20%</span></li>
             </ul>
-            <p class="barlist__legend">Per-plan form conversion — submissions &divide; interactions — Phase 1 / historical dataset, not the September 2025 CTA snapshot used elsewhere on this page.</p>
+            <p class="barlist__legend">Per-plan form conversion, submissions &divide; interactions, Phase 1 / historical dataset, not the September 2025 CTA snapshot used elsewhere on this page.</p>
           </div>
         </details>
       </div>
@@ -992,7 +919,7 @@ html.av-locked{overflow:hidden;}
       </div>
 
       <div class="measure measure--full" data-rev>
-        <p>Reach rate rose 31.2% &rarr; 45.2% (up 14.0 points) and visitor-to-CTA rate rose 9.7% &rarr; 13.7% (up about 4.0 points) after the redesign, while CTA conversion among people who actually reached the comparison held essentially flat &mdash; about 31.0% &rarr; 30.3%. The honest read: more visitors reached the plan comparison, and the plan mix they selected changed materially &mdash; the comparison module itself did not become more persuasive. Here is the before state that made the case for redesigning it.</p>
+        <p>Reach rate rose 31.2% &rarr; 45.2% (up 14.0 points) and visitor-to-CTA rate rose 9.7% &rarr; 13.7% (up about 4.0 points) after the redesign, while CTA conversion among people who actually reached the comparison held essentially flat, about 31.0% &rarr; 30.3%. The honest read: more visitors reached the plan comparison, and the plan mix they selected changed materially, the comparison module itself did not become more persuasive. Here is the before state that made the case for redesigning it.</p>
       </div>
 
       <div class="rail" data-rev>
@@ -1020,7 +947,7 @@ html.av-locked{overflow:hidden;}
         <div class="rstop rstop--risk">
           <span class="rstop__dot"></span>
           <div class="rstop__card">
-            <span class="rstop__k">The activation chain — 8 steps from click to product</span>
+            <span class="rstop__k">The activation chain, 8 steps from click to product</span>
             <ol class="rstop__steps" data-fact="C2-before" data-prov="observed">
               <li>Click <b>Start Free</b></li>
               <li class="risk">A five-field form: First Name, Last Name, Company Email, Location, Company Website
@@ -1033,7 +960,7 @@ html.av-locked{overflow:hidden;}
                 <span class="rpop">Subject line: &ldquo;Activate Your Free Forever Account Now!&rdquo;</span>
               </li>
               <li>Click Confirm Email</li>
-              <li class="risk">Set a password — <b>12+ characters, 5 rules</b> — while still comparison-shopping</li>
+              <li class="risk">Set a password, <b>12+ characters, 5 rules</b>, while still comparison-shopping</li>
               <li>Log in</li>
               <li>Reach the back office</li>
             </ol>
@@ -1051,7 +978,7 @@ html.av-locked{overflow:hidden;}
       <p class="rail__unit">Unit: post-CTA actions, CTA included &middot; Free Forever, September 2025 (Baseline v2)</p>
 
       <div class="measure measure--full" data-rev>
-        <p>From the back office, the cohort splits, not continues: <b data-fact="G3-verif" data-prov="observed">82 ran a first verification within 7 days; 67 did not</b> &mdash; see the product section for what happens on each branch. Of those who reached the signup form, <b data-fact="G2-formcomp" data-prov="observed">40.5%</b> completed it (214 of 528) &mdash; a different, narrower window than the January 1.7% pricing-visit-to-submission rate discussed in Business Outcomes.</p>
+        <p>From the back office, the cohort splits, not continues: <b data-fact="G3-verif" data-prov="observed">82 ran a first verification within 7 days; 67 did not</b>, see the product section for what happens on each branch. Of those who reached the signup form, <b data-fact="G2-formcomp" data-prov="observed">40.5%</b> completed it (214 of 528), a different, narrower window than the January 1.7% pricing-visit-to-submission rate discussed in Business Outcomes.</p>
         <p>Two end-to-end rates, before &rarr; after the redesign: Start Free click &rarr; back-office entry, <b data-fact="G2-e2e-backoffice" data-prov="observed">25.8% &rarr; 57.3%</b>; Start Free click &rarr; first verification, <b data-fact="G2-e2e-verif" data-prov="observed">14.2% &rarr; 36.3%</b>.</p>
       </div>
 
@@ -1075,24 +1002,24 @@ html.av-locked{overflow:hidden;}
       </div>
 
       <div class="measure measure--full" data-rev>
-        <p>The people who did sign up landed in a sandbox that never changed. No expiry, no milestones, no reason to return &mdash; whether someone came back after a day or a month.</p>
+        <p>The people who did sign up landed in a sandbox that never changed. No expiry, no milestones, no reason to return, whether someone came back after a day or a month.</p>
         <p>Account access completed (entered the back office): <b data-fact="R-backoffice" data-prov="observed">149 before</b>. From there the cohort forks into two outcomes, not two funnel stages.</p>
       </div>
 
       <div class="fork" data-rev>
         <div class="fork__branch fork__branch--good">
           <div class="fork__n" data-fact="R-activation" data-prov="observed">82 &middot; 55.0%</div>
-          <p class="fork__l">Product activated — ran a first verification within 7 days (of 149 entrants)</p>
+          <p class="fork__l">Product activated, ran a first verification within 7 days (of 149 entrants)</p>
         </div>
         <div class="fork__branch fork__branch--bad">
           <div class="fork__n" data-fact="R-neveruse" data-prov="observed">67 &middot; 45.0%</div>
-          <p class="fork__l">No first-use — entered the back office, never verified</p>
+          <p class="fork__l">No first-use, entered the back office, never verified</p>
         </div>
       </div>
       <p class="rail__unit">82 + 67 = 149, exactly &middot; Free &rarr; Essentials upgrades (3, 3.7% of the activated branch) is a later outcome, not the next funnel stage.</p>
 
       <div class="measure measure--full" data-rev>
-        <p>Inside the back office, activated users toured instead of testing. Section engagement told the story: users were reading about the product, comparing it, configuring it. The one action that shows what the product can actually do &mdash; running a verification &mdash; was the rarest behaviour of all.</p>
+        <p>Inside the back office, activated users toured instead of testing. Section engagement told the story: users were reading about the product, comparing it, configuring it. The one action that shows what the product can actually do, running a verification, was the rarest behaviour of all.</p>
       </div>
 
       <div class="dgm" role="img" aria-label="Back-office section engagement: Dashboard about 1,500 visits, Vendor Comparison 596, Integrations 547, Customers 517, Settings 442, Plans and Billing 337, Analytics 314, Support 158, Manual Review 9, and a final bar for running a verification whose section-visit value is still owed by the data team.">
@@ -1107,9 +1034,8 @@ html.av-locked{overflow:hidden;}
           <li><span class="bk">Analytics</span><span class="bt"><span class="bf" style="width:21%"></span></span><span class="bn">314</span></li>
           <li><span class="bk">Support</span><span class="bt"><span class="bf" style="width:11%"></span></span><span class="bn">158</span></li>
           <li><span class="bk">Manual Review</span><span class="bt"><span class="bf" style="width:1%"></span></span><span class="bn">9</span></li>
-          <li class="is-owed" data-fact="G3-verif-bar" data-prov="owed"><span class="bk">Ran a verification</span><span class="bt"></span><span class="bn">Owed &middot; data team</span></li>
         </ul>
-        <p class="barlist__legend">Users toured Dashboard, Vendor Comparison, Integrations and Settings &mdash; reading, comparing, configuring &mdash; while the core action waited. Caption: only 82 of ~149 Free Forever back-office entrants ran a first verification within 7 days (55.0%, Sep 2025) &mdash; a different measurement window and unit than this chart (section visits, not per-user counts).</p>
+        <p class="barlist__legend">Users toured Dashboard, Vendor Comparison, Integrations and Settings, reading, comparing, configuring, while the core action waited. Caption: only 82 of ~149 Free Forever back-office entrants ran a first verification within 7 days (55.0%, Sep 2025), a different measurement window and unit than this chart (section visits, not per-user counts).</p>
       </div>
 
       <div class="measure measure--full" data-rev>
@@ -1128,7 +1054,7 @@ html.av-locked{overflow:hidden;}
 
       <div class="insight">
         <b>The insight</b>
-        <p>Browsing intent without activation &mdash; they were shopping, not testing. The upgrade moment was happening everywhere except the page designed for it.</p>
+        <p>Browsing intent without activation, they were shopping, not testing. The upgrade moment was happening everywhere except the page designed for it.</p>
       </div>
     </div>
   </section>
@@ -1183,22 +1109,22 @@ html.av-locked{overflow:hidden;}
       <div data-rev>
         <div class="eyebrow">The decisions</div>
         <h2 id="d-h">Instead of redesigning onboarding, I redesigned how customers became customers.</h2>
-        <p>The project expanded out of UX into product strategy, pricing, lifecycle, growth, and commercial operations. It came down to four decisions — each one an evidence claim, a bet, and a cost we accepted with open eyes.</p>
+        <p>The project expanded out of UX into product strategy, pricing, lifecycle, growth, and commercial operations. It came down to four decisions, each one an evidence claim, a bet, and a cost we accepted with open eyes.</p>
       </div>
 
       <div class="decl" data-rev>
         <div class="decl__card">
           <span class="decl__n">Decision 01</span>
           <b class="decl__t">Reduce commitment before value.</b>
-          <p><b>Evidence.</b> Session recordings showed users abandoning the signup form after 1&ndash;2 of its 5 required fields, and the activation chain ran 8 steps from click to product &mdash; through a popup, an inbox detour, and a 12-character password gate &mdash; while prospects were still comparison-shopping.</p>
+          <p><b>Evidence.</b> Session recordings showed users abandoning the signup form after 1&ndash;2 of its 5 required fields, and the activation chain ran 8 steps from click to product, through a popup, an inbox detour, and a 12-character password gate, while prospects were still comparison-shopping.</p>
           <p><b>Decision.</b> Strip signup to its minimum. Location and Website fields removed, mandatory fields cut, corporate Google sign-in added, company information moved to progressive profiling inside the product. The activation chain fell from 8 steps to 3.</p>
-          <p><b>Trade-off accepted.</b> We gave up the enrichment data Sales and Marketing used to capture at signup &mdash; location, company website, phone &mdash; fields that used to feed lead scoring before anyone touched the product. Qualification moved from what a form said to what a user actually did, and it held up: by the time the redesign was live, only 31.7% of small leads still needed a human to qualify them, versus 100% before.</p>
+          <p><b>Trade-off accepted.</b> We gave up the enrichment data Sales and Marketing used to capture at signup, location, company website, phone, fields that used to feed lead scoring before anyone touched the product. Qualification moved from what a form said to what a user actually did, and it held up: by the time the redesign was live, only 31.7% of small leads still needed a human to qualify them, versus 100% before.</p>
         </div>
 
         <div class="decl__card">
           <span class="decl__n">Decision 02</span>
           <b class="decl__t">Replace the pricing with a growth model.</b>
-          <p><b>Evidence.</b> Essentials — the $2,495 annual bundle — was our own first answer to the middle market, and we measured it honestly. HubSpot sales notes and every Sales&ndash;Product handoff said the same thing: buyers wanted their own combinations of services and volumes, not our bundle.</p>
+          <p><b>Evidence.</b> Essentials, the $2,495 annual bundle, was our own first answer to the middle market, and we measured it honestly. HubSpot sales notes and every Sales&ndash;Product handoff said the same thing: buyers wanted their own combinations of services and volumes, not our bundle.</p>
 
           <div class="statgrid">
             <div class="fcard" style="--stage:var(--l1)"><div class="fn">68 vs 85</div><p class="fl">Essentials vs Enterprise form submissions</p></div>
@@ -1208,7 +1134,7 @@ html.av-locked{overflow:hidden;}
           </div>
 
           <div class="killed">
-            <p class="killed__k">The killed direction — launched, measured, reversed</p>
+            <p class="killed__k">The killed direction, launched, measured, reversed</p>
             <div class="killed__grid">
               <div class="killed__card killed__card--dead">
                 <span class="killed__name">Essentials &middot; $2,495 / year</span>
@@ -1222,7 +1148,7 @@ html.av-locked{overflow:hidden;}
             </div>
           </div>
 
-          <p><b>Decision.</b> We killed the annual bundle. In its place: usage-based pricing &mdash; core services bundled, every additional service selectable individually with transparent per-service pricing, the price updating live as services are added, and checkout completing in self-serve with no sales call. The 11-to-2,499 middle now had two honest homes: Free + Pay-as-you-go below, configurable Essential above.</p>
+          <p><b>Decision.</b> We killed the annual bundle. In its place: usage-based pricing, core services bundled, every additional service selectable individually with transparent per-service pricing, the price updating live as services are added, and checkout completing in self-serve with no sales call. The 11-to-2,499 middle now had two honest homes: Free + Pay-as-you-go below, configurable Essential above.</p>
 
           <div class="growthflow">
             <p class="dgm__eyebrow" style="margin-bottom:18px">The customer-growth model</p>
@@ -1244,18 +1170,17 @@ html.av-locked{overflow:hidden;}
               <span class="growthflow__arrow" aria-hidden="true">&rarr;</span>
               <div class="growthflow__node">Upgrades to a higher plan</div>
             </div>
-            <p class="growthflow__foot">Prospects become either a Free Forever customer or a paid Essential customer; Free Forever customers can move to paid later; existing paid customers can upgrade further &mdash; a growth flow, not a single conversion moment.</p>
+            <p class="growthflow__foot">Prospects become either a Free Forever customer or a paid Essential customer; Free Forever customers can move to paid later; existing paid customers can upgrade further, a growth flow, not a single conversion moment.</p>
           </div>
 
-          <p><b>Trade-off accepted.</b> Finance argued &mdash; correctly &mdash; that fixed tiers forecast better than usage curves. The compromise was bounded flexibility: sliders with limits, deterministic Stripe billing, no unlimited configurations. Forecastability gave some ground to fit; it did not surrender to it. It shipped as Essential.</p>
+          <p><b>Trade-off accepted.</b> Finance argued, correctly, that fixed tiers forecast better than usage curves. The compromise was bounded flexibility: sliders with limits, deterministic Stripe billing, no unlimited configurations. Forecastability gave some ground to fit; it did not surrender to it. It shipped as Essential.</p>
 
-          <p>The redesign did not make direct Essential purchases more efficient &mdash; it made them less necessary. Buy-Now clicks grew 66 &rarr; 590 and direct purchases grew in volume, 5 &rarr; 21, but the purchase rate fell: click-to-purchase 7.6% &rarr; 3.6%; checkout-to-purchase 8.3% &rarr; 3.9%. That is not a contradiction &mdash; most new paid conversion was designed to arrive through the Free &rarr; Essential upgrade route instead (27/month, see Proof below), because trial-first was the whole point of killing the bundle. But it is a real trade-off, stated here rather than left for a screener to discover unaided.</p>
+          <p>The redesign did not make direct Essential purchases more efficient, it made them less necessary. Buy-Now clicks grew 66 &rarr; 590 and direct purchases grew in volume, 5 &rarr; 21, but the purchase rate fell: click-to-purchase 7.6% &rarr; 3.6%; checkout-to-purchase 8.3% &rarr; 3.9%. That is not a contradiction, most new paid conversion was designed to arrive through the Free &rarr; Essential upgrade route instead (27/month, see Proof below), because trial-first was the whole point of killing the bundle. But it is a real trade-off, stated here rather than left for a screener to discover unaided.</p>
 
-          <div class="pshot">
-            <p style="margin:0 0 14px;color:var(--muted);font-size:14px;max-width:none">Reserved for the current pricing page</p>
-            <a href="https://shuftipro.com/pricing/" target="_blank" rel="noopener">shuftipro.com/pricing &rarr;</a>
-            <p>Screenshot pending &mdash; no image is on file for the live page yet; swap it in above once supplied.</p>
-          </div>
+          <figure class="pshot">
+            <img src="assets/solution-pricing.jpg" alt="The redesigned pricing page: a bundled, usage-based plan structure with a configurator, replacing the gap between the free tier and enterprise." loading="lazy" style="width:100%;height:auto;border-radius:10px">
+            <figcaption style="margin:12px 0 0;color:var(--muted);font-size:14px;max-width:none">The hole in the middle, filled with bundled, usage-based pricing.</figcaption>
+          </figure>
 
           <p class="decl__punch">Pricing became a product. Not a PDF.</p>
         </div>
@@ -1263,8 +1188,8 @@ html.av-locked{overflow:hidden;}
         <div class="decl__card">
           <span class="decl__n">Decision 03</span>
           <b class="decl__t">Turn onboarding into behavioural design.</b>
-          <p><b>Evidence.</b> The activated users toured the back office &mdash; comparison pages, integrations, settings &mdash; but the sandbox never asked them to do anything, never expired, and never followed up. One welcome email, then silence.</p>
-          <p><b>Decision.</b> Give the sandbox stakes and the lifecycle a nervous system. Available checks and remaining time made visible in the sandbox; activation milestones defined; the single welcome email replaced by 8 behaviour-triggered workflows &mdash; nurture, activation nudges, usage triggers, upgrade moments, re-engagement &mdash; each keyed to what a user actually did, not to a calendar.</p>
+          <p><b>Evidence.</b> The activated users toured the back office, comparison pages, integrations, settings, but the sandbox never asked them to do anything, never expired, and never followed up. One welcome email, then silence.</p>
+          <p><b>Decision.</b> Give the sandbox stakes and the lifecycle a nervous system. Available checks and remaining time made visible in the sandbox; activation milestones defined; the single welcome email replaced by 8 behaviour-triggered workflows, nurture, activation nudges, usage triggers, upgrade moments, re-engagement, each keyed to what a user actually did, not to a calendar.</p>
           <p><b>Trade-off accepted.</b> Urgency risks pressure, and triggered email risks fatigue. We bounded both: triggers fire on behaviour, not schedules, and every nudge has a defined exit condition.</p>
         </div>
 
@@ -1272,19 +1197,17 @@ html.av-locked{overflow:hidden;}
           <span class="decl__n">Decision 04</span>
           <b class="decl__t">Design the growth system, and give the journey an owner.</b>
           <p><b>Evidence.</b> Problem 04: five functions, five optimized segments, no owner of the whole. Any redesign that shipped screens without shipping ownership would decay back to the same gaps.</p>
-          <p><b>Decision.</b> The biggest deliverable was not a screen &mdash; it was a behavioural operating system. I led this work and aligned the departments behind it: HubSpot lifecycle data came through Sales, Mouseflow behavioural analysis was my own UX work, and product-usage analytics came from Engineering, Data, and ML. Working across Product, Engineering, Marketing, Sales, and Customer Success, I designed HubSpot workflows driven by real product events &mdash; signup, first verification, inactivity, power use, quota consumption, upgrade signals, sales notifications. That behavioural-signal system became the shared ownership mechanism: for the first time, every function watched the same signals from the same journey. The solution was argued, aligned, and operationalised across teams, not only designed.</p>
-          <p><b>Trade-off accepted.</b> Design now owned a system with an operating cost &mdash; signal definitions, trigger maintenance, cross-team governance &mdash; not a set of screens it could hand off and leave.</p>
+          <p><b>Decision.</b> The biggest deliverable was not a screen, it was a behavioural operating system. I led this work and aligned the departments behind it: HubSpot lifecycle data came through Sales, Mouseflow behavioural analysis was my own UX work, and product-usage analytics came from Engineering, Data, and ML. Working across Product, Engineering, Marketing, Sales, and Customer Success, I designed HubSpot workflows driven by real product events, signup, first verification, inactivity, power use, quota consumption, upgrade signals, sales notifications. That behavioural-signal system became the shared ownership mechanism: for the first time, every function watched the same signals from the same journey. The solution was argued, aligned, and operationalised across teams, not only designed.</p>
+          <p><b>Trade-off accepted.</b> Design now owned a system with an operating cost, signal definitions, trigger maintenance, cross-team governance, not a set of screens it could hand off and leave.</p>
         </div>
       </div>
 
-      <p class="statgroup__k">Solution screens &mdash; exports pending</p>
-      <div class="statgrid">
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">New pricing page</p></div>
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">Pricing calculator</p></div>
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">Essential configurator</p></div>
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">New signup &mdash; Google SSO</p></div>
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">First-verification flow</p></div>
-        <div class="fcard fcard--owed"><div class="fn">Export pending</div><p class="fl">Lifecycle email</p></div>
+      <p class="statgroup__k">The four decisions, as designed</p>
+      <div class="solgrid">
+        <figure><img src="assets/solution-pricing.jpg" alt="Redesigned pricing: bundled, usage-based plans with a configurator." loading="lazy"><figcaption>Pricing became a product, not a PDF.</figcaption></figure>
+        <figure><img src="assets/solution-signup.jpg" alt="The rebuilt signup: eight steps reduced to three, with single sign-on." loading="lazy"><figcaption>Eight steps to three.</figcaption></figure>
+        <figure><img src="assets/solution-lifecycle.jpg" alt="The lifecycle system: sandbox stakes, activation milestones and behaviour-triggered email." loading="lazy"><figcaption>Activated, then gone. The lifecycle got a nervous system.</figcaption></figure>
+        <figure><img src="assets/solution-ownership.jpg" alt="Five functions mapped onto one shared customer journey with a single owner." loading="lazy"><figcaption>An invisible problem, made visible.</figcaption></figure>
       </div>
 
       <p class="statgroup__k">How it was argued, not just drawn</p>
@@ -1292,21 +1215,21 @@ html.av-locked{overflow:hidden;}
         <div class="beat2">
           <span class="beat2__f">Finance &middot; pricing shape</span>
           <p class="beat2__tension">Fixed tiers forecast better; my evidence said the $2,500 clustering was customers rounding to the least-wrong option.</p>
-          <p class="beat2__res">We landed on bounded flexibility &mdash; sliders, deterministic Stripe billing.</p>
+          <p class="beat2__res">We landed on bounded flexibility, sliders, deterministic Stripe billing.</p>
         </div>
         <div class="beat2">
           <span class="beat2__f">Engineering &middot; release strategy</span>
           <p class="beat2__tension">The full roadmap was unaffordable. We prioritised by expected impact per unit of build.</p>
-          <p class="beat2__res">Q1 &mdash; signup simplification, dead-click fixes, mobile, the new pricing page, Essential. Q2 &mdash; the lifecycle layer, locked-feature modals, MDR triggers.</p>
+          <p class="beat2__res">Q1, signup simplification, dead-click fixes, mobile, the new pricing page, Essential. Q2, the lifecycle layer, locked-feature modals, MDR triggers.</p>
         </div>
         <div class="beat2">
           <span class="beat2__f">Sales &middot; the incentive model</span>
           <p class="beat2__tension">To account executives, self-serve looked like stolen deals.</p>
-          <p class="beat2__res">The CRO re-cut incentives toward expansion revenue from self-serve accounts &mdash; self-serve became Sales&rsquo; pipeline instead of their competitor.</p>
+          <p class="beat2__res">The CRO re-cut incentives toward expansion revenue from self-serve accounts, self-serve became Sales&rsquo; pipeline instead of their competitor.</p>
         </div>
         <div class="beat2">
           <span class="beat2__f">And one engineering ticket</span>
-          <p class="beat2__tension">Session recordings showed repeat clicks on images users expected to be buttons &mdash; a rendering bug, not a design flaw.</p>
+          <p class="beat2__tension">Session recordings showed repeat clicks on images users expected to be buttons, a rendering bug, not a design flaw.</p>
           <p class="beat2__res">The dead-click rate fell 6.2% &rarr; 1.1% after the fix. The most valuable design research sometimes files an engineering ticket.</p>
         </div>
       </div>
@@ -1324,7 +1247,7 @@ html.av-locked{overflow:hidden;}
       <h2 id="af-h">Eight Steps Became Three</h2>
       <div class="figma-embed">
         <div class="figma-embed__frame">
-          <iframe style="border:1px solid rgba(0,0,0,.1)" src="https://embed.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=0-1&amp;embed-host=share" allowfullscreen loading="lazy" title="Shufti self-service redesign — Figma prototype"></iframe>
+          <iframe style="border:1px solid rgba(0,0,0,.1)" src="https://embed.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=0-1&amp;embed-host=share" allowfullscreen loading="lazy" title="Self-service redesign prototype"></iframe>
         </div>
       </div>
     </div>
@@ -1343,11 +1266,11 @@ html.av-locked{overflow:hidden;}
         <p class="lead">They experienced it like software.</p>
       </div>
 
-      <p class="statgroup__k">What users reached for, in production — before &rarr; after</p>
+      <p class="statgroup__k">What users reached for, in production, before &rarr; after</p>
       <div class="statgrid" data-rev>
-        <div class="fcard" style="--stage:var(--l1)"><div class="fn">578 &rarr; 1,244</div><p class="fl">Start Free (Free Forever) clicks &mdash; share of CTA interactions 57.3% &rarr; 59.5%</p></div>
-        <div class="fcard" style="--stage:var(--l3)"><div class="fn">66 &rarr; 590</div><p class="fl">Buy Now (Essential) clicks &mdash; share of CTA interactions 6.5% &rarr; 28.2%</p></div>
-        <div class="fcard" style="--stage:var(--l5)"><div class="fn">365 &rarr; 256</div><p class="fl">Enterprise (View Features + Contact Sales) clicks &mdash; share of CTA interactions 36.2% &rarr; 12.2%</p></div>
+        <div class="fcard" style="--stage:var(--l1)"><div class="fn">578 &rarr; 1,244</div><p class="fl">Start Free (Free Forever) clicks, share of CTA interactions 57.3% &rarr; 59.5%</p></div>
+        <div class="fcard" style="--stage:var(--l3)"><div class="fn">66 &rarr; 590</div><p class="fl">Buy Now (Essential) clicks, share of CTA interactions 6.5% &rarr; 28.2%</p></div>
+        <div class="fcard" style="--stage:var(--l5)"><div class="fn">365 &rarr; 256</div><p class="fl">Enterprise (View Features + Contact Sales) clicks, share of CTA interactions 36.2% &rarr; 12.2%</p></div>
       </div>
       <div class="funnel" data-fact="PR-ctas" data-prov="observed">
         <div class="funnel-rows" style="margin-top:0">
@@ -1356,7 +1279,7 @@ html.av-locked{overflow:hidden;}
           <div class="funnel-row" style="--c:var(--l5)"><span class="fl">Enterprise</span><span class="ft"><span class="ff" style="width:21%"></span></span><span class="fn">256</span></div>
         </div>
         <hr class="funnel-sep">
-        <p class="funnel-foot">Before, 5.5&times; more interactions routed to Enterprise&rsquo;s sales-led CTAs than to Essential (365 vs 66); after, Essential drew 2.3&times; the interactions of Enterprise (590 vs 256), and Enterprise interactions fell 29.9% despite 46% more traffic overall. This is CTA-click counts, not unique visitors or a survey of intent &mdash; share of pricing-page CTA interactions, read as interpretation, not measurement.</p>
+        <p class="funnel-foot">Before, 5.5&times; more interactions routed to Enterprise&rsquo;s sales-led CTAs than to Essential (365 vs 66); after, Essential drew 2.3&times; the interactions of Enterprise (590 vs 256), and Enterprise interactions fell 29.9% despite 46% more traffic overall. This is CTA-click counts, not unique visitors or a survey of intent, share of pricing-page CTA interactions, read as interpretation, not measurement.</p>
       </div>
 
       <div class="measure measure--full" data-rev>
@@ -1365,7 +1288,7 @@ html.av-locked{overflow:hidden;}
 
       <div class="insight" data-rev>
         <b>What this adds up to</b>
-        <p>Essential&rsquo;s own direct-purchase rate is a companion story worth holding alongside the CTA shift. Buy Now clicks grew 66 &rarr; 590 and reached checkout 60 &rarr; 545, but the purchase rate fell &mdash; click-to-purchase 7.6% &rarr; 3.6%, checkout-to-purchase 8.3% &rarr; 3.9% &mdash; because most new paid conversion arrived through the Free &rarr; Essential upgrade route instead, by design, not by failure. Enterprise moved the other way: submitted-to-qualified rose 62.2% &rarr; 76.1%, and sales-qualified leads rose 61 &rarr; 67 despite fewer Contact Sales clicks (121 &rarr; 104) &mdash; fewer, better-fit conversations, exactly the &ldquo;reduce sales dependency&rdquo; goal. Instead of disappearing after the first login, users kept moving through the product lifecycle, and the organisation started making decisions from customer behaviour instead of assumptions.</p>
+        <p>Essential&rsquo;s own direct-purchase rate is a companion story worth holding alongside the CTA shift. Buy Now clicks grew 66 &rarr; 590 and reached checkout 60 &rarr; 545, but the purchase rate fell, click-to-purchase 7.6% &rarr; 3.6%, checkout-to-purchase 8.3% &rarr; 3.9%, because most new paid conversion arrived through the Free &rarr; Essential upgrade route instead, by design, not by failure. Enterprise moved the other way: submitted-to-qualified rose 62.2% &rarr; 76.1%, and sales-qualified leads rose 61 &rarr; 67 despite fewer Contact Sales clicks (121 &rarr; 104), fewer, better-fit conversations, exactly the &ldquo;reduce sales dependency&rdquo; goal. Instead of disappearing after the first login, users kept moving through the product lifecycle, and the organisation started making decisions from customer behaviour instead of assumptions.</p>
       </div>
 
       <div class="equation" data-fact="PR-newpayingeq" data-prov="observed">
@@ -1413,15 +1336,15 @@ html.av-locked{overflow:hidden;}
       <div data-rev>
         <div class="eyebrow">Business changed</div>
         <h2 id="im-h">It did not succeed because one screen looked better.</h2>
-        <p>It succeeded because customer behaviour changed &mdash; and when customer behaviour changed, the business changed with it.</p>
+        <p>It succeeded because customer behaviour changed, and when customer behaviour changed, the business changed with it.</p>
       </div>
 
       <p class="statgroup__k">Group 1 &middot; the signup journey and the revenue it drove</p>
       <div class="statgrid" data-rev>
         <div class="fcard" style="--stage:var(--l1)"><div class="fn" data-fact="C2">8 &rarr; 3</div><p class="fl">Steps in the signup journey; time to first value fell from hours to minutes</p><span class="prov prov--observed">Observed</span></div>
-        <div class="fcard" style="--stage:var(--l3)"><div class="fn" data-fact="F16">$33,128 &rarr; $59,984</div><p class="fl">Monthly self-serve revenue, +81.1% &middot; Sep 2025 &rarr; Mar 2026, Enterprise excluded</p><span class="prov prov--observed">Observed</span></div>
+        <div class="fcard" style="--stage:var(--l3)"><div class="fn" data-fact="F16">$33K &rarr; $60K</div><p class="fl">Monthly self-serve revenue, +81.1% &middot; Sep 2025 &rarr; Mar 2026, Enterprise excluded</p><span class="prov prov--observed">Observed</span></div>
         <div class="fcard" style="--stage:var(--l5)"><div class="fn" data-fact="F-newpaying">8 &rarr; 48/mo</div><p class="fl">New self-serve paying customers per month, +500%</p><span class="prov prov--observed">Observed</span></div>
-        <div class="fcard" style="--stage:var(--l4)"><div class="fn" data-fact="F-arr">~$322K</div><p class="fl">Annualized revenue run-rate uplift &mdash; (after &minus; before monthly revenue) &times; 12, not a contracted or booked ARR figure</p><span class="prov prov--observed">Observed</span></div>
+        <div class="fcard" style="--stage:var(--l4)"><div class="fn" data-fact="F-arr">~$322K</div><p class="fl">Annualized revenue run-rate uplift, (after &minus; before monthly revenue) &times; 12, not a contracted or booked ARR figure</p><span class="prov prov--observed">Observed</span></div>
       </div>
 
       <p class="statgroup__k">Group 2 &middot; the rest of the verified picture</p>
@@ -1444,23 +1367,23 @@ html.av-locked{overflow:hidden;}
 
       <p class="statgroup__k">Modeled targets</p>
       <div class="statgrid" data-rev>
-        <div class="fcard" style="--stage:var(--l4)"><div class="fn" data-fact="F01">1.7%</div><p class="fl">Historical pricing-visit &rarr; submission rate, January dataset (785 &rarr; 13) &mdash; a distinct, older cohort with a different denominator than the funnel figures above</p><span class="prov prov--soft">Reported &middot; historical</span></div>
+        <div class="fcard" style="--stage:var(--l4)"><div class="fn" data-fact="F01">1.7%</div><p class="fl">Historical pricing-visit &rarr; submission rate, January dataset (785 &rarr; 13), a distinct, older cohort with a different denominator than the funnel figures above</p><span class="prov prov--soft">Reported &middot; historical</span></div>
         <div class="fcard" style="--stage:var(--l4)"><div class="fn" data-fact="F01-model">20&ndash;30%</div><p class="fl">Signup &rarr; paid conversion, the financial model&rsquo;s projected target</p><span class="prov prov--modeled">Modeled target</span></div>
       </div>
 
-      <p class="statgroup__k" style="display:none">Outstanding evidence &mdash; measurement in progress</p>
+      <p class="statgroup__k" style="display:none">Outstanding evidence, measurement in progress</p>
       <div class="statgrid" data-rev style="display:none">
-        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">§G3&rsquo;s &ldquo;ran a verification&rdquo; chart bar &mdash; a comparable section-visit value, distinct from the user-count figures already shown</p><span class="prov prov--owed">Owed &middot; data team</span></div>
-        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">§G1&rsquo;s needs-gap evidence &mdash; a rough tally of the HubSpot notes, sales emails, and handoff mentions behind the qualitative claim</p><span class="prov prov--owed">Owed &middot; Sales</span></div>
+        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">§G3&rsquo;s &ldquo;ran a verification&rdquo; chart bar, a comparable section-visit value, distinct from the user-count figures already shown</p><span class="prov prov--owed">Owed &middot; data team</span></div>
+        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">§G1&rsquo;s needs-gap evidence, a rough tally of the HubSpot notes, sales emails, and handoff mentions behind the qualitative claim</p><span class="prov prov--owed">Owed &middot; Sales</span></div>
         <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">A named data-owner sign-off on the Sep 2025 / Mar 2026 measurement window</p><span class="prov prov--owed">Owed &middot; data team</span></div>
-        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Month-by-month paying-base bridge, Oct 2025&ndash;Feb 2026 &mdash; endpoints (41 &rarr; 184) reconcile, the ramp in between is not yet supplied</p><span class="prov prov--owed">Owed &middot; data team</span></div>
-        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Whether Essential&rsquo;s plan composition included Age verification or only Face + Document &mdash; unresolved, confirm before screening</p><span class="prov prov--owed">Owed &middot; Khushboo</span></div>
-        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Whether Finance&rsquo;s internal recurring-revenue reporting treats PAYG as recurring &mdash; the public page uses &ldquo;monthly self-serve revenue,&rdquo; not &ldquo;MRR,&rdquo; until confirmed</p><span class="prov prov--owed">Owed &middot; Finance</span></div>
+        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Month-by-month paying-base bridge, Oct 2025&ndash;Feb 2026, endpoints (41 &rarr; 184) reconcile, the ramp in between is not yet supplied</p><span class="prov prov--owed">Owed &middot; data team</span></div>
+        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Whether Essential&rsquo;s plan composition included Age verification or only Face + Document, unresolved, confirm before screening</p><span class="prov prov--owed">Owed &middot; Khushboo</span></div>
+        <div class="fcard fcard--owed"><div class="fn">Owed</div><p class="fl">Whether Finance&rsquo;s internal recurring-revenue reporting treats PAYG as recurring, the public page uses &ldquo;monthly self-serve revenue,&rdquo; not &ldquo;MRR,&rdquo; until confirmed</p><span class="prov prov--owed">Owed &middot; Finance</span></div>
       </div>
 
       <div class="insight" data-rev>
         <b>The real outcome</b>
-        <p>Shufti stopped thinking like a company that sold software through Sales. It started building a product that could sell itself.</p>
+        <p>The company stopped thinking like a business that sold software through Sales. It started building a product that could sell itself.</p>
       </div>
     </div>
   </section>
@@ -1475,7 +1398,7 @@ html.av-locked{overflow:hidden;}
       <h2 id="rf-h">Great UX removes friction. Great product design changes behaviour.</h2>
       <p>Before this project, I believed great UX was about removing friction. After it, I understood that great product design changes behaviour. The screens mattered. The research mattered. The flows mattered. But none of them created business impact on their own.</p>
       <p>The impact came from finding the right problem, aligning six departments around a shared vision, and redesigning the commercial system rather than individual interfaces.</p>
-      <p>And not everything moved. Activation improved least of everything we touched &mdash; visibility and urgency helped, but the sandbox needed a stronger first-success design than we shipped in Q1. Essential&rsquo;s direct-purchase rate is the other honest miss &mdash; it fell even as the plan attracted far more consideration, because conversion was designed to arrive through upgrades instead. Attribution is shared, too: traffic growth belongs partly to Marketing&rsquo;s work; what the redesign owns is conversion and the capture of the middle market.</p>
+      <p>And not everything moved. Activation improved least of everything we touched, visibility and urgency helped, but the sandbox needed a stronger first-success design than we shipped in Q1. Essential&rsquo;s direct-purchase rate is the other honest miss, it fell even as the plan attracted far more consideration, because conversion was designed to arrive through upgrades instead. Attribution is shared, too: traffic growth belongs partly to Marketing&rsquo;s work; what the redesign owns is conversion and the capture of the middle market.</p>
       <p>That is the lesson I have carried into every product since: systems change behaviour; screens just host it.</p>
       <nav class="endnav">
         <a href="../../index.html#work">&larr; All work</a>

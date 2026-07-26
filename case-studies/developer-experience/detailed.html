@@ -263,7 +263,7 @@ section.act > .wrap > h2,h2.big{max-width:none;font-size:clamp(36px,6vw,78px);li
     <h1>The portal is the <em>product</em>.</h1>
     <p class="thesis"><b>Beacon</b> generates the developer portal, the SDKs, and the AI copilot for an API. Every gap in the default ships into every developer's experience. The redesign is a <b>re-layering</b>, not a re-skin.</p>
     <div class="meta-grid">
-      <div><div class="k">Role</div><div class="v">Product design lead, end to end</div></div>
+      <div><div class="k">Role on this project</div><div class="v">Lead Product Designer, end to end</div></div>
       <div><div class="k">Scope</div><div class="v">Audit, research, IA, design, system</div></div>
       <div><div class="k">Worked example</div><div class="v">Resonance, a music API</div></div>
       <div><div class="k">Method</div><div class="v">Evidence-led, sourced throughout</div></div>
@@ -485,11 +485,12 @@ section.act > .wrap > h2,h2.big{max-width:none;font-size:clamp(36px,6vw,78px);li
           <tr><td class="lbl">Google Workspace</td><td class="s-good">Strong</td><td class="s-good">Strong</td><td class="s-good">Strong</td><td class="s-good">Strong</td><td class="s-good">Strong</td><td class="s-mid">Mid</td></tr>
           <tr><td class="lbl">Figma</td><td class="s-good">Strong</td><td class="s-mid">Mid</td><td class="s-good">Strong</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-good">Strong</td></tr>
           <tr><td class="lbl">Postman</td><td class="s-mid">Mid</td><td class="s-good">Strong</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-good">Strong</td><td class="s-mid">Mid</td></tr>
-          <tr><td class="lbl">ClickUp</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-weak">Weak</td><td class="s-good">Strong</td><td class="s-mid">Mid</td></tr>
+          <tr><td class="lbl">ClickUp</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-mid">Mid</td><td class="s-mid">Limited</td><td class="s-good">Strong</td><td class="s-mid">Mid</td></tr>
           <tr class="us"><td class="lbl">Beacon (today)</td><td class="s-weak">Weak</td><td class="s-weak">Weak</td><td class="s-good">Strong</td><td class="s-weak">Weak</td><td class="s-mid">Mid</td><td class="s-weak">Weak</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="measure" style="font-size:14px;opacity:.72">Ratings are my own read of each portal's publicly available documentation at the time of the audit, scored against the six dimensions above. They are a design assessment, not a product endorsement or criticism, and they will have moved on since.</p>
     <p class="measure">The single takeaway: borrow the proven moves. Claude's lifecycle IA, Twilio and Google's operational surfaces, Postman-grade AI-agent affordances. Beacon already bundles portal, SDK, copilot, and playground; the redesign makes that integration visibly superior, not just present.</p>
 
     <h3 class="mt">Study two &middot; how each portal layers the five jobs.</h3>
@@ -654,7 +655,7 @@ section.act > .wrap > h2,h2.big{max-width:none;font-size:clamp(36px,6vw,78px);li
   <div class="wrap">
     <div data-rev><div class="act-marker"><span class="dot"></span>Act VII &middot; The system</div>
     <h2>A system the portal <em>runs on</em>, not a coat of paint.</h2></div>
-    <div class="measure" data-rev><p class="lead">The redesign ships on tokens, not Figma assets. Every value is expressible in the portal's generator config and themable per brand. A few of the load-bearing ones, shown directly.</p></div>
+    <div class="measure" data-rev><p class="lead">The redesign is specified on tokens, not Figma assets. Every value is expressible in the portal's generator config and themable per brand. A few of the load-bearing ones, shown directly.</p></div>
 
     <h3 class="mt-s">Color, by meaning.</h3>
     <p class="measure">Two systems do the work: a layer palette that color-codes the five jobs, and an HTTP-method palette that makes endpoints and states scannable.</p>
@@ -704,7 +705,7 @@ section.act > .wrap > h2,h2.big{max-width:none;font-size:clamp(36px,6vw,78px);li
     <div class="measure" data-rev><p class="lead">Some moves are buildable today; some need infrastructure that does not exist yet. Phasing is what separates a redesign that ships from a concept reel.</p></div>
     <div class="tbl" data-rev>
       <table>
-        <thead><tr><th>Wave</th><th>What ships</th></tr></thead>
+        <thead><tr><th>Wave</th><th>What is proposed</th></tr></thead>
         <tbody>
           <tr><td class="lbl" style="color:var(--good)">Wave 1</td><td>Four-group IA, hero working code, tier-ladder auth, compliance pre-auth, walkthroughs in Build, reference 3-pane with pre-populated responses, Operate (status, deprecations, rate limits, runbook), changelog, SDK and version picker.</td></tr>
           <tr><td class="lbl" style="color:var(--l1)">Wave 2</td><td>Per-tenant rate-limit headroom in Dashboard, AI summary per page (content-grounded), anchored copilot drawer, status pipeline on real incident feeds, command-K search.</td></tr>
@@ -728,8 +729,8 @@ section.act > .wrap > h2,h2.big{max-width:none;font-size:clamp(36px,6vw,78px);li
       </table>
     </div>
 
-    <h3 class="mt">Validated against a developer who does not behave.</h3>
-    <div class="pull measure" data-rev>Experienced developers do not read documentation portals anymore. They open them exactly twice per integration: once for starter code, once when something breaks.<span class="src-l">A senior engineer, 8 to 9 years of API integration, in a validation session</span></div>
+    <h3 class="mt">Pressure-tested against a developer who does not behave.</h3>
+    <div class="pull measure" data-rev>Experienced developers do not read documentation portals anymore. They open them exactly twice per integration: once for starter code, once when something breaks.<span class="src-l">A senior engineer, 8 to 9 years of API integration, in one validation conversation</span></div>
     <p class="measure">That reframed the thesis from five stages for everyone to four behaviors at different surfaces: <strong>Evaluators</strong> open once and decide, <strong>Implementors</strong> live in the IDE and open the portal twice, <strong>Operators</strong> show up when something is wrong, and <strong>AI-augmented</strong> assistants read the docs on the developer's behalf. The five-layer map still holds; the headline shifts to the portal being the trusted operational and reference surface that the assistant tools cannot replace.</p>
   </div>
 </section>

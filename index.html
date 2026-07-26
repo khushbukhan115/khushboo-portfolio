@@ -443,6 +443,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on button,html.cursor-on [role="button"],html.cursor-on .totop{cursor:pointer!important}
 .shotf{border:1px solid var(--line-d);border-radius:16px;background:transparent;box-shadow:var(--shadow-lg)}
 .shotf .bar{display:none}
+/* portrait mobile-app variant: a pair of phone screens instead of one web screenshot */
+.shotf--phones{display:flex;justify-content:center;align-items:flex-start;gap:clamp(14px,2vw,22px);padding:clamp(22px,3vw,34px);background:radial-gradient(120% 130% at 28% -10%,rgba(0,173,239,.2),rgba(12,15,14,0) 62%),#0c0f0e}
+.shotf--phones img{width:44%;max-width:210px;border-radius:16px;border:1px solid var(--line-d);box-shadow:0 22px 50px -28px rgba(0,0,0,.95)}
+.shotf--phones img:nth-of-type(2){transform:translateY(clamp(12px,2vw,26px))}
 /* hero domain motif: faint identity-scan rings */
 .hero::before{content:"";position:absolute;z-index:0;right:-6vw;top:9vh;width:min(50vw,640px);height:min(50vw,640px);pointer-events:none;
   background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke='%2334E29B' stroke-width='0.7'><circle cx='100' cy='100' r='30' stroke-opacity='0.18'/><circle cx='100' cy='100' r='52' stroke-opacity='0.14'/><circle cx='100' cy='100' r='74' stroke-opacity='0.10'/><circle cx='100' cy='100' r='96' stroke-opacity='0.07'/><path d='M85 100l11 11 22-24' stroke-opacity='0.55' stroke-width='1.4'/></svg>") center/contain no-repeat}
@@ -554,7 +558,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
         <h1 data-reveal="" class="in" style="transition-delay: 70ms;">Turning complex problems into products that feel <span class="grn">effortless</span><span class="pt">.</span></h1>
         <div class="hero__tag in" data-reveal="" style="transition-delay: 140ms;">Connecting user needs to business outcomes across consumer, SaaS, AI, and enterprise products.</div>
         <dl class="hero__status in" data-reveal="" style="transition-delay: 210ms;">
-          <div><dt>Now</dt><dd>Shufti · Head of Design</dd></div>
+          <div><dt>Now</dt><dd>Toptal · Product Design Consultant</dd></div>
           <div><dt>Focus</dt><dd>Strategy · Systems · AI</dd></div>
           <div><dt>Seeking</dt><dd>Principal · Staff · Head</dd></div>
           <div><dt>Where</dt><dd>Remote · Any TZ</dd></div>
@@ -592,49 +596,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
     <div class="feat in" data-reveal>
       <div class="feat__media">
         <div class="metricpanel">
-          <div class="mp"><div class="n">1.7 &rarr; <em>20%</em></div><div class="k">signup form rate</div></div>
-          <div class="mp"><div class="n"><em>6 figures</em></div><div class="k">new ARR, self-serve</div></div>
-          <div class="mp"><div class="n">7 &rarr; <em>3</em></div><div class="k">steps to first value</div></div>
-          <div class="mp"><div class="n"><em>$2,500</em></div><div class="k">tier-clustering, broken open</div></div>
-        </div>
-      </div>
-      <div class="feat__text">
-        <div class="feat__eyebrow">Self-Service &middot; Enterprise SaaS</div>
-        <h3>From sales-gated to self-serve.</h3>
-        <p>A sales-gated signup, rebuilt into a self-serve revenue engine that beat its plan.</p>
-        <a class="feat__cta" href="case-studies/self-service/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-    </div>
-
-    <div class="feat feat--rev in" data-reveal>
-      <div class="feat__media">
-        <figure class="shotf"><img src="case-studies/developer-experience/assets/cs-discover.png" alt="Beacon developer portal: a working API call and its JSON response above the fold." loading="lazy"></figure>
-      </div>
-      <div class="feat__text">
-        <div class="feat__eyebrow">Developer Experience &middot; Beacon</div>
-        <h3>A portal that runs code on the front door.</h3>
-        <p>One re-layering of the portal resolved three personas' break-points at once.</p>
-        <div class="feat__chips"><span class="mchip"><b>1 &rarr; 5</b> layers</span><span class="mchip"><b>3</b> break-points, one move</span></div>
-        <a class="feat__cta" href="case-studies/developer-experience/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-    </div>
-
-    <div class="feat in" data-reveal>
-      <div class="feat__media">
-        <figure class="shotf"><img src="case-studies/giftcardsby/assets/img/giftcardby_landing-web.jpg" alt="GiftCardsby.com's live public landing page: 'Create &amp; Sell your own digital Gift Card' headline with a Get Started call to action and no-setup-fee badge." loading="lazy"></figure>
-      </div>
-      <div class="feat__text">
-        <div class="feat__eyebrow">GiftCardsby.com &middot; Merit Incentives</div>
-        <h3>Productising enterprise gifting for self-serve.</h3>
-        <p>Merit's digital gifting capability existed only as high-touch, custom-built programmes. I led the MVP that turned it into a product any business could run itself &mdash; live since Aug 2022.</p>
-        <a class="feat__cta" href="case-studies/giftcardsby/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-    </div>
-
-    <div class="feat feat--rev in" data-reveal>
-      <div class="feat__media">
-        <div class="metricpanel">
-          <div class="mp"><div class="n">9 &rarr; <em>5</em></div><div class="k">screens, happy path</div></div>
+          <div class="mp"><div class="n">6 &rarr; <em>3</em></div><div class="k">steps in the verification flow</div></div>
           <div class="mp"><div class="n">2 &rarr; <em>0</em></div><div class="k">manual selections</div></div>
           <div class="mp"><div class="n">2 &rarr; <em>1</em></div><div class="k">camera sessions</div></div>
           <div class="mp"><div class="n"><em>Enterprise</em></div><div class="k">adopted after production proof</div></div>
@@ -645,6 +607,75 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
         <h3>Faster identity verification, fewer steps.</h3>
         <p>I redesigned an enterprise KYC document check so the system does the work the user used to. Fewer screens, fewer failed verifications, and adoption by a major enterprise customer once it was proven in production.</p>
         <a class="feat__cta" href="case-studies/adaptive-verification/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="feat feat--rev in" data-reveal>
+      <div class="feat__media">
+        <div class="metricpanel">
+          <div class="mp"><div class="n">2.5&times;</div><div class="k">more signups reached first value</div></div>
+          <div class="mp"><div class="n">+<em>81%</em></div><div class="k">monthly self-serve revenue</div></div>
+          <div class="mp"><div class="n">8 &rarr; <em>3</em></div><div class="k">steps to first value</div></div>
+          <div class="mp"><div class="n">0 &rarr; <em>1</em></div><div class="k">plans built for the middle market</div></div>
+        </div>
+      </div>
+      <div class="feat__text">
+        <div class="feat__eyebrow">Self-Service &middot; Enterprise SaaS</div>
+        <h3>From sales-gated to self-serve.</h3>
+        <p>A sales-gated signup, rebuilt into a self-serve revenue engine that beat its plan.</p>
+        <a class="feat__cta" href="case-studies/self-service/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="feat in" data-reveal>
+      <div class="feat__media">
+        <figure class="shotf"><img src="case-studies/giftcardsby/assets/img/giftcardby_landing-web.jpg" alt="GiftCardsby.com's live public landing page: 'Create &amp; Sell your own digital Gift Card' headline with a Get Started call to action and no-setup-fee badge." loading="lazy"></figure>
+      </div>
+      <div class="feat__text">
+        <div class="feat__eyebrow">GiftCardsby.com &middot; Merit Incentives</div>
+        <h3>Productising enterprise gifting for self-serve.</h3>
+        <p>Merit's digital gifting capability existed only as high-touch, custom-built programmes. I led the MVP that turned it into a product any business could run itself, live since Aug 2022.</p>
+        <a class="feat__cta" href="case-studies/giftcardsby/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="feat feat--rev in" data-reveal>
+      <div class="feat__media">
+        <figure class="shotf shotf--phones">
+          <img src="case-studies/air-miles/assets/screen-home.jpg" alt="Air Miles home screen: a bonus earn banner, the member's Air Miles balance, five category shortcuts and a Trending row." loading="lazy">
+          <img src="case-studies/air-miles/assets/screen-my-air-miles-card.jpg" alt="Air Miles My Air Miles screen: the digital membership card with a scannable barcode above the balance and account shortcuts." loading="lazy">
+        </figure>
+      </div>
+      <div class="feat__text">
+        <div class="feat__eyebrow">Air Miles &middot; Coalition loyalty &middot; Mobile app</div>
+        <h3>Simple on the surface, a system underneath.</h3>
+        <p>The Air Miles (Middle East) mobile app, designed end to end from a short client brief: seven business drivers, seven pain points mapped to seven goals, one information architecture, and one earn and redeem loop.</p>
+        <a class="feat__cta" href="case-studies/air-miles/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="feat in" data-reveal>
+      <div class="feat__media">
+        <figure class="shotf"><img src="case-studies/developer-experience/assets/cs-discover.png" alt="Beacon developer portal: a working API call and its JSON response above the fold." loading="lazy"></figure>
+      </div>
+      <div class="feat__text">
+        <div class="feat__eyebrow">Developer Experience &middot; Beacon <span style="opacity:.62">&middot; Worked example</span></div>
+        <h3>A portal that runs code on the front door.</h3>
+        <p>One re-layering of the portal resolved three personas' break-points at once. A self-directed worked example, so the numbers below are structural, not shipped performance.</p>
+        <div class="feat__chips"><span class="mchip"><b>1 &rarr; 5</b> layers</span><span class="mchip"><b>3</b> break-points, one move</span></div>
+        <a class="feat__cta" href="case-studies/developer-experience/index.html">Read the case <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="feat feat--rev in" data-reveal>
+      <div class="feat__media">
+        <figure class="shotf"><img src="case-studies/commerce/assets/beu-checkout-egift.jpg" alt="Be U e-gift card checkout: card value chips from 50 to 5000 dirhams, a quantity field, and a choice between buying for yourself or buying as a gift." loading="lazy"></figure>
+      </div>
+      <div class="feat__text">
+        <div class="feat__eyebrow">Selected product work &middot; Four industries</div>
+        <h3>The customer-facing side of the work.</h3>
+        <p>Be U, a bilingual loyalty and rewards marketplace for the Gulf, alongside three retail and consumer brands. A gallery of finished interface design rather than a case study, with each period stated: roughly 2014 to 2020.</p>
+        <a class="feat__cta" href="case-studies/commerce/index.html">View the gallery <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
 
@@ -678,7 +709,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0111 0"/><path d="M16 5.5a3.2 3.2 0 010 6.3M21 19a5.5 5.5 0 00-3.5-5.1"/></svg></span><div class="n">Millions</div><div class="k">Users served across consumer &amp; trust products</div></div>
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg></span><div class="n" data-count="230">230<span class="sfx">+</span></div><div class="k">Countries &amp; territories reached by live verifications</div></div>
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="7" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M7.6 8.6l3 7.6M16.4 8.6l-3 7.6M8 7h8"/></svg></span><div class="n" data-count="40">40<span class="sfx">+</span></div><div class="k">Designers led &amp; mentored</div></div>
-      <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.6-3 7.6-7 9-4-1.4-7-4.4-7-9V5.6z"/><path d="M8.5 12l2.3 2.3 4.7-5"/></svg></span><div class="n" data-count="15" data-pfx="+">+15<span class="sfx">%</span></div><div class="k">Increase in successful verifications<span class="ksub">(+12% FTPS increased)</span></div></div>
+      <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.1c0 4.6-3 7.6-7 9-4-1.4-7-4.4-7-9V5.6z"/><path d="M8.5 12l2.3 2.3 4.7-5"/></svg></span><div class="n" data-count="15" data-pfx="+">+15<span class="sfx">%</span></div><div class="k">Increase in successful verifications<span class="ksub">(measured in production)</span></div></div>
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 1116 0"/><path d="M12 14l4-3"/><circle cx="12" cy="18" r="1.2"/></svg></span><div class="n" data-count="30" data-pfx="≈">≈30<span class="sfx">%</span></div><div class="k">Reduction in case review time</div></div>
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21 12 18.5 16.5 21 15 13.5"/></svg></span><div class="n" data-count="35">35<span class="sfx">+</span></div><div class="k">Student teams evaluated<span class="ksub">(PUCon · Softec · UCP)</span></div></div>
       <div class="stat" data-reveal><span class="dico"><svg viewBox="0 0 24 24"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6.5 6.5l3 3M14.5 14.5l3 3M17.5 6.5l-3 3M9.5 14.5l-3 3"/></svg></span><div class="n" style="white-space:nowrap">0 &rarr; 1</div><div class="k">Multiple products taken zero to one</div></div>
@@ -776,10 +807,17 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
     <div class="seclabel in" role="heading" aria-level="2" data-reveal="fade"><span class="n">04</span> / PATH</div>
     <div class="path">
       <div class="pstep cur in" data-reveal="fade">
+        <div class="pstep-logo"><img src="assets/logos/toptal.svg" alt="" loading="lazy"></div>
+        <div class="when">2026 to Present · Remote</div>
+        <div class="role"><span class="co">Toptal</span> · Freelance Product Design Consultant</div>
+        <div class="desc">Senior product design consulting through Toptal's global talent network, after selective vetting. I work across consumer apps, e-commerce and marketplaces, B2B and enterprise SaaS, fintech, AI driven workflows, and developer facing tools, from discovery through shipped design. What carries across all of them is the same thing: taking a product that has become complicated and making it feel obvious, with a frontend engineering foundation underneath.</div>
+        <div class="sub"><span class="b">CONSUMER APPS</span><span class="b">E-COMMERCE &amp; MARKETPLACES</span><span class="b">ENTERPRISE SAAS</span><span>FINTECH</span><span>AI PRODUCTS</span><span>DEVELOPER TOOLS</span><span>DESIGN SYSTEMS</span><span>0 &rarr; 1</span><span>GROWTH / PLG</span></div>
+      </div>
+      <div class="pstep in" data-reveal="fade" style="transition-delay: 280ms;">
         <div class="pstep-logo"><img src="assets/logos/shufti.png" alt="" loading="lazy"></div>
-        <div class="when">2022 to Present · Remote Global</div>
+        <div class="when">2023 to 2026 · Remote Global</div>
         <div class="role"><span class="co">Shufti</span> · Head of Product Design</div>
-        <div class="desc">Identity verification and risk platform across 230+ countries. Owns design across KYC, KYB, transaction monitoring, and fraud. Rebuilt the verification flow, lifting completion by a double digit margin, and cut case review time by about 30 percent. Built the design practice from zero.</div>
+        <div class="desc">Identity verification and risk platform across 230+ countries. Owned design across KYC, KYB, transaction monitoring, and fraud. Rebuilt the verification flow, lifting completion by a double digit margin, and cut case review time by about 30 percent. Built the design practice from zero.</div>
         <div class="sub"><span class="b">KYC</span><span class="b">KYB</span><span class="b">AML</span><span>FRAUD</span><span>AI REVIEW</span></div>
       </div>
       <div class="pstep in" data-reveal="fade" style="transition-delay: 70ms;">
@@ -787,7 +825,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
         <div class="when">2019 to 2022 · Remote</div>
         <div class="role"><span class="co">Merit Incentives</span> · Lead UX Designer</div>
         <div class="desc">Enterprise rewards and engagement across EMEA, with significant work on consumer products. Led onboarding, dashboards, and engagement across gift cards, wishlists, and global gifting.</div>
-        <div class="sub"><span>GIFTCARDSBY</span><span>MYLIST</span><span>GIFTI GLOBAL</span><span class="b">HSBC, AIRMILES</span><span class="b">RIYADH BANK, HASSAD</span><span>NOON</span></div>
+        <div class="sub"><span>GIFTCARDSBY</span><span>MYLIST</span><span>GIFTI GLOBAL</span><span class="b">VODAFONE</span><span class="b">RIYAD BANK, HASSAD</span><span class="b">TALABAT</span></div>
       </div>
       <div class="pstep in" data-reveal="fade" style="transition-delay: 140ms;">
         <div class="pstep-logo"><img src="assets/logos/macrosoft.png" alt="" loading="lazy"></div>

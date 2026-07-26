@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Customer-Facing Commerce Work · Four Industries · Khushboo Khan</title>
+<meta name="description" content="A gallery of customer-facing commerce and retail product work across four industries: Be U, a Gulf loyalty and rewards marketplace, plus Faygo, Vintage Galleria and Marble. Finished interface design, with each period stated." />
+<meta property="og:title" content="Customer-Facing Commerce Work · Four Industries | Khushboo Khan" />
+<meta property="og:description" content="Be U, Faygo, Vintage Galleria and Marble. Finished interface design for four different businesses, shown as a gallery rather than a case study, with each period stated." />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="assets/og-commerce.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ===========================================================
+   GALLERY  ·  Customer-facing product work, four industries
+   Same design-system tokens and chrome as the case studies
+   (case-studies/air-miles/index.html). Accent recoloured to
+   amber / bronze so this page reads as its own item in the set.
+   Extra components: brand ledger, gallery wall, clipped frames.
+   Deliberately not a case study: no problem / decision /
+   trade-off narrative, because that record does not exist for
+   this work. No performance figures anywhere on this page.
+   =========================================================== */
+:root{
+  --bg:#070605; --bg-soft:#0b0908; --surface:#100d0a; --surface-2:#16120e;
+  --ink:#F7F5F2; --muted:#AFA79D; --faint:#847C72; --line:rgba(255,255,255,.11); --line-2:rgba(255,255,255,.06);
+  --accent:#B07826; --accent-2:#E0A64F; --accent-3:#F0CE93;
+  --disp:"Space Grotesk",sans-serif; --sans:"Inter",sans-serif; --mono:"IBM Plex Mono",monospace;
+  --max:1180px; --measure:760px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(1100px 700px at 84% -8%,rgba(176,120,38,.20),transparent 56%),radial-gradient(900px 600px at -4% 4%,rgba(224,166,79,.09),transparent 52%),radial-gradient(900px 760px at 50% 118%,rgba(176,120,38,.07),transparent 60%)}
+a{color:inherit;text-decoration:none}::selection{background:rgba(176,120,38,.34);color:#fff}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:0;z-index:200;background:var(--accent);color:#1a1004;padding:.7rem 1.1rem;border-radius:0 0 10px 0;font-weight:600}.skip:focus{left:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}.measure{max-width:var(--measure)}
+
+.chrome{border-bottom:1px solid var(--line-2);position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(7,6,5,.9),rgba(7,6,5,.45))}
+.chrome-in{max-width:var(--max);margin:0 auto;padding:13px 32px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--faint)}
+.chrome-in a.back{color:var(--muted);display:inline-flex;gap:.5rem;align-items:center;transition:color .25s}.chrome-in a.back:hover{color:var(--ink)}
+.chrome-in .ident b{color:var(--ink);font-weight:500}.chrome-in .caret{color:var(--accent-2);margin:0 7px}
+@media(max-width:640px){.chrome-in .ident{display:none}}
+
+.hero{padding:clamp(64px,10vw,128px) 0 clamp(20px,3vw,32px)}
+.spectrum{display:flex;gap:6px;margin-bottom:30px;max-width:360px}.spectrum span{height:5px;border-radius:3px;flex:1}
+.eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);display:inline-flex;align-items:center;gap:.6rem;margin-bottom:24px}.eyebrow::before{content:"";width:22px;height:1px;background:var(--accent-2)}
+.hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(42px,7.2vw,96px);line-height:1.02;letter-spacing:-.045em;margin-bottom:28px}
+.hero h1 em{font-style:normal;color:var(--accent-2);text-shadow:0 0 46px rgba(176,120,38,.5)}
+.hero .thesis{font-family:var(--disp);font-weight:400;font-size:clamp(21px,2.6vw,30px);line-height:1.4;color:var(--muted);max-width:40ch;letter-spacing:-.01em}.hero .thesis b{color:var(--ink);font-weight:500}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:52px;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.meta-grid .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}.meta-grid .v{font-size:15px;color:var(--ink);font-weight:500}
+@media(max-width:720px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+
+section.act{padding:clamp(52px,7vw,104px) 0;position:relative}
+section.act.tight{padding-top:clamp(28px,4vw,52px)}
+.act-marker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-2);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.act-marker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);flex:none}
+.act-marker .era{color:var(--faint);letter-spacing:.14em}
+h2{font-family:var(--disp);font-weight:600;font-size:clamp(34px,5.6vw,70px);line-height:1.03;letter-spacing:-.032em;margin-bottom:26px}
+h2 em{font-style:normal;color:var(--accent-2);text-shadow:0 0 34px rgba(176,120,38,.42)}
+h3{font-family:var(--disp);font-weight:600;letter-spacing:-.02em}
+p{margin-bottom:20px;color:var(--muted);max-width:var(--measure)}
+p strong{color:var(--ink);font-weight:600}
+p:last-child{margin-bottom:0}
+.lead{font-family:var(--disp);font-weight:400;font-size:clamp(20px,2.3vw,26px);line-height:1.5;color:var(--ink);letter-spacing:-.01em;max-width:36ch}
+.mt{margin-top:56px}
+
+.note{margin:32px 0;padding:22px 24px 22px 26px;border-left:3px solid var(--accent-2);background:var(--surface);border-radius:0 10px 10px 0;font-size:14.5px;color:var(--muted);line-height:1.62;max-width:var(--measure)}
+.note .n-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);font-weight:500;margin-bottom:10px}
+.note p{font-size:14.5px;max-width:none;margin-bottom:12px}
+
+/* brand ledger */
+.ledger{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:44px 0 0;background:var(--surface)}
+.led-head,.led-row{display:grid;grid-template-columns:1.05fr 1.15fr .8fr 1.7fr;gap:22px;padding:18px 26px;align-items:start}
+.led-head{background:var(--surface-2);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.led-row{border-bottom:1px solid var(--line-2);font-size:14.5px;color:var(--muted);line-height:1.55}
+.led-row:last-child{border-bottom:none}
+.led-row .b{font-family:var(--disp);font-size:19px;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.25}
+.led-row .era{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--accent-2)}
+@media(max-width:900px){
+  .led-head{display:none}
+  .led-row{grid-template-columns:1fr;gap:8px;padding:22px 22px}
+  .led-row .era{order:-1}
+}
+
+/* gallery wall */
+.gwall{display:grid;grid-template-columns:1fr;gap:30px;margin-top:38px}
+@media(min-width:760px){.gwall{grid-template-columns:1fr 1fr;gap:34px 30px}}
+@media(min-width:1000px){.gwall--3{grid-template-columns:repeat(3,1fr)}}
+.gwall .span2{grid-column:1 / -1}
+.gitem{margin:0}
+.glabel{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent-2);margin-bottom:11px}
+.frame{border:1px solid var(--line);border-radius:13px;background:#0d0b09;overflow:hidden;box-shadow:0 36px 80px -46px rgba(0,0,0,.9),0 0 56px -32px rgba(176,120,38,.34)}
+.frame .bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:linear-gradient(180deg,#1b1712,#100d0a);border-bottom:1px solid rgba(255,255,255,.06)}
+.frame .bar i{width:8px;height:8px;border-radius:50%;flex:none}
+.frame .bar .r{background:#E0625F88}.frame .bar .y{background:#E8C84A88}.frame .bar .g{background:#8FCB6E88}
+.frame .clip{position:relative;overflow:hidden}
+.frame .clip img{cursor:zoom-in;width:100%;height:auto}
+.frame .clip.tall{max-height:520px}
+.frame .clip.tall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:110px;pointer-events:none;background:linear-gradient(180deg,rgba(7,6,5,0),rgba(7,6,5,.92))}
+.frame .clip.tall .more{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-3);pointer-events:none}
+.gcap{font-size:14px;color:var(--muted);margin-top:13px;line-height:1.55}.gcap b{color:var(--ink);font-weight:600}
+
+/* lifecycle grid */
+.cycle{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:44px 0 0}
+.cyc{background:var(--bg-soft);padding:28px 26px 30px}
+.cyc .i{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--accent-2);margin-bottom:12px}
+.cyc h3{font-size:23px;margin-bottom:10px}
+.cyc p{font-size:14px;color:var(--muted);max-width:none;margin:0;line-height:1.6}
+@media(max-width:900px){.cycle{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.cycle{grid-template-columns:1fr}}
+
+/* cta + ending */
+.ctaband{border:1px solid var(--line);border-radius:18px;background:linear-gradient(140deg,rgba(176,120,38,.13),transparent 70%);padding:clamp(30px,5vw,52px);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;box-shadow:0 0 60px -30px rgba(176,120,38,.7);margin-top:20px}
+.ctaband h3{font-size:clamp(26px,3.4vw,40px);max-width:20ch}.ctaband .sub{font-size:14px;color:var(--muted);margin-top:8px;max-width:48ch}
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:13px;letter-spacing:.04em;border-radius:999px;padding:.95rem 1.5rem;transition:.3s}
+.btn-solid{background:var(--accent);color:#1a1004;font-weight:600}.btn-solid:hover{background:var(--accent-2);transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--line);color:var(--ink)}.btn-ghost:hover{border-color:var(--accent-2);color:var(--accent-2)}
+.ending{padding:clamp(80px,12vw,150px) 0;background:radial-gradient(ellipse at 50% 120%,rgba(176,120,38,.16),transparent 60%);border-top:1px solid var(--line)}
+.ending p{font-family:var(--disp);font-size:clamp(28px,4.6vw,56px);line-height:1.07;color:#fff;font-weight:600;letter-spacing:-.03em;max-width:24ch}
+.ending p em{font-style:normal;color:var(--accent-2);text-shadow:0 0 44px rgba(176,120,38,.5)}
+.ending .sig{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--faint)}.ending .sig a:hover{color:var(--accent-2)}
+
+/* lightbox */
+.lbx{position:fixed;inset:0;z-index:300;background:rgba(4,3,2,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;padding:28px;cursor:zoom-out;overflow:auto}
+.lbx.on{display:block}
+.lbx img{max-width:min(1100px,94vw);margin:0 auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 40px 120px -30px rgba(0,0,0,.95)}
+.lbx .lbx-x{position:fixed;top:18px;right:22px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.5rem .9rem;background:rgba(20,16,12,.8)}
+
+html.js [data-rev]:not(.in){opacity:0;transform:translateY(22px)}
+[data-rev]{transition:opacity .8s var(--ease),transform .8s var(--ease)}
+[data-rev].in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html.js [data-rev]:not(.in){opacity:1;transform:none}[data-rev]{transition:none}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <a class="back" href="../../index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Khushboo Khan</a>
+    <span class="ident">Selected product work<span class="caret">/</span>Four industries<span class="caret">/</span>Gallery</span>
+  </div>
+</div>
+
+<header class="hero wrap" id="main">
+  <div data-rev>
+    <div class="spectrum" aria-hidden="true"><span style="background:#F5D000"></span><span style="background:#E9438C"></span><span style="background:#B07826"></span><span style="background:#8C8880"></span><span style="background:#E0A64F"></span></div>
+    <div class="eyebrow">Selected product work &middot; Commerce and retail</div>
+    <h1>Customer-facing products, across <em>four industries</em>.</h1>
+    <p class="thesis">Across my career I have designed customer-facing digital products in loyalty, retail, consumer brands and fashion. <b>This is the customer-facing complement to the enterprise product work</b> in the rest of this portfolio.</p>
+    <div class="meta-grid">
+      <div><div class="k">What this page is</div><div class="v">A gallery of finished work</div></div>
+      <div><div class="k">Brands</div><div class="v">Be U, Faygo, Vintage Galleria, Marble</div></div>
+      <div><div class="k">Periods</div><div class="v">Roughly 2014 to 2020, stated per brand</div></div>
+      <div><div class="k">Surfaces covered</div><div class="v">Catalog, detail, configurable checkout, delivery</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- HOW TO READ THIS PAGE -->
+<section class="act tight">
+  <div class="wrap">
+    <div class="measure" data-rev>
+      <p class="lead">Four businesses that had almost nothing in common, and one interface discipline applied to all of them.</p>
+      <div class="note">
+        <div class="n-label">How to read this page</div>
+        <p>The case studies in this portfolio walk through a problem, the decisions taken and the trade-offs accepted. This page does not, because that written record was never kept for this work, and reconstructing it now would not be honest.</p>
+        <p>What is here is the finished interface design, the business each piece was made for, and the period it was made in. There are no performance figures for this set, so none are shown or implied.</p>
+      </div>
+      <p>The four sit in different industries, serve different customer segments and run on different business models. One is a live transactional product where a member spends earned points and receives something. One sells drinks and merchandise directly. One asks for an appointment instead of a payment. One serves a retail buyer and a shopper in the same layout. The work was to read each business quickly and design inside its rules.</p>
+    </div>
+    <div class="ledger" data-rev>
+      <div class="led-head">
+        <div>Brand</div><div>Industry and place</div><div>Period</div><div>What the design covered</div>
+      </div>
+      <div class="led-row">
+        <div class="b">Be U</div>
+        <div>Loyalty and rewards marketplace &middot; Gulf region, United Arab Emirates and Saudi Arabia</div>
+        <div class="era">Roughly 2020</div>
+        <div>Tiered membership, partner catalog, voucher detail, configurable checkout, digital delivery. Desktop and mobile, English and Arabic with right-to-left layout.</div>
+      </div>
+      <div class="led-row">
+        <div class="b">Faygo</div>
+        <div>Consumer soft drinks (CPG) &middot; Detroit, United States</div>
+        <div class="era">Mid 2010s</div>
+        <div>Storefront and flavour navigation, product detail with variants and cart, store locator entry, editorial and recipe content.</div>
+      </div>
+      <div class="led-row">
+        <div class="b">Vintage Galleria</div>
+        <div>Luxury interiors and decor &middot; Karachi, Pakistan</div>
+        <div class="era">Roughly 2015</div>
+        <div>Full-bleed landing, persistent side navigation, browsing gallery, exhibition listings, appointment and enquiry paths.</div>
+      </div>
+      <div class="led-row">
+        <div class="b">Marble</div>
+        <div>Wholesale womenswear &middot; Glasgow, United Kingdom</div>
+        <div class="era">Roughly 2014</div>
+        <div>Mobile-first responsive site serving trade buyers and consumers in one experience: collections, a buyer-facing argument, and an event diary.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BE U -->
+<section class="act">
+  <div class="wrap">
+    <div data-rev>
+      <div class="act-marker"><span class="dot"></span>The anchor of the set <span class="era">&middot; Be U &middot; roughly 2020</span></div>
+      <h2>Be U, a real <em>transactional</em> product.</h2>
+    </div>
+    <div class="measure" data-rev>
+      <p class="lead">Members earn points on what they spend and turn them into vouchers they actually receive. That makes this the most product-like work in the set, which is why it leads the page.</p>
+      <p>Be U is a loyalty and rewards marketplace for the Gulf, run by the retail group Beside Trading. It is not a page that describes a purchase. It is the purchase, with money and points on the line, terms that have to be read, and a delivery that has to arrive.</p>
+      <p>The design covers the whole path. A member lands on a tiered welcome, browses a category taxonomy and a partner catalog, opens a voucher and reads its validity and conditions, configures it by denomination and quantity, chooses whether it is for themselves or a gift, sees the tax position, and then receives it digitally to a wallet, by text message, by email, or as something printable.</p>
+      <p>Two constraints shaped the interface more than anything else. <strong>It had to hold in two languages.</strong> English and Arabic means the layout mirrors for right-to-left reading, so alignment, iconography and the direction of every flow had to work both ways. <strong>It had to hold on both desktop and mobile.</strong> The same tier welcome, the same reward list and the same checkout, at both sizes, without a second design. That pushed the work towards reusable pieces: one card, one category tile, one offer row, one voucher template, repeated across a catalog that keeps taking on new partners.</p>
+      <div class="note">
+        <div class="n-label">An honest note on this system</div>
+        <p>Yellow on white at small sizes, and the thin display face used for headings, are the contrast risks in this design. They are worth naming rather than hiding. On a system this transactional, that is the thing I would revisit first today.</p>
+      </div>
+    </div>
+
+    <div class="gwall" data-rev>
+      <figure class="gitem span2">
+        <div class="glabel">The marketplace &middot; desktop</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/beu-marketplace-desktop.jpg" width="1280" height="2017" alt="Be U marketplace home page on desktop: a yellow banner explaining in-store points redemption, a Gold member gift prompt, a grid of reward categories with line icons, a most popular rewards row and a how it works strip." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>Everything a member needs on one screen.</b> How points are redeemed in store, the branch into vouchers, the full category taxonomy, the most popular rewards, and a how-it-works strip at the foot for anyone still unsure.</div>
+      </figure>
+    </div>
+
+    <div class="gwall" data-rev>
+      <figure class="gitem">
+        <div class="glabel">Gold tier welcome</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/beu-tier-gold.jpg" width="900" height="1573" loading="lazy" alt="Be U Gold tier welcome screen: a congratulations banner with gold balloons, a please select your gift prompt, and a stacked list of partner rewards including Beside, Reel Cinema and Anghami." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>Membership tier decides what a member sees.</b> The welcome sets the tier, then the reward set below it is the one that tier can claim.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Black tier welcome</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/beu-tier-black.jpg" width="800" height="1863" loading="lazy" alt="Be U Black tier welcome screen: the same congratulations layout with black balloons, followed by a longer list of partner rewards including Beside, Anghami, Patchi, Jarir Bookstore and VOX." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>One template, a different list.</b> The higher tier reuses the same components and swaps the partner set, which is what keeps a tiered catalog maintainable.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Partner catalog &middot; one category</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/beu-catalog-partners.jpg" width="1280" height="1733" loading="lazy" alt="Be U electronics and communication category page: a dense grid of partner e-gift card tiles including Careem, Amazon, Anghami, iTunes, Apple Music and Babyshop." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>Built to absorb new partners.</b> A repeating tile does all the work, so adding a brand to the catalog is a content job rather than a design job.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Voucher detail</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/beu-voucher-detail.jpg" width="900" height="965" loading="lazy" alt="Be U voucher detail page for a Beside AED 500 gift voucher: the face value, the participating brands Diesel, Fred Perry, Pinko, Scotch and Soda and Geox, a description, validity, full terms and conditions, and a get it now button." /></div>
+        </div>
+        <div class="gcap"><b>Read before you commit.</b> Face value, participating brands, validity and the full terms sit above the action, because a voucher a member cannot use is worse than no voucher.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Configurable checkout</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/beu-checkout-egift.jpg" width="1500" height="930" loading="lazy" alt="Be U e-gift card checkout for Damas Jewellery: a row of card value chips from 50 to 5000 dirhams with 500 selected, a quantity field capped at five, radio buttons for buying for myself or buying as a gift, a delivered to wallet line, and add to cart and continue buttons. An Arabic language toggle sits in the top left." /></div>
+        </div>
+        <div class="gcap"><b>The hard part of any transaction.</b> Denomination chips, a quantity cap, the branch between buying for yourself and buying as a gift, the tax position stated, and the delivery destination named before payment. The Arabic toggle sits top left.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Digital delivery</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/beu-voucher-delivery.jpg" width="900" height="1052" loading="lazy" alt="Be U issued voucher screen: the AED 500 Beside voucher with its number, terms and conditions, a print now button, and separate fields to send the voucher to a mobile number by text message or to an email address." /></div>
+        </div>
+        <div class="gcap"><b>The transaction is not finished at payment.</b> The issued voucher carries its own number and terms, and three ways out on the same screen: print it, send it to a mobile number, or send it to an email address.</div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- FAYGO -->
+<section class="act">
+  <div class="wrap">
+    <div data-rev>
+      <div class="act-marker"><span class="dot"></span>A consumer brand, sold directly <span class="era">&middot; Faygo &middot; mid 2010s</span></div>
+      <h2>A loud brand, held together by one <em>device</em>.</h2>
+    </div>
+    <div class="measure" data-rev>
+      <p class="lead">Faygo is a Detroit soft-drink brand, founded in 1907 and part of the culture of the American Midwest. Its site had to do three jobs at once.</p>
+      <p>Carry a brand voice that is genuinely loud. Help people find the flavours in shops near them. And sell drinks and merchandise directly to the people who cannot find them.</p>
+      <p>What holds it together is a single diagonal colour-block device, used as a system rather than a decoration. It becomes the navigation mosaic, the overlay on photography, and the frame for a recipe card, so a palette that would otherwise be chaos gets structure. Oversized display type sets the hierarchy, and the brand's own voice runs through the small copy. Storefront, product page and editorial all read as one thing, at several widths.</p>
+    </div>
+    <div class="gwall gwall--3" data-rev>
+      <figure class="gitem">
+        <div class="glabel">Storefront and navigation</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/faygo-storefront.jpg" width="500" height="1978" loading="lazy" alt="Faygo storefront at a narrow width: a diagonal colour-block mosaic linking to Flavors, Locator, History and Popshop, an online orders banner with three bottles, an oversized FIND YOUR POP headline over a pouring drink, and a Popshop panel below." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>The colour block as navigation.</b> The same diagonal cut carries the menu, the campaign line and the section entries down the page.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Product detail</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/faygo-product-detail.jpg" width="1024" height="980" loading="lazy" alt="Faygo product page for Cotton Candy: the bottle on white, size and quantity selects, an orange add to cart button, brand-voiced product copy, share buttons and a you might also like row of three items." /></div>
+        </div>
+        <div class="gcap"><b>Ordinary retail anatomy, done properly.</b> Variant selects, quantity, add to cart, share, and a cross-sell row, with the brand's voice doing the persuading.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Editorial &middot; the Popshop</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/faygo-popshop.jpg" width="720" height="1812" loading="lazy" alt="Faygo Popshop page: a black and white record-player header, a photographic mosaic of Gear, Games, Recipes and Music, a green order pop bar, and coloured tiles for ring tones, events and the video vault." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>Culture and catalog on one page.</b> Merchandise, music, contests and recipes share a grid, so brand content and things to buy sit side by side.</div>
+      </figure>
+      <figure class="gitem span2">
+        <div class="glabel">Recipes</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/faygo-recipes.jpg" width="780" height="1730" loading="lazy" alt="Faygo recipes page: full-width photographs of a cotton candy lemonade, a root beer float and a Rock N Rye cocktail, each with the diagonal colour block carrying the ingredients and method." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>The same device, a third job.</b> Each recipe is a photograph with the diagonal block holding the ingredients and the method, which keeps a content page inside the brand system instead of beside it.</div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- VINTAGE GALLERIA -->
+<section class="act">
+  <div class="wrap">
+    <div data-rev>
+      <div class="act-marker"><span class="dot"></span>A considered purchase <span class="era">&middot; Vintage Galleria &middot; roughly 2015</span></div>
+      <h2>Restraint, for a purchase people <em>think about</em>.</h2>
+    </div>
+    <div class="measure" data-rev>
+      <p class="lead">Nobody buys a hand-finished interior piece out of a cart, so this site is not built around one.</p>
+      <p>Vintage Galleria is a Karachi gallery of bespoke and handcrafted interiors and decor. Its business is consultative. The site has to convey the quality of the work, show the collection well enough to be judged, and get someone to book an appointment or send an enquiry.</p>
+      <p>So the layout is deliberately quiet, and it is the opposite register to Faygo. A full-bleed landing, a persistent left navigation with a clear active state, a lot of negative space, and a browsing grid where the captions appear on hover instead of competing with the pieces. Hierarchy comes from scale and space rather than ornament, with one gold accent and a script wordmark carrying the signal. Some captions in these screens are still placeholder text, because this is a design-stage capture rather than the final populated site.</p>
+    </div>
+    <div class="gwall" data-rev>
+      <figure class="gitem">
+        <div class="glabel">Landing</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/vintage-landing.jpg" width="1240" height="645" loading="lazy" alt="Vintage Galleria landing page: a dark full-bleed photograph of an antique interior, the script wordmark centred with social links beneath it, and a gold exhibition notice in the top right corner." /></div>
+        </div>
+        <div class="gcap"><b>Atmosphere first.</b> A full-bleed photograph, the wordmark, and one gold notice for the current exhibition. Nothing else asks for attention.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">About &middot; the appointment path</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/vintage-lifestyle.jpg" width="1240" height="645" loading="lazy" alt="Vintage Galleria about page: a persistent left side navigation with the About item active, a centred lifestyle statement, a pull quote, and a gold book your appointment now button." /></div>
+        </div>
+        <div class="gcap"><b>The conversion is a conversation.</b> The persistent side navigation holds position, and the only call to action on the page is booking an appointment.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Galleria &middot; browsing grid</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/vintage-gallery-grid.jpg" width="1240" height="645" loading="lazy" alt="Vintage Galleria gallery page: an eight-cell grid of dark product photographs including brass mirror frames, a brass door knob, a leather table and planters, with captions appearing under the tiles." /></div>
+        </div>
+        <div class="gcap"><b>Built for looking, not filtering.</b> A tight grid of pieces with captions on the tiles, sized so a visitor can scan the range of craft in one pass.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Exhibitions</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/vintage-exhibition.jpg" width="1240" height="645" loading="lazy" alt="Vintage Galleria exhibitions page: a dated listing for a February 2015 festival at a Karachi hotel above a horizontal carousel of exhibition photographs with placeholder captions." /></div>
+        </div>
+        <div class="gcap"><b>A reason to come in person.</b> Dated exhibition listings with a carousel below, which is how a showroom business turns a website visit into a visit.</div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- MARBLE -->
+<section class="act">
+  <div class="wrap">
+    <div data-rev>
+      <div class="act-marker"><span class="dot"></span>Two audiences, one layout <span class="era">&middot; Marble &middot; roughly 2014</span></div>
+      <h2>One site, a trade buyer and a <em>shopper</em>.</h2>
+    </div>
+    <div class="measure" data-rev>
+      <p class="lead">Marble is a Glasgow womenswear house whose knitwear co-ordinates sell through several hundred stockists across the United Kingdom, Europe and Canada.</p>
+      <p>That split its audience in a way most fashion sites do not have to handle. A retail buyer needs to judge whether the range is worth stocking, how deliveries work, and how well it sells through. A shopper wants to see the look and find somewhere to buy it. Both arrive at the same address.</p>
+      <p>The site is mobile-first and responsive, on a dark theme with large type and a navigation bar pinned at the foot. The part worth pointing at is Why Marble: a numbered argument written for a buyer, about sizing, capsule ranges, delivery scheduling, point of sale support and sell-through, sitting inside the same layout a consumer browses. One design serves both, with no separate trade portal to build and maintain.</p>
+    </div>
+    <div class="gwall gwall--3" data-rev>
+      <figure class="gitem">
+        <div class="glabel">Home</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/marble-home.jpg" width="728" height="1024" loading="lazy" alt="Marble home screen at tablet width: the script wordmark above a Spring Summer 2014 line and a sizes available line, a full-width fashion photograph with carousel arrows, and a bottom bar with Home, Collections and Event Diary plus a newsletter signup and language selector." /></div>
+        </div>
+        <div class="gcap"><b>Mobile-first, on a dark theme.</b> Season and sizing sit in the header, the photograph carries the page, and navigation waits at the foot where a thumb reaches it.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Collections</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip"><img src="assets/marble-collections.jpg" width="728" height="1024" loading="lazy" alt="Marble collections screen: the same header and bottom navigation as the home screen, with the Collections item active and a two-up pair of season photographs labelled Spring Summer 2014." /></div>
+        </div>
+        <div class="gcap"><b>The same frame, a different job.</b> Collections reuses the home template exactly, so the season lookbook needs no new structure.</div>
+      </figure>
+      <figure class="gitem">
+        <div class="glabel">Why Marble &middot; the buyer's page</div>
+        <div class="frame"><div class="bar" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="clip tall"><img src="assets/marble-why.jpg" width="728" height="1410" loading="lazy" alt="Marble Why Marble screen: a numbered list of ten reasons aimed at retail buyers, covering size range, mix and match capsules, colour, tailored deliveries, photography of every style, point of sale support and sell-through, over a darkened fashion photograph." /><span class="more">Click to open full page</span></div>
+        </div>
+        <div class="gcap"><b>A business case, inside a consumer layout.</b> Ten numbered reasons written for a stockist, about ranges, deliveries, imagery and sell-through, in the same template and type hierarchy as the rest of the site.</div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- LIFECYCLE -->
+<section class="act">
+  <div class="wrap">
+    <div data-rev>
+      <div class="act-marker"><span class="dot"></span>What the set adds up to</div>
+      <h2>Capabilities across the customer <em>lifecycle</em>.</h2>
+    </div>
+    <div class="measure" data-rev>
+      <p class="lead">Read together rather than brand by brand, this work covers every stage a customer moves through in a transactional product, and every stage a business needs someone to own.</p>
+    </div>
+    <div class="cycle" data-rev>
+      <div class="cyc">
+        <div class="i">01</div><h3>Discover</h3>
+        <p>Catalogs, taxonomies and browsing. Be U's category structure and partner catalog, Faygo's flavour and shop navigation, Vintage Galleria's browsing grid.</p>
+      </div>
+      <div class="cyc">
+        <div class="i">02</div><h3>Compare</h3>
+        <p>Detail pages and terms that let someone choose with confidence. Be U's voucher detail with validity and conditions, Faygo's product page with variants and a cross-sell row.</p>
+      </div>
+      <div class="cyc">
+        <div class="i">03</div><h3>Configure</h3>
+        <p>Options and pricing before payment. Be U's denomination chips, quantity cap, stated tax position, and the branch between buying for yourself and buying as a gift.</p>
+      </div>
+      <div class="cyc">
+        <div class="i">04</div><h3>Purchase</h3>
+        <p>The transactional path itself, held on desktop and on mobile, and in English and in Arabic with the layout mirrored for right-to-left reading.</p>
+      </div>
+      <div class="cyc">
+        <div class="i">05</div><h3>Return</h3>
+        <p>What happens after payment. Be U's issued voucher, delivered to a wallet, sent to a mobile number, sent to an email address, or printed, with its number and terms attached.</p>
+      </div>
+      <div class="cyc">
+        <div class="i">06</div><h3>Re-engage</h3>
+        <p>Reasons to come back. Be U's Gold and Black tiers and rotating partner offers, Faygo's editorial and recipes, Marble's seasonal collections and event diary.</p>
+      </div>
+    </div>
+    <div class="measure mt" data-rev>
+      <div class="note">
+        <div class="n-label">Provenance and periods</div>
+        <p>Be U, Faygo, Vintage Galleria and Marble are real businesses and these are screens of real work. Each period is stated on its section and in the ledger above, so nothing here should be read as current. The older pieces are shown because the discipline in them still holds, not because the styling does.</p>
+        <p>Marble's site of this era was produced with the Glasgow agency Refractiv, and that credit is visible in the footer of those screens. No performance figures are claimed anywhere on this page, because none exist for this work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="act">
+  <div class="wrap">
+    <div class="ctaband" data-rev>
+      <div><h3>The decisions live in the case studies.</h3><div class="sub">This page is the finished work. For the problems, the trade-offs and the outcomes, read the enterprise cases: identity verification, a sales-gated signup rebuilt for self-serve, a gifting product, a coalition loyalty app, and a developer portal.</div></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-solid" href="../../index.html#featured">Back to selected work <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost" href="../adaptive-verification/index.html">Read a case study</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="ending">
+  <div class="wrap" data-rev>
+    <div class="eyebrow" style="margin-bottom:34px">Thesis</div>
+    <p>Four different businesses, and <em>one designer</em> any of them could be handed to.</p>
+    <div class="sig">
+      <span>Khushboo Khan &middot; Product &amp; Visual Design</span>
+      <span><a href="../../index.html#featured">Back to selected work &rarr;</a></span>
+    </div>
+  </div>
+</section>
+
+<div class="lbx" id="lbx" aria-hidden="true"><span class="lbx-x">Close &times;</span><img alt="Enlarged screen" /></div>
+<script>
+document.documentElement.classList.add('js');
+document.documentElement.classList.remove('loading');
+(function(){var els=[].slice.call(document.querySelectorAll('[data-rev]'));if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});els.forEach(function(e){io.observe(e)});})();
+(function(){var lb=document.getElementById('lbx');if(!lb)return;var im=lb.querySelector('img');document.querySelectorAll('.frame .clip img').forEach(function(g){g.addEventListener('click',function(){im.setAttribute('src',g.getAttribute('src'));im.setAttribute('alt',g.getAttribute('alt')||'Enlarged screen');lb.classList.add('on');lb.setAttribute('aria-hidden','false');lb.scrollTop=0;});});function cl(){lb.classList.remove('on');lb.setAttribute('aria-hidden','true');}lb.addEventListener('click',cl);document.addEventListener('keydown',function(e){if(e.key==='Escape')cl();});})();
+</script>
+</body>
+</html>

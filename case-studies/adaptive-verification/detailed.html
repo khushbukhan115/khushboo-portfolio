@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Faster Identity Verification, Fewer Steps, Fewer Drop-offs</title>
-<meta name="description" content="How I redesigned Shufti's KYC document verification so more people get through, with fewer screens and fewer failed checks.">
+<meta name="description" content="How I redesigned an enterprise KYC document verification flow so more people get through, with fewer screens and fewer failed checks.">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -730,87 +730,12 @@
   @media(max-width:600px){.role-row{grid-template-columns:1fr;gap:5px;}}
 
   /* ============ CONFIDENTIAL ACCESS GATE ============ */
-  html.av-locked{overflow:hidden;}
-  .av-gate{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(1100px 700px at 50% -12%,rgba(52,226,155,0.10),transparent 60%),rgba(4,6,5,0.93);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);opacity:0;animation:avFade .5s ease forwards;}
-  .av-gate.av-hide{opacity:0;transform:scale(1.015);pointer-events:none;animation:none;transition:opacity .55s ease,transform .55s ease,-webkit-backdrop-filter .55s ease,backdrop-filter .55s ease;-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);}
-  @keyframes avFade{to{opacity:1;}}
-  .av-card{position:relative;width:100%;max-width:440px;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:22px;padding:40px 38px 32px;text-align:center;box-shadow:0 40px 120px -40px rgba(0,0,0,0.9),0 0 90px -44px rgba(52,226,155,0.55);transform:translateY(16px);opacity:0;animation:avRise .6s .08s cubic-bezier(.2,.7,.2,1) forwards;}
-  @keyframes avRise{to{transform:none;opacity:1;}}
-  .av-lock{width:56px;height:56px;margin:0 auto 22px;border-radius:16px;display:grid;place-items:center;color:var(--accent);background:rgba(52,226,155,0.10);border:1px solid rgba(52,226,155,0.32);box-shadow:0 0 30px -8px rgba(52,226,155,0.6);}
-  .av-lock svg{width:26px;height:26px;}
-  .av-kick{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:13px;}
-  .av-title{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:-0.02em;line-height:1.16;color:var(--text);margin-bottom:13px;}
-  .av-intro{font-size:14.5px;color:var(--text-dim);line-height:1.6;margin-bottom:26px;}
-  .av-form{display:flex;flex-direction:column;gap:11px;text-align:left;}
-  .av-label{font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-mute);}
-  .av-input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--text);font-family:var(--sans);font-size:16px;transition:border-color .25s,box-shadow .25s;}
-  .av-input::placeholder{color:var(--text-mute);}
-  .av-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(52,226,155,0.14);}
-  .av-gate.av-error .av-input{border-color:var(--bad);box-shadow:0 0 0 4px rgba(224,98,95,0.14);animation:avShake .4s;}
-  @keyframes avShake{10%,90%{transform:translateX(-2px);}30%,70%{transform:translateX(4px);}50%{transform:translateX(-6px);}}
-  .av-err{font-size:13px;color:var(--bad);line-height:1.5;opacity:0;transform:translateY(-4px);transition:opacity .25s,transform .25s;}
-  .av-gate.av-error .av-err{opacity:1;transform:none;}
-  .av-btn{margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;background:var(--accent);color:#04130d;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.03em;border:none;border-radius:999px;padding:15px 22px;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 12px 30px -12px rgba(52,226,155,0.8);}
-  .av-btn:hover{background:#48eaa6;transform:translateY(-2px);}
-  .av-btn:active{transform:translateY(0);}
-  .av-btn svg{width:15px;height:15px;}
-  .av-foot{margin-top:22px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:var(--text-mute);line-height:1.6;}
-  .av-foot a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
-  @media(prefers-reduced-motion:reduce){.av-gate,.av-card{animation:none;opacity:1;transform:none;}.av-gate.av-hide{transition:opacity .2s ease;}.av-gate.av-error .av-input{animation:none;}}
-  @media(max-width:480px){.av-card{padding:32px 24px 26px;border-radius:18px;}.av-title{font-size:22px;}}
+@keyframes avFade{to{opacity:1;}}
+@keyframes avRise{to{transform:none;opacity:1;}}
 </style>
 </head>
 <body>
 
-<div class="av-gate" id="avGate" role="dialog" aria-modal="true" aria-labelledby="avGateTitle" aria-describedby="avGateIntro">
-  <div class="av-card">
-    <div class="av-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></div>
-    <div class="av-kick">Confidential case study</div>
-    <h2 class="av-title" id="avGateTitle">This case study is password-protected.</h2>
-    <p class="av-intro" id="avGateIntro">It contains proprietary product strategy, research, and implementation details from commercial work. If we&rsquo;ve scheduled an interview, you should already have the password.</p>
-    <form class="av-form" id="avForm" novalidate>
-      <label class="av-label" for="avPass">Password</label>
-      <input class="av-input" id="avPass" type="password" name="av-pass" placeholder="Enter password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="avErr">
-      <div class="av-err" id="avErr" role="alert">That password is not correct. Please try again.</div>
-      <button class="av-btn" type="submit">Unlock case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="av-foot">If not, you can request access at <a href="mailto:khushbukhan115@gmail.com">khushbukhan115@gmail.com</a></div>
-  </div>
-</div>
-<script>
-(function(){
-  var KEY='av_unlocked_adaptive';
-  var enc='YWRhcHRpdmUtdmVyaWZpY2F0aW9u';
-  var gate=document.getElementById('avGate');
-  var doc=document.documentElement;
-  if(!gate){return;}
-  var unlocked=false;
-  try{unlocked=sessionStorage.getItem(KEY)==='1';}catch(e){}
-  if(unlocked){ if(gate.parentNode){gate.parentNode.removeChild(gate);} return; }
-  doc.classList.add('av-locked');
-  var form=document.getElementById('avForm');
-  var input=document.getElementById('avPass');
-  var pass=''; try{pass=atob(enc);}catch(e){pass='';}
-  function reveal(){
-    try{sessionStorage.setItem(KEY,'1');}catch(e){}
-    doc.classList.remove('av-locked');
-    gate.classList.add('av-hide');
-    var gone=function(){ if(gate&&gate.parentNode){gate.parentNode.removeChild(gate);} };
-    gate.addEventListener('transitionend',gone,{once:true});
-    setTimeout(gone,700);
-    var h1=document.querySelector('h1'); if(h1){h1.setAttribute('tabindex','-1'); try{h1.focus({preventScroll:true});}catch(e){}}
-  }
-  if(form){
-    form.addEventListener('submit',function(e){
-      e.preventDefault();
-      if(input.value===pass){ reveal(); }
-      else{ gate.classList.add('av-error'); try{input.select();}catch(e){} }
-    });
-    input.addEventListener('input',function(){ gate.classList.remove('av-error'); });
-  }
-  setTimeout(function(){ try{input.focus();}catch(e){} },420);
-})();
-</script>
 
 <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
 
@@ -821,7 +746,7 @@
 
 <header class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">Product Design &middot; Identity Verification &middot; Shufti</div>
+    <div class="eyebrow">Product Design &middot; Identity Verification &middot; Enterprise SaaS</div>
     <h1>Faster identity verification.<br>Fewer steps, fewer drop-offs.</h1>
     <p class="sub">
       I redesigned the KYC document check that runs inside our clients' signups, so the system works
@@ -832,22 +757,22 @@
       <div class="is-cell"><div class="is-ba"><span class="was">6</span><span class="arw">&rarr;</span><span class="now">3</span></div><div class="is-k">steps in the verification flow</div></div>
       <div class="is-cell"><div class="is-ba"><span class="was">2</span><span class="arw">&rarr;</span><span class="now">0</span></div><div class="is-k">manual selections before capture</div></div>
       <div class="is-cell"><div class="is-ba"><span class="was">2</span><span class="arw">&rarr;</span><span class="now">1</span></div><div class="is-k">camera sessions</div></div>
-      <div class="is-cell"><div class="is-ba"><span class="now word">TikTok</span></div><div class="is-k">shipped to ByteDance after production proof</div></div>
+      <div class="is-cell"><div class="is-ba"><span class="now word">Enterprise</span></div><div class="is-k">adopted after production proof</div></div>
     </div>
     <p class="impact-note">
       In production, the behaviours that drove failed checks became much less frequent, so
       interaction-driven declines fell and the main path got faster. Measured before and after
-      rollout in Shufti's internal analytics.
+      rollout in the provider's internal analytics.
     </p>
 
     <div class="role">
-      <div class="role-row"><span class="role-k">Role</span><span class="role-v"><b>Lead Product Designer</b></span></div>
+      <div class="role-row"><span class="role-k">Role on this project</span><span class="role-v"><b>Lead Product Designer</b></span></div>
       <div class="role-row"><span class="role-k">Ownership</span><span class="role-v">Product strategy, UX research, behavioural analysis, interaction design, experimentation strategy, stakeholder alignment, and rollout planning.</span></div>
       <div class="role-row"><span class="role-k">Partnered with</span><span class="role-v">The <b>Data Analyst team</b>, who quantified the patterns from existing decline codes and production telemetry; <b>Engineering</b>, who built and safely released each iteration; and <b>Compliance</b>, who signed off every change before rollout.</span></div>
       <div class="role-row"><span class="role-k">ROI</span><span class="role-v">Reduced verification time, fewer avoidable declines, improved verification success, and more successful customer onboarding.</span></div>
     </div>
     <div class="hero-links">
-      <a href="https://www.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=77-27894&amp;t=WFjrWP232E0Ev77A-1" target="_blank" rel="noopener">View the Figma design file <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+      
     </div>
   </div>
 </header>
@@ -860,7 +785,7 @@
     <a class="chip" href="#insight">Insight</a>
     <a class="chip" href="#evolution">Evolution</a>
     <a class="chip" href="#validation">Validation</a>
-    <a class="chip" href="#enterprise">ByteDance</a>
+    <a class="chip" href="#enterprise">The hardest customer</a>
     <a class="chip" href="#impact">Impact</a>
   </nav>
 </div>
@@ -877,7 +802,7 @@
       called Know Your Customer, or KYC.
     </p>
     <p>
-      Shufti runs this identity check for more than <strong>2,000 businesses worldwide</strong>. Their users
+      The provider runs this identity check for <strong>thousands of businesses worldwide</strong>. Their users
       meet it during onboarding, before they are let into the product. Because it sits at the very start of
       the journey, it has to be fast and accurate at the same time. If a legitimate person struggles here,
       the business loses a customer before that customer ever sees the product.
@@ -909,7 +834,7 @@
     <div class="why">
       <div class="why-line">Every unnecessary decline is a legitimate customer lost before they ever became one.</div>
       <div class="why-line">Every second removed from verification cuts friction at the most valuable stage of the acquisition funnel.</div>
-      <div class="why-sum">So this was never really about screens. At Shufti's scale, this single experience decides how many legitimate customers its clients successfully onboard, which is why small improvements here compound into real business outcomes.</div>
+      <div class="why-sum">So this was never really about screens. At that scale, this single experience decides how many legitimate customers its clients successfully onboard, which is why small improvements here compound into real business outcomes.</div>
     </div>
 
     <div class="bridge warm">
@@ -1008,7 +933,7 @@
 
     <div class="whymatter">
       <div class="wm-k">Why it mattered</div>
-      <div class="wm-lead">At Shufti's scale, this wasn't happening once. It was happening across production traffic, every day.</div>
+      <div class="wm-lead">At that scale, this wasn't happening once. It was happening across production traffic, every day.</div>
       <p>Businesses weren't just seeing more retries and slower checks. <b>They were losing legitimate customers.</b> For our clients, every avoidable decline was a real person who failed onboarding because of the interaction, not their identity, a paying customer turned away at the very first step, before they ever became one.</p>
     </div>
 
@@ -1026,7 +951,7 @@
 
     <div class="callout">
       <div class="cl-l">How the signal was captured</div>
-      At the end of every KYC journey, <b>users could rate their experience and leave written feedback.</b> Every rating and comment was stored alongside the verification itself: the client, country, document type, request ID, and outcome, in Shufti's internal analytics portal.
+      At the end of every KYC journey, <b>users could rate their experience and leave written feedback.</b> Every rating and comment was stored alongside the verification itself: the client, country, document type, request ID, and outcome, in the provider's internal analytics portal.
     </div>
 
     <div class="statement">
@@ -1464,23 +1389,23 @@
     <div class="kicker"><span class="step">The hardest customer</span></div>
     <h2>Our biggest customer said no. That mattered most.</h2>
     <p>
-      ByteDance, who run verification for TikTok, review any big change before adopting it. I presented the
+      Our largest enterprise customer, who run verification for a major consumer app, review any big change before adopting it. I presented the
       redesign with the evidence behind it. They said no, on operational risk: at their volume, even a small
       regression affects millions of people, and they would not bet that on a prediction.
     </p>
     <div class="timeline">
       <div class="tl"><div class="tt">I presented the redesign, with the evidence</div><div class="td">The problem, the design, and the expected impact, taken straight to their team.</div></div>
-      <div class="tl turn"><div class="tt">ByteDance said no, on operational risk</div><div class="td">Not a no to the idea. A no to betting millions of users on a prediction. They were the one customer not ready to accept that risk yet.</div></div>
-      <div class="tl"><div class="tt">We launched it for every other customer</div><div class="td">Every other customer approved the redesign and moved forward. It went live in production across the customer base, with ByteDance deliberately held back until there was proof.</div></div>
-      <div class="tl"><div class="tt">Production gave us the evidence</div><div class="td">Across the rest of the customer base, on the exact measures ByteDance cared about, the drop-off behaviours fell and verification integrity held. A forecast had become a fact.</div></div>
-      <div class="tl win"><div class="tt">We went back to ByteDance, with proof</div><div class="td">The same proposal, now carrying real production results for the exact risk they had raised. This time they approved.</div></div>
-      <div class="tl win"><div class="tt">It went live for TikTok</div><div class="td">I worked with their team and our engineers through the rollout.</div></div>
+      <div class="tl turn"><div class="tt">They said no, on operational risk</div><div class="td">Not a no to the idea. A no to betting millions of users on a prediction. They were the one customer not ready to accept that risk yet.</div></div>
+      <div class="tl"><div class="tt">We launched it for every other customer</div><div class="td">Every other customer approved the redesign and moved forward. It went live in production across the customer base, with that customer deliberately held back until there was proof.</div></div>
+      <div class="tl"><div class="tt">Production gave us the evidence</div><div class="td">Across the rest of the customer base, on the exact measures they cared about, the drop-off behaviours fell and verification integrity held. A forecast had become a fact.</div></div>
+      <div class="tl win"><div class="tt">We went back to them, with proof</div><div class="td">The same proposal, now carrying real production results for the exact risk they had raised. This time they approved.</div></div>
+      <div class="tl win"><div class="tt">It went live for their app</div><div class="td">I worked with their team and our engineers through the rollout.</div></div>
     </div>
 
     <div class="payoff">
       <div class="pf-k">The payoff</div>
       <div class="pf-lead">The evidence cleared the exact risk they had raised.</div>
-      <p>ByteDance had declined on operational risk, not on the idea. What changed their answer was production data from the rest of the customer base, measured on the same drop-off behaviours they cared about, showing the redesign reduced friction while verification held. On that evidence, they approved the rollout for TikTok.</p>
+      <p>They had declined on operational risk, not on the idea. What changed their answer was production data from the rest of the customer base, measured on the same drop-off behaviours they cared about, showing the redesign reduced friction while verification held. On that evidence, they approved the rollout for their app.</p>
       <div class="pf-close">That was the moment it all came together: months of research, incremental experiments proven in production, and hard-won cross-functional trust. At this scale you do not earn the most risk-averse customer's approval with a better argument. You earn it with evidence.</div>
     </div>
 
@@ -1585,7 +1510,7 @@
 
     <div class="callout">
       <div class="cl-l">A built-in control, not just a before and after</div>
-      The strongest evidence was not these two snapshots months apart. It was the rollout itself. Every other customer moved to the new flow while <b>ByteDance deliberately stayed on the previous experience</b> until the evidence was in. Over the same window and the same markets, the two behaviours fell for the migrated customers and held steady for the cohort still on the old flow. That side by side is what lets me attribute the drop to the redesign rather than to something else changing over time. The after-launch numbers below confirm it held once the redesign was fully live.
+      The strongest evidence was not these two snapshots months apart. It was the rollout itself. Every other customer moved to the new flow while <b>that customer deliberately stayed on the previous experience</b> until the evidence was in. Over the same window and the same markets, the two behaviours fell for the migrated customers and held steady for the cohort still on the old flow. That side by side is what lets me attribute the drop to the redesign rather than to something else changing over time. The after-launch numbers below confirm it held once the redesign was fully live.
     </div>
 
     <div class="analytics">
@@ -1636,7 +1561,7 @@
     <div class="out-grid">
       <div class="out-cell"><div class="n">6 &rarr; 3</div><div class="k">steps in the verification flow</div></div>
       <div class="out-cell"><div class="n">2 &rarr; 0</div><div class="k">manual selections before the camera opens</div></div>
-      <div class="out-cell"><div class="n">TikTok</div><div class="k">adopted by ByteDance after production evidence, then live for their app</div></div>
+      <div class="out-cell"><div class="n">Enterprise</div><div class="k">adopted by the most risk-averse customer after production evidence, then live for their app</div></div>
     </div>
     <div class="callout"><div class="cl-l">What is measured, and what is modelled</div>Every hard number here comes from the same internal analytics I used to find the problems: the same decline codes and capture telemetry, over the same fifteen-day window, before and after rollout. The failure reductions and the structural changes are measured and exact. The one figure I modelled, the additional customers onboarded, is labelled as an estimate and derived directly from those measured reductions, never presented as a counted KPI.</div>
 
@@ -1671,7 +1596,7 @@
   <div class="sig">
     <a href="../../index.html">&larr; Back to portfolio</a>
     <a href="index.html">Read the short version &rarr;</a>
-    <a href="https://www.figma.com/design/usvtOv9PF8XCOY8MV5F25b/Case-Studies?node-id=77-27894&amp;t=WFjrWP232E0Ev77A-1" target="_blank" rel="noopener">View the Figma file &rarr;</a>
+    
   </div>
 </div></div>
 
