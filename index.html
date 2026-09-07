@@ -4,7 +4,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Khushboo Khan · Head of Product Design</title>
-<meta name="description" content="Khushboo Khan. Head of Product Design. Thirteen years turning complex, high-stakes problems into products that feel obvious, across consumer, SaaS, AI, enterprise, and fintech.">
+<meta name="description" content="Khushboo Khan. Head of Product Design. Thirteen years turning complex, high-stakes decisions into products that feel obvious, across consumer, SaaS, AI, enterprise, and fintech.">
 <script>document.documentElement.className+=' js';</script>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -273,7 +273,32 @@ html.js [data-reveal=fade]:not(.in){transform:none}
 .aip h4{font-family:var(--display);font-weight:500;font-size:clamp(1.15rem,1.9vw,1.45rem);letter-spacing:-.01em;color:var(--ink);margin-bottom:10px}
 .aip p{color:var(--muted);font-weight:300;font-size:.98rem;line-height:1.6}
 .ai__note{margin-top:26px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);line-height:1.7}
-@media(max-width:780px){.aiq{grid-template-columns:1fr}}
+.aiq--3{grid-template-columns:repeat(3,1fr)}
+.aip{display:flex;flex-direction:column}
+.aip__proof{margin-top:auto;padding-top:20px}
+.aip__proof a{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(52,226,155,.32);padding-bottom:3px;transition:border-color .3s}
+.aip__proof a:hover{border-color:var(--accent)}
+.aip__proof a svg{width:14px;height:14px;flex:none}
+.loop{--gap:clamp(30px,5vw,80px);position:relative;margin-top:clamp(40px,6vh,64px);display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gap);row-gap:2px}
+.loop::before{content:"";position:absolute;left:50%;top:14px;bottom:14px;width:1px;background:linear-gradient(180deg,transparent,var(--hair) 6%,var(--hair) 94%,transparent);transform:translateX(-.5px)}
+.lstep{position:relative;display:flex;align-items:center;gap:14px;padding:10px 0}
+.lstep--you{grid-column:1;justify-content:flex-start;text-align:right;flex-direction:row-reverse}
+.lstep--ai{grid-column:2}
+.lstep__k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;flex:none;padding:4px 7px;border-radius:4px;line-height:1}
+.lstep--you .lstep__k{color:#0b0e0d;background:var(--accent)}
+.lstep--ai .lstep__k{color:var(--faint);border:1px solid var(--hair)}
+.lstep__t{font-family:var(--display);font-size:clamp(.95rem,1.45vw,1.12rem);line-height:1.35}
+.lstep--you .lstep__t{color:var(--ink);font-weight:400}
+.lstep--ai .lstep__t{color:var(--muted);font-weight:300}
+.lstep::after{content:"";position:absolute;top:50%;height:1px;width:calc(var(--gap)/2);background:var(--hair)}
+.lstep--you::after{right:calc(var(--gap)/-2)}
+.lstep--ai::after{left:calc(var(--gap)/-2)}
+.loop__note{margin-top:clamp(30px,4vh,44px);padding-top:22px;border-top:1px solid var(--hair);font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);line-height:1.7;max-width:70ch}
+@media(max-width:820px){.aiq,.aiq--3{grid-template-columns:1fr}
+.loop{grid-template-columns:1fr;column-gap:0;row-gap:0}
+.loop::before{left:3px;transform:none}
+.lstep,.lstep--you,.lstep--ai{grid-column:1!important;grid-row:auto!important;justify-content:flex-start;text-align:left;flex-direction:row;padding-left:24px}
+.lstep::after{content:"";left:3px;right:auto;width:14px}}
 .ai{border:1px solid var(--hair2);background:linear-gradient(180deg,var(--panel),var(--bg));border-radius:16px;overflow:hidden;margin-top:64px}
 .ai__bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--hair);background:var(--bg2)}
 .ai__bar i{width:10px;height:10px;border-radius:50%;background:#2a2e37}
@@ -552,14 +577,14 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
     <div class="hero__grid">
       <div class="hero__left">
         <div class="hero__bar in" data-reveal="fade">
-          <span>Head of Product Design</span>
+          <span>Strategy · Systems · AI-native delivery</span>
           <span class="live"><span class="dot"></span> Available for new roles</span>
         </div>
-        <h1 data-reveal="" class="in" style="transition-delay: 70ms;">Turning complex problems into products that feel <span class="grn">effortless</span><span class="pt">.</span></h1>
-        <div class="hero__tag in" data-reveal="" style="transition-delay: 140ms;">Connecting user needs to business outcomes across consumer, SaaS, AI, and enterprise products.</div>
+        <h1 data-reveal="" class="in" style="transition-delay: 70ms;">Turning complex decisions into products that feel <span class="grn">effortless</span><span class="pt">.</span></h1>
+        <div class="hero__tag in" data-reveal="" style="transition-delay: 140ms;">From identity and enterprise SaaS to consumer commerce. I work from strategy through hands-on craft, and I build AI into the design process as a system with constraints, review, and human accountability.</div>
         <dl class="hero__status in" data-reveal="" style="transition-delay: 210ms;">
           <div><dt>Now</dt><dd>Toptal · Product Design Consultant</dd></div>
-          <div><dt>Focus</dt><dd>Strategy · Systems · AI</dd></div>
+          <div><dt>Previously</dt><dd>Head of Product Design</dd></div>
           <div><dt>Seeking</dt><dd>Principal · Staff · Head</dd></div>
           <div><dt>Where</dt><dd>Remote · Any TZ</dd></div>
         </dl>
@@ -570,7 +595,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
         <div class="hero__pscan"></div>
         <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
         <div class="hero__pid">ID / KK.2026</div>
-        <div class="hero__pcap">KHUSHBOO KHAN<br>HEAD OF PRODUCT DESIGN</div>
+        <div class="hero__pcap">KHUSHBOO KHAN<br>PRODUCT DESIGN</div>
       </div>
     </div>
   </div>
@@ -773,6 +798,16 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
           </div>
         </div>
       </div>
+      <div class="build in" data-reveal>
+        <div class="build__n">06</div>
+        <div class="build__body">
+          <h3 class="build__sit">Your team is using AI but the output is inconsistent.</h3>
+          <div class="build__cols">
+            <div class="build__col"><div class="build__lab">How I approach it</div><p>I replace personal prompting skill with a system: controlled inputs, explicit constraints, quality gates, and clear rules about what a designer decides alone and what comes back for review.</p></div>
+            <div class="build__col build__col--out"><div class="build__lab">The outcome</div><p>Consistent output that does not depend on who is prompting, and a team that can operate it without me.</p></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="frame in" data-reveal>
       <p class="frame__lead">However the problem shows up, the way I work is the same.</p>
@@ -845,34 +880,44 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
   </div>
 </section>
 
-<!-- DESIGNING AI PEOPLE CAN TRUST -->
+<!-- HOW I WORK WITH AI -->
 <section class="block" id="ai">
   <div class="wrap">
-    <div class="seclabel in" role="heading" aria-level="2" data-reveal="fade"><span class="n">05</span> / DESIGNING AI PEOPLE CAN TRUST</div>
-    <div class="about__lead in" data-reveal="" style="margin-bottom:clamp(32px,5vh,50px);max-width:26ch">I design AI that people <b>understand, trust, and actually adopt.</b></div>
-    <div class="aiq">
+    <div class="seclabel in" role="heading" aria-level="2" data-reveal="fade"><span class="n">05</span> / HOW I WORK WITH AI</div>
+    <div class="about__lead in" data-reveal="" style="margin-bottom:clamp(32px,5vh,50px);max-width:34ch"><b>AI is part of what I design and how I design it.</b> My work spans three layers.</div>
+    <div class="aiq aiq--3">
       <div class="aip in" data-reveal="">
         <div class="aip__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10h-7l-4 3.5V15H4z"/><circle cx="12" cy="8.4" r=".9" fill="currentColor" stroke="none"/><path d="M12 10.8v3"/></svg></div>
-        <h4>AI should explain itself.</h4>
-        <p>People should understand why something happened and what they can do next.</p>
+        <h4>Design AI products.</h4>
+        <p>Transparent decisions, explainable states, recoverability, and meaningful human control. Especially where AI meets identity, risk, and high-stakes workflows.</p>
+        <div class="aip__proof"><a href="case-studies/adaptive-verification/index.html">See it in practice <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
       </div>
       <div class="aip in" data-reveal="" style="transition-delay:70ms">
         <div class="aip__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M3.5 19a5.5 5.5 0 0111 0"/><path d="M18.5 14V6M15.5 9l3-3 3 3"/></svg></div>
-        <h4>AI should amplify human judgment.</h4>
-        <p>The best AI reduces effort without removing meaningful human control.</p>
+        <h4>Design with AI.</h4>
+        <p>Research synthesis, exploration, prototyping, critique, and generative production. Problem framing, evidence standards, trade-offs, and the final call stay human.</p>
       </div>
       <div class="aip in" data-reveal="" style="transition-delay:140ms">
-        <div class="aip__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.3"/></svg></div>
-        <h4>AI should earn confidence.</h4>
-        <p>Transparency, recoverability, feedback, and clear interaction design matter as much as model quality.</p>
-      </div>
-      <div class="aip in" data-reveal="" style="transition-delay:210ms">
         <div class="aip__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.5" cy="12" r="2"/><circle cx="19.5" cy="12" r="2"/><rect x="9" y="8.8" width="6" height="6.4" rx="1.6"/><path d="M6.5 12h2.5M15 12h2.5"/></svg></div>
-        <h4>AI should fit the workflow.</h4>
-        <p>Copilots and agents work when they are interruptible, correctable, and easy to take or leave.</p>
+        <h4>Operationalise AI for teams.</h4>
+        <p>I turn useful experiments into repeatable workflows: structured inputs, constraint systems, quality gates, provenance, model evaluation, and a handoff another designer can run without me.</p>
+        <!-- PROOF LINK: activate when the commerce + AI production case study ships
+        <div class="aip__proof"><a href="case-studies/CASE-SLUG/index.html">See it in practice <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        -->
       </div>
     </div>
-    <div class="ai__note in" data-reveal="">The same principles whether it's a copilot, an agent, an LLM-powered interface, or an AI-assisted workflow.</div>
+
+    <div class="loop" role="list" aria-label="How the work moves between me and AI">
+        <div class="lstep lstep--you in" role="listitem" data-reveal="fade" style="transition-delay:0ms;grid-row:1"><span class="lstep__k">Me</span><span class="lstep__t">Define the problem</span></div>
+        <div class="lstep lstep--ai in" role="listitem" data-reveal="fade" style="transition-delay:55ms;grid-row:2"><span class="lstep__k">AI</span><span class="lstep__t">Expand the possibility space</span></div>
+        <div class="lstep lstep--you in" role="listitem" data-reveal="fade" style="transition-delay:110ms;grid-row:3"><span class="lstep__k">Me</span><span class="lstep__t">Challenge the outputs</span></div>
+        <div class="lstep lstep--ai in" role="listitem" data-reveal="fade" style="transition-delay:165ms;grid-row:4"><span class="lstep__k">AI</span><span class="lstep__t">Analyse and synthesise</span></div>
+        <div class="lstep lstep--you in" role="listitem" data-reveal="fade" style="transition-delay:220ms;grid-row:5"><span class="lstep__k">Me</span><span class="lstep__t">Make the strategic decision</span></div>
+        <div class="lstep lstep--you in" role="listitem" data-reveal="fade" style="transition-delay:275ms;grid-row:6"><span class="lstep__k">Me</span><span class="lstep__t">Design and refine</span></div>
+        <div class="lstep lstep--ai in" role="listitem" data-reveal="fade" style="transition-delay:330ms;grid-row:7"><span class="lstep__k">AI</span><span class="lstep__t">Assist validation and iteration</span></div>
+        <div class="lstep lstep--you in" role="listitem" data-reveal="fade" style="transition-delay:385ms;grid-row:8"><span class="lstep__k">Me</span><span class="lstep__t">Own the final result</span></div>
+    </div>
+    <p class="loop__note in" data-reveal="">Speed and breadth come from the model. Evidence, sequencing, trade-offs, and the decision to release stay with me. The same shape holds whether it is a copilot, an agent, an LLM-powered interface, or an AI-assisted production workflow.</p>
   </div>
 </section>
 
@@ -911,7 +956,7 @@ html.cursor-on{cursor:auto!important}html.cursor-on a[href],html.cursor-on butto
 </section>
 
 <footer class="wrap foot">
-  <div>KHUSHBOO KHAN · HEAD OF PRODUCT DESIGN · © 2026</div>
+  <div>KHUSHBOO KHAN · PRODUCT DESIGN · © 2026</div>
   <div>BUILT ON SYSTEMS, NOT SCREENS</div>
   <div class="totop" id="totop">BACK TO TOP ↑</div>
 </footer>
