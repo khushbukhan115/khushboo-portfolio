@@ -767,20 +767,20 @@
     <div class="av-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15.7" r="1.5" fill="currentColor" stroke="none"/></svg></div>
     <div class="av-kick">Confidential case study</div>
     <h2 class="av-title" id="avGateTitle">This case study is password-protected.</h2>
-    <p class="av-intro" id="avGateIntro">It contains proprietary product strategy, research, and implementation details from commercial work. If we&rsquo;ve scheduled an interview, you should already have the password.</p>
+    <p class="av-intro" id="avGateIntro">It contains proprietary product strategy, research, and implementation details from commercial work. Reviewing through A.Team? The password is on my A.Team profile and available from A.Team. If we&rsquo;ve scheduled an interview, you should already have it.</p>
     <form class="av-form" id="avForm" novalidate>
       <label class="av-label" for="avPass">Password</label>
       <input class="av-input" id="avPass" type="password" name="av-pass" placeholder="Enter password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="avErr">
       <div class="av-err" id="avErr" role="alert">That password is not correct. Please try again.</div>
       <button class="av-btn" type="submit">Unlock case study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </form>
-    <div class="av-foot">If not, you can request access at <a href="mailto:khushbukhan115@gmail.com">khushbukhan115@gmail.com</a></div>
+    <div class="av-foot">Otherwise, request access at <a href="mailto:khushbukhan115@gmail.com">khushbukhan115@gmail.com</a></div>
   </div>
 </div>
 <script>
 (function(){
   var KEY='av_unlocked_adaptive';
-  var enc='YWRhcHRpdmUtdmVyaWZpY2F0aW9u';
+  var HASH='4764c96d26ede9ef0e62d97bc29d5953b0619b312845b1deffa55412a98f800c';
   var gate=document.getElementById('avGate');
   var doc=document.documentElement;
   if(!gate){return;}
@@ -790,7 +790,6 @@
   doc.classList.add('av-locked');
   var form=document.getElementById('avForm');
   var input=document.getElementById('avPass');
-  var pass=''; try{pass=atob(enc);}catch(e){pass='';}
   function reveal(){
     try{sessionStorage.setItem(KEY,'1');}catch(e){}
     doc.classList.remove('av-locked');
@@ -803,8 +802,12 @@
   if(form){
     form.addEventListener('submit',function(e){
       e.preventDefault();
-      if(input.value===pass){ reveal(); }
-      else{ gate.classList.add('av-error'); try{input.select();}catch(e){} }
+      var fail=function(){ gate.classList.add('av-error'); try{input.select();}catch(e){} };
+      if(!(window.crypto&&crypto.subtle&&window.TextEncoder)){ fail(); return; }
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode(input.value)).then(function(buf){
+        var hex=Array.prototype.map.call(new Uint8Array(buf),function(b){return ('00'+b.toString(16)).slice(-2);}).join('');
+        if(hex===HASH){ reveal(); } else { fail(); }
+      }).catch(fail);
     });
     input.addEventListener('input',function(){ gate.classList.remove('av-error'); });
   }
